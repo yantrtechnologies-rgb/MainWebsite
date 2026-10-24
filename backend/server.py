@@ -122,21 +122,34 @@ def _assert_safe_email(subject: str, html: str) -> None:
                 raise ValueError(f"Anchor text {m.group(1)!r} != real link host {real!r} (G3)")
 
 
+_bg_tasks: set = set()
+
+
+def _spawn(coro) -> None:
+    task = asyncio.create_task(coro)
+    _bg_tasks.add(task)
+    task.add_done_callback(_bg_tasks.discard)
+
+
 async def send_email(*, to: str, subject: str, html: str) -> Optional[str]:
     if not EMAIL_KEY:
         logger.warning("EMERGENT_EMAIL_KEY not set; skipping email send")
         return None
-    _assert_safe_email(subject, html)
     payload = {"to": [to], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
     if EMAIL_REPLY_TO:
         payload["contact_email"] = EMAIL_REPLY_TO
     try:
+        _assert_safe_email(subject, html)
         async with httpx.AsyncClient(timeout=30) as http_client:
-            resp = await http_client.post(
-                f"{EMAIL_BASE_URL}/api/v1/email/send",
-                headers={"X-Email-Key": EMAIL_KEY},
-                json=payload,
-            )
+            for attempt in range(3):
+                resp = await http_client.post(
+                    f"{EMAIL_BASE_URL}/api/v1/email/send",
+                    headers={"X-Email-Key": EMAIL_KEY},
+                    json=payload,
+                )
+                if resp.status_code != 429:
+                    break
+                await asyncio.sleep(2 ** (attempt + 1))
         resp.raise_for_status()
         return resp.json().get("id")
     except httpx.HTTPStatusError as e:
@@ -399,10 +412,10 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
             'We never ask for your password or card details by email.</p>'
             '</td></tr></table>'
         )
-        asyncio.create_task(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html))
+        _spawn(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html))
 
     if payload.email:
-        asyncio.create_task(send_email(
+        _spawn(send_email(
             to=payload.email,
             subject=f"Thank you for contacting Yantr Technologies — {enquiry_id}",
             html=_customer_email_html(payload, enquiry_id),

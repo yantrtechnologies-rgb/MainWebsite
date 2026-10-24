@@ -1,0 +1,30 @@
+{
+  "summary": "Iteration 3: tested the WhatsApp floating button, Contact page Google Map, customer thank-you email and the enquiry/contact regression. Everything requested passed. Backend: 14/14 pytest passed, including the earlier rule tests. The customer email was confirmed in the backend log: an enquiry with an email gave 2 email sends (admin + customer), both 202 Accepted, and the API answered in under 3s. Phone-only gave 1 send (admin) with no errors. Frontend: the WhatsApp button shows on /, /digital-marketing, /it-products and /contact at 1280 and 390. It has the correct wa.me/919692791725 link with the encoded 'Hi Yantr Technologies' message and target=_blank. On mobile it shows the icon only (56x56, bottom-right) and does not cover CTAs. The enquiry modal overlay (z-50) correctly sits above it. The map iframe and directions link are correct and lay out well at both widths. The contact form and the multi-step modal submit successfully, and the phone-or-email toast is enforced.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/enquiries (send_email)", "issue": "When submissions come in a burst, the Emergent email provider returns 429 rate_limited. send_email only logs a warning, with no retry or queue, so those admin/customer emails are silently lost (seen at 12:02 during parallel test runs). Normal single submissions work (202)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_customer_email_whatsapp.py", "/app/backend/tests/test_enquiry_contact_rules.py", "/app/test_reports/pytest/pytest_results_iter3.xml"],
+  "action_items": [
+    "Optional: add a simple retry/backoff on 429 in send_email, or persist an email_status field on the enquiry so lost notifications are visible in the admin panel"
+  ],
+  "critical_code_review_comments": [
+    "asyncio.create_task results are not stored. Keep references in a set (and discard them on done) so tasks can't be garbage-collected mid-flight",
+    "_assert_safe_email is called outside the try block in send_email. A ValueError would surface as an unretrieved task exception instead of a logged error",
+    "server.py is ~518 lines; it is getting close to the point where email helpers/templates should move into their own module"
+  ],
+  "updated_files": ["/app/backend/tests/test_customer_email_whatsapp.py"],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin amtrks79@gmail.com / YantrAdmin@2026 (from /app/memory/test_credentials.md) - works",
+  "seed_data_creation": "TEST_ leads were created and then deleted via mongo cleanup in test_cleanup",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Run the email-count test with '-n 0' (pytest.ini uses xdist). Avoid running it in parallel with other enquiry tests: the email provider rate-limits bursts (429) and other tests add sends. Assert '202 Accepted', not '202' (the log dates contain 2026). The preview URL sometimes shows a Cloudflare challenge page; just retry."
+}

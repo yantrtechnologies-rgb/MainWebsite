@@ -14,6 +14,10 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote
   - Enquiries need phone OR email (enforced on the frontend and backend); vertical restricted to allowed values
+  - Floating WhatsApp button (wa.me/919692791725 with a ready-made hello message) on all public pages
+  - Customer thank-you email (reference ID, request summary, company contacts), sent when the customer gives an email; retries on 429
+  - Google Map embed + directions link on the Contact page
+  - Testing: iteration_3 passed 100%
   - Footer column links go straight to their pages (Digital Marketing → /digital-marketing)
   - Dropdown menus now have a solid background with readable text (Contact enquiry-type fix)
 - Testing: iteration_2 passed 100% on backend and frontend

@@ -151,6 +151,39 @@ async def send_email(*, to: str, subject: str, html: str) -> Optional[str]:
         return None
 
 
+VERTICAL_LABELS = {"marketing": "Digital Marketing", "products": "IT Products", "academy": "IT Training",
+                   "corporate": "Corporate / Bulk", "general": "General Enquiry"}
+
+
+def _customer_email_html(p: "EnquiryInput", enquiry_id: str) -> str:
+    items = [("Reference ID", enquiry_id), ("Service", p.category or VERTICAL_LABELS.get(p.vertical, p.vertical)),
+             ("Interested in", p.interest), ("Budget range", p.budget), ("Timeline", p.timeline),
+             ("Phone", p.phone), ("Details", (p.message or "")[:500] or None)]
+    rows = "".join(
+        f'<tr><td style="padding:6px 16px 6px 0;color:#64748b;font-size:13px;vertical-align:top">{escape(k)}</td>'
+        f'<td style="padding:6px 0;color:#0f172a;font-size:13px"><strong>{escape(str(v))}</strong></td></tr>'
+        for k, v in items if v
+    )
+    return (
+        '<table role="presentation" width="100%" style="font-family:Arial,sans-serif;background:#f8fafc">'
+        '<tr><td style="padding:24px"><table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px">'
+        '<tr><td style="background:#0B0F19;padding:20px 24px;border-radius:12px 12px 0 0">'
+        '<span style="color:#ffffff;font-size:20px;font-weight:bold">Yantr Technologies</span></td></tr>'
+        '<tr><td style="padding:24px">'
+        f'<h2 style="color:#0B0F19;margin:0 0 8px">Thank you, {escape(p.name)}!</h2>'
+        '<p style="color:#475569;margin:0 0 16px;font-size:14px">We have received your enquiry. Our team will get back to you shortly. '
+        'Please keep your reference ID for any follow-up.</p>'
+        f'<table role="presentation">{rows}</table>'
+        '<p style="color:#0B0F19;font-size:14px;margin:24px 0 6px"><strong>Need to reach us?</strong></p>'
+        '<p style="color:#475569;font-size:13px;margin:0;line-height:1.7">'
+        'Email: <a href="mailto:yantrtechnologies@gmail.com" style="color:#2563EB">yantrtechnologies@gmail.com</a><br>'
+        'Phone / WhatsApp: <a href="tel:+919692791725" style="color:#2563EB">+91 9692791725</a><br>'
+        'Office: Pragati Vihar, Ainthapali, Sambalpur, Odisha</p>'
+        '<p style="font-size:12px;color:#94a3b8;margin-top:24px">You received this because you submitted an enquiry on the Yantr Technologies website.</p>'
+        '</td></tr></table></td></tr></table>'
+    )
+
+
 # ---------------------------------------------------------------------------
 # Auth helpers
 # ---------------------------------------------------------------------------
@@ -367,6 +400,13 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
             '</td></tr></table>'
         )
         asyncio.create_task(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html))
+
+    if payload.email:
+        asyncio.create_task(send_email(
+            to=payload.email,
+            subject=f"Thank you for contacting Yantr Technologies — {enquiry_id}",
+            html=_customer_email_html(payload, enquiry_id),
+        ))
 
     return {"id": enquiry_id, "status": "received",
             "message": "Thank you! Your enquiry has been received. Our team will reach out shortly."}

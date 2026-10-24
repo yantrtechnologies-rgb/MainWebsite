@@ -10,6 +10,8 @@ import { PageHero } from "@/components/PageHero";
 import api, { formatApiError } from "@/lib/api";
 import { COMPANY } from "@/data/siteData";
 
+const MAP_QUERY = "Pragati Vihar, Ainthapali, Sambalpur, Odisha";
+
 const TYPES = [
   { v: "marketing", l: "Digital Marketing" },
   { v: "products", l: "IT Product Sales" },
@@ -90,6 +92,25 @@ export default function Contact() {
                 </Button>
               </form>
             )}
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+          <div data-testid="contact-map" className="rounded-3xl overflow-hidden border border-slate-200 bg-white">
+            <div className="flex flex-wrap items-center justify-between gap-3 px-6 py-4 border-b border-slate-200">
+              <div className="flex items-center gap-3">
+                <MapPin className="w-5 h-5 text-[#2563EB]" />
+                <p className="font-semibold text-slate-900">Visit us — {COMPANY.address}</p>
+              </div>
+              <a data-testid="contact-map-directions" href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP_QUERY)}`} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-[#2563EB] hover:underline">Get directions →</a>
+            </div>
+            <iframe
+              data-testid="contact-map-iframe"
+              title="Yantr Technologies office location"
+              src={`https://maps.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&z=15&output=embed`}
+              className="w-full h-[320px] sm:h-[400px] border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
           </div>
         </div>
       </section>

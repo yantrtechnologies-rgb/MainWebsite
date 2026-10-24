@@ -1,0 +1,310 @@
+{
+  "brand_identity": {
+    "name": "Yantr Technologies",
+    "tagline": "Engineered for Growth. Hardware for Power. Mastery for Tomorrow.",
+    "positioning": "A high-octane multi-vertical technology power-house blending creative digital agency energy (inspired by Social Panga), high-performance IT hardware e-commerce, and cutting-edge tech academy.",
+    "verticals": [
+      {
+        "id": "marketing",
+        "title": "Digital Marketing Agency",
+        "card_title": "Grow Your Brand",
+        "badge": "Agency Vertical",
+        "tagline": "Bold performance marketing, creative storytelling & high-converting brand campaigns."
+      },
+      {
+        "id": "products",
+        "title": "IT Products & E-Commerce",
+        "card_title": "Power Your Business",
+        "badge": "E-Commerce Vertical",
+        "tagline": "Enterprise laptops, custom workstations, high-speed networking & accessories."
+      },
+      {
+        "id": "academy",
+        "title": "IT Training Academy",
+        "card_title": "Build Your Future",
+        "badge": "Academy Vertical",
+        "tagline": "Industry-grade bootcamps in Full-Stack, Cloud Architecture, AI & Cyber Security."
+      }
+    ]
+  },
+  "color_system": {
+    "archetype": "Electric & Performance Swiss (High Contrast Dark Slate + Vibrant Kinetic Accents)",
+    "tokens": {
+      "primary_dark": "#0B0F19",
+      "surface_dark": "#111827",
+      "surface_dark_card": "#1E293B",
+      "surface_light": "#FAFAFA",
+      "surface_white": "#FFFFFF",
+      "electric_blue": "#2563EB",
+      "electric_blue_light": "#3B82F6",
+      "lime_accent": "#84CC16",
+      "orange_accent": "#F97316",
+      "text_light_primary": "#F8FAFC",
+      "text_light_secondary": "#94A3B8",
+      "text_dark_primary": "#0F172A",
+      "text_dark_secondary": "#475569",
+      "border_dark": "rgba(255, 255, 255, 0.12)",
+      "border_light": "rgba(15, 23, 42, 0.08)"
+    },
+    "theme_rules": {
+      "default_theme": "light",
+      "hero_section": "Dark navy (#0B0F19) with glowing electric blue glass cards and neon lime accent tags",
+      "marketing_vertical": "High contrast energetic dark & white sections with kinetic outline typography",
+      "products_vertical": "Clean minimalist white surface with slate borders and high contrast product shots",
+      "academy_vertical": "Deep slate blue with vibrant orange badges and code terminal visual accents",
+      "footer": "Deep Navy (#0B0F19) with massive oversized watermark logo typography"
+    }
+  },
+  "typography": {
+    "headline_font": "Outfit / Plus Jakarta Sans (Bold display weights 700-900, tracking-tight)",
+    "body_font": "Plus Jakarta Sans / Inter (Regular/Medium weights 400-500)",
+    "mono_font": "JetBrains Mono (For metric counters, product SKUs, code snippets & status badges)",
+    "scale": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-none",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight",
+      "h3_card": "text-xl sm:text-2xl font-bold tracking-snug",
+      "body_lead": "text-lg text-slate-600 dark:text-slate-300 leading-relaxed",
+      "body_regular": "text-base text-slate-600 dark:text-slate-400 leading-normal",
+      "label_eyebrow": "text-xs uppercase font-mono tracking-[0.2em] font-bold text-blue-600 dark:text-lime-400"
+    },
+    "anti_patterns": [
+      "DO NOT use Inter or Space Grotesk for main display headings",
+      "DO NOT exceed text-6xl for hero headings on desktop",
+      "DO NOT center-align dense body paragraphs or form label text"
+    ]
+  },
+  "layout_and_spacing": {
+    "spacing_scale": "Tailwind standard (p-4, p-6, p-8, p-12, p-16, py-20, py-24)",
+    "container_max_width": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+    "bento_grid_modes": {
+      "portfolio_grid": "grid grid-cols-1 md:grid-cols-12 gap-6 lg:gap-8 (Hero case study span-8, secondary span-4)",
+      "verticals_grid": "grid grid-cols-1 md:grid-cols-3 gap-8",
+      "products_grid": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6",
+      "admin_dashboard_grid": "grid grid-cols-1 lg:grid-cols-12 gap-6 (Pipeline overview span-12, Kanban/Table span-8, Detail drawer span-4)"
+    }
+  },
+  "sections_specifications": {
+    "header_nav": {
+      "style": "Sticky top bar with backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 z-50",
+      "elements": [
+        "Brand Logo: 'YANTR' with geometric pulse symbol",
+        "Vertical Jump Links: Agency | IT Products | Academy | Why Us | Work",
+        "Actions: Dark/Light Mode Toggle, 'Enquire Now' primary button with electric pulse hover, Admin Dashboard quick launcher button"
+      ]
+    },
+    "hero_section": {
+      "theme": "Dark navy background (#0B0F19) with subtle grid scanlines and radial electric blue ambient lighting",
+      "eyebrow": "/// YANTR TECHNOLOGIES — THREE POWERHOUSE VERTICALS",
+      "headline": "Transforming Brands, Equipping Teams & Educating Tech Leaders.",
+      "subheadline": "We unite creative digital marketing agency power, enterprise hardware deployment, and hands-on IT career bootcamps under one ecosystem.",
+      "cards": [
+        {
+          "id": "grow",
+          "title": "Grow Your Brand",
+          "vertical": "Digital Marketing",
+          "tag": "Creative Agency",
+          "metric": "+240% ROI Average",
+          "cta": "Explore Agency Services",
+          "icon": "TrendingUp"
+        },
+        {
+          "id": "power",
+          "title": "Power Your Business",
+          "vertical": "IT Products Store",
+          "tag": "Hardware & Gear",
+          "metric": "5000+ Items In Stock",
+          "cta": "Browse IT Catalog",
+          "icon": "Laptop"
+        },
+        {
+          "id": "build",
+          "title": "Build Your Future",
+          "vertical": "Training Academy",
+          "tag": "Career Bootcamps",
+          "metric": "94% Hiring Rate",
+          "cta": "View Academy Courses",
+          "icon": "GraduationCap"
+        }
+      ]
+    },
+    "verticals_deep_dive": {
+      "type": "Interactive Tabbed & Bento Cards showcase for Digital Marketing, IT E-Commerce, and Tech Academy with live previews and spec badges."
+    },
+    "why_choose_us": {
+      "cards": [
+        {
+          "title": "End-to-End Synergy",
+          "description": "Marketing strategies paired with high-spec hardware and skilled trained talent."
+        },
+        {
+          "title": "Proven Track Record",
+          "description": "Over 150+ successful brand campaigns and enterprise IT deployments."
+        },
+        {
+          "title": "Custom Tailored Solutions",
+          "description": "Zero generic templates — every strategy and build is custom engineered."
+        },
+        {
+          "title": "Dedicated 24/7 Support",
+          "description": "Account managers, certified technicians, and course mentors on standby."
+        }
+      ]
+    },
+    "featured_work_portfolio": {
+      "inspiration": "SocialPanga creative showcase style with bold case study cards, hover zoom, metrics callouts, and filter tags.",
+      "filters": ["All", "Digital Marketing", "Branding & Social", "Performance Ads", "Web Apps"],
+      "items": [
+        {
+          "title": "FinPulse Global Rebrand",
+          "category": "Branding & Social",
+          "stat": "3.8M Impressions",
+          "image": "https://images.unsplash.com/photo-1758873271824-a3216c80d1ac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwzfHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85"
+        },
+        {
+          "title": "HyperDrive Performance Campaign",
+          "category": "Performance Ads",
+          "stat": "4.2x ROAS",
+          "image": "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        },
+        {
+          "title": "Nexus AI Web Application",
+          "category": "Web Apps",
+          "stat": "120k Users Onboarded",
+          "image": "https://images.unsplash.com/photo-1758873268695-1b55590e507a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwyfHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85"
+        }
+      ]
+    },
+    "featured_it_products": {
+      "style": "Clean e-commerce cards with price, availability badge, quick add to quote button, and specs rating.",
+      "products": [
+        {
+          "name": "Yantr Workstation Pro M3",
+          "specs": "64GB RAM | 2TB NVMe | RTX 4090",
+          "price": "$3,299",
+          "badge": "Top Seller",
+          "image": "https://images.unsplash.com/photo-1515343480029-43cdfe6b6aae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85"
+        },
+        {
+          "name": "Enterprise UltraBook X15",
+          "specs": "32GB RAM | 1TB SSD | OLED 120Hz",
+          "price": "$1,899",
+          "badge": "New Arrival",
+          "image": "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85"
+        },
+        {
+          "name": "Dual Curved 34\" Developer Display",
+          "specs": "4K HDR1000 | 144Hz | USB-C 90W",
+          "price": "$899",
+          "badge": "Featured",
+          "image": "https://images.pexels.com/photos/20263137/pexels-photo-20263137.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        }
+      ]
+    },
+    "featured_courses": {
+      "style": "Academy bootcamp cards with duration, tech stack icons, placement support badge, and syllabus modal.",
+      "courses": [
+        {
+          "title": "Full-Stack Software Engineering Bootcamp",
+          "duration": "16 Weeks • Live Online & Offline",
+          "stack": ["React", "Node.js", "Python", "PostgreSQL"],
+          "badge": "Placement Guaranteed",
+          "image": "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGNvZGluZyUyMGxlYXJuaW5nJTIwSVQlMjBjbGFzc3Jvb20lMjBzdHVkaW98ZW58MHx8fHwxNzkyODM3MDE1fDA&ixlib=rb-4.1.0&q=85"
+        },
+        {
+          "title": "Cloud Architecture & DevOps Masterclass",
+          "duration": "12 Weeks • Weekend Executive",
+          "stack": ["AWS", "Docker", "Kubernetes", "Terraform"],
+          "badge": "Industry Certified",
+          "image": "https://images.pexels.com/photos/10638070/pexels-photo-10638070.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        }
+      ]
+    },
+    "connected_journey": {
+      "title": "How We Help Businesses Grow — Step-by-Step",
+      "steps": [
+        {
+          "step": "01",
+          "name": "Audit & Growth Strategy",
+          "description": "Deep-dive analysis of your brand positioning, tech stack, and talent gaps."
+        },
+        {
+          "step": "02",
+          "name": "Creative Agency Execution",
+          "description": "High-impact social, SEO, and performance marketing to generate revenue."
+        },
+        {
+          "step": "03",
+          "name": "IT Infrastructure Scaling",
+          "description": "Deploying cutting-edge hardware, laptops, and workstations for your workforce."
+        },
+        {
+          "step": "04",
+          "name": "Talent & Upskilling",
+          "description": "Training your engineering and marketing team via specialized Yantr Academy bootcamps."
+        }
+      ]
+    },
+    "testimonials": {
+      "style": "Client and student success story quote carousel with company logos and star ratings."
+    },
+    "enquiry_and_lead_capture": {
+      "type": "Interactive Multi-Step Modal / Dedicated Page Form",
+      "steps": [
+        "Step 1: Select Vertical (Marketing / Hardware Purchase / Training Academy)",
+        "Step 2: Requirement Details (Budget, Timeline, Project Scope / Course Choice)",
+        "Step 3: Contact Info (Name, Business Email, Phone, Company / Qualification)",
+        "Step 4: Instant Confirmation & Schedule Discovery Call"
+      ]
+    },
+    "admin_dashboard": {
+      "title": "Yantr Lead Management & CRM",
+      "features": [
+        "Kanban Status Pipeline: New -> Contacted -> Qualified -> Proposal Sent -> Converted -> Lost",
+        "Search & Filter leads by Vertical, Date, Value, Status",
+        "Lead Details Modal with action buttons (Change Status, Add Note, Send Proposal, Export CSV)",
+        "Key Metrics Cards: Total Leads, Conversion Rate, Pipeline Value, Avg Response Time"
+      ]
+    },
+    "footer": {
+      "style": "Dark slate massive footer with watermark brand logo, vertical fast-links, office locations, newsletter signup, and copyright."
+    }
+  },
+  "media_assets": {
+    "team_office_images": [
+      "https://images.unsplash.com/photo-1787647560610-435c393752ec?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHw0fHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1758691737124-05c5bffe46f0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/3194519/pexels-photo-3194519.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ],
+    "hardware_images": [
+      "https://images.unsplash.com/photo-1515343480029-43cdfe6b6aae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/20263137/pexels-photo-20263137.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ],
+    "academy_images": [
+      "https://images.unsplash.com/photo-1555436169-20e93ea9a7ff?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzNDR8MHwxfHNlYXJjaHwxfHxzdHVkZW50cyUyMGNvZGluZyUyMGxlYXJuaW5nJTIwSVQlMjBjbGFzc3Jvb20lMjBzdHVkaW98ZW58MHx8fHwxNzkyODM3MDE1fDA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/10638075/pexels-photo-10638075.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "https://images.pexels.com/photos/10638070/pexels-photo-10638070.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+    ]
+  },
+  "testing_and_accessibility": {
+    "data_testid_rules": "All interactive elements (buttons, inputs, select options, filter tabs, modal triggers, status dropdowns, lead table rows) MUST have data-testid attributes in kebab-case.",
+    "sample_testids": [
+      "data-testid=\"nav-brand-logo\"",
+      "data-testid=\"hero-card-marketing\"",
+      "data-testid=\"hero-card-products\"",
+      "data-testid=\"hero-card-academy\"",
+      "data-testid=\"portfolio-filter-all\"",
+      "data-testid=\"enquiry-form-submit-button\"",
+      "data-testid=\"admin-lead-table\"",
+      "data-testid=\"admin-status-filter-dropdown\""
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow React .js file conventions (components in .jsx or .js as existing in repo).",
+    "Ensure Sonner toast notifications (from src/components/ui/sonner) are triggered on form submissions and lead updates.",
+    "Implement full dark/light theme toggle functionality integrated with tailwind class 'dark'.",
+    "Build a robust state-managed lead administration dashboard with sample leads across all 6 pipeline stages.",
+    "Ensure mobile responsiveness with hamburger navigation drawer and responsive grids."
+  ]
+}

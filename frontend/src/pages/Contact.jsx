@@ -28,10 +28,10 @@ export default function Contact() {
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email) { toast.error("Please provide your name and email."); return; }
+    if (!form.name.trim() || (!form.email.trim() && !form.phone.trim())) { toast.error("Please provide your name and a phone number or email."); return; }
     setSending(true);
     try {
-      const { data } = await api.post("/enquiries", form);
+      const { data } = await api.post("/enquiries", { ...form, email: form.email.trim() || null });
       setDone(data);
       toast.success("Message sent — we'll be in touch!");
     } catch (err) {
@@ -77,12 +77,13 @@ export default function Contact() {
                 </div>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div><Label>Full name *</Label><Input data-testid="contact-name" value={form.name} onChange={(e) => set("name", e.target.value)} className="mt-1.5" /></div>
-                  <div><Label>Email *</Label><Input data-testid="contact-email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} className="mt-1.5" /></div>
+                  <div><Label>Email</Label><Input data-testid="contact-email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} className="mt-1.5" /></div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-5">
-                  <div><Label>Phone</Label><Input data-testid="contact-phone" value={form.phone} onChange={(e) => set("phone", e.target.value)} className="mt-1.5" /></div>
+                  <div><Label>Phone</Label><Input data-testid="contact-phone" type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} className="mt-1.5" /></div>
                   <div><Label>Company</Label><Input data-testid="contact-company" value={form.company} onChange={(e) => set("company", e.target.value)} className="mt-1.5" /></div>
                 </div>
+                <p data-testid="contact-hint" className="text-xs text-slate-500 -mt-2">* Phone number or email is required.</p>
                 <div><Label>Message</Label><Textarea data-testid="contact-message" value={form.message} onChange={(e) => set("message", e.target.value)} rows={4} className="mt-1.5" placeholder="How can we help?" /></div>
                 <Button data-testid="contact-submit" type="submit" disabled={sending} className="w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-full h-12 font-semibold">
                   {sending ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Sending…</> : "Send Message"}

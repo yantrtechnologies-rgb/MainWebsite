@@ -22,7 +22,7 @@ from urllib.parse import urlparse
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, EmailStr
+from pydantic import BaseModel, Field, EmailStr, field_validator, model_validator
 
 # ---------------------------------------------------------------------------
 # DB + App setup
@@ -218,7 +218,7 @@ class EnquiryInput(BaseModel):
     vertical: str                      # marketing | products | academy | corporate | general
     category: Optional[str] = None
     name: str
-    email: EmailStr
+    email: Optional[EmailStr] = None
     phone: Optional[str] = None
     company: Optional[str] = None
     website: Optional[str] = None
@@ -228,6 +228,17 @@ class EnquiryInput(BaseModel):
     services: Optional[List[str]] = None
     interest: Optional[str] = None     # course name / product name
     message: Optional[str] = None
+
+    @field_validator("email", "phone", mode="before")
+    @classmethod
+    def _blank_to_none(cls, v):
+        return (v.strip() or None) if isinstance(v, str) else v
+
+    @model_validator(mode="after")
+    def _need_contact(self):
+        if not self.email and not self.phone:
+            raise ValueError("Please provide a phone number or email")
+        return self
 
 
 class StatusUpdate(BaseModel):
@@ -339,7 +350,7 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
             for k, v in [
                 ("Enquiry ID", enquiry_id), ("Vertical", payload.vertical),
                 ("Category", payload.category or "-"), ("Name", payload.name),
-                ("Email", payload.email), ("Phone", payload.phone or "-"),
+                ("Email", payload.email or "-"), ("Phone", payload.phone or "-"),
                 ("Company", payload.company or "-"), ("Budget", payload.budget or "-"),
                 ("Interest", payload.interest or "-"),
                 ("Message", (payload.message or "-")[:500]),

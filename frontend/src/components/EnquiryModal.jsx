@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { TrendingUp, Laptop, GraduationCap, Building2, CheckCircle2, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import api, { formatApiError } from "@/lib/api";
@@ -16,8 +15,6 @@ const VERTICAL_OPTIONS = [
   { id: "academy", label: "IT Training", icon: GraduationCap, desc: "Enrol in a course" },
   { id: "corporate", label: "Corporate / Bulk", icon: Building2, desc: "Teams & institutions" },
 ];
-
-const BUDGETS = ["< $1,000", "$1,000 – $5,000", "$5,000 – $20,000", "$20,000+", "Not sure yet"];
 
 const empty = { vertical: "marketing", name: "", email: "", phone: "", company: "", budget: "", timeline: "", interest: "", message: "" };
 
@@ -39,13 +36,13 @@ export const EnquiryModal = () => {
   const set = (k, v) => setForm((f) => ({ ...f, [k]: v }));
 
   const submit = async () => {
-    if (!form.name || !form.email) {
-      toast.error("Please provide your name and email.");
+    if (!form.name.trim() || (!form.email.trim() && !form.phone.trim())) {
+      toast.error("Please provide your name and a phone number or email.");
       return;
     }
     setSubmitting(true);
     try {
-      const { data } = await api.post("/enquiries", form);
+      const { data } = await api.post("/enquiries", { ...form, email: form.email.trim() || null });
       setDone(data);
       setStep(4);
       toast.success("Enquiry submitted successfully!");
@@ -109,11 +106,8 @@ export const EnquiryModal = () => {
                 </div>
               )}
               <div>
-                <Label className="text-slate-300">Estimated budget</Label>
-                <Select value={form.budget} onValueChange={(v) => set("budget", v)}>
-                  <SelectTrigger data-testid="enquiry-budget" className="mt-1.5 bg-white/5 border-white/10 text-white"><SelectValue placeholder="Select a range" /></SelectTrigger>
-                  <SelectContent>{BUDGETS.map((b) => <SelectItem key={b} value={b}>{b}</SelectItem>)}</SelectContent>
-                </Select>
+                <Label className="text-slate-300">Your budget range</Label>
+                <Input data-testid="enquiry-budget" value={form.budget} onChange={(e) => set("budget", e.target.value)} placeholder="e.g. ₹50,000 – ₹1,00,000" className="mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-slate-500" />
               </div>
               <div>
                 <Label className="text-slate-300">Timeline</Label>
@@ -134,14 +128,15 @@ export const EnquiryModal = () => {
               </div>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <Label className="text-slate-300">Email *</Label>
+                  <Label className="text-slate-300">Email</Label>
                   <Input data-testid="enquiry-email" type="email" value={form.email} onChange={(e) => set("email", e.target.value)} className="mt-1.5 bg-white/5 border-white/10 text-white" />
                 </div>
                 <div>
                   <Label className="text-slate-300">Phone</Label>
-                  <Input data-testid="enquiry-phone" value={form.phone} onChange={(e) => set("phone", e.target.value)} className="mt-1.5 bg-white/5 border-white/10 text-white" />
+                  <Input data-testid="enquiry-phone" type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} className="mt-1.5 bg-white/5 border-white/10 text-white" />
                 </div>
               </div>
+              <p data-testid="enquiry-contact-hint" className="text-xs text-[#84CC16] -mt-2">* Phone number or email is required so we can send your quote.</p>
               <div>
                 <Label className="text-slate-300">Company / Organisation</Label>
                 <Input data-testid="enquiry-company" value={form.company} onChange={(e) => set("company", e.target.value)} className="mt-1.5 bg-white/5 border-white/10 text-white" />

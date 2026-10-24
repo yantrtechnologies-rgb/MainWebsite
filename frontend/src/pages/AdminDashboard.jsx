@@ -89,7 +89,7 @@ export default function AdminDashboard() {
 
   const exportCsv = () => {
     const rows = [["ID", "Name", "Email", "Phone", "Company", "Vertical", "Status", "Interest", "Created"]];
-    leads.forEach((l) => rows.push([l.id, l.name, l.email, l.phone || "", l.company || "", l.vertical, l.status, l.interest || "", l.created_at]));
+    leads.forEach((l) => rows.push([l.id, l.name, l.email || "", l.phone || "", l.company || "", l.vertical, l.status, l.interest || "", l.created_at]));
     const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
     const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
     const a = document.createElement("a");
@@ -177,7 +177,7 @@ export default function AdminDashboard() {
                     <tr key={l.id} data-testid={`lead-row-${l.id}`} className="border-t border-white/5 hover:bg-white/[0.03] transition-colors">
                       <td className="px-4 py-3">
                         <p className="font-semibold text-white">{l.name}</p>
-                        <p className="text-slate-400 text-xs">{l.email}</p>
+                        <p className="text-slate-400 text-xs">{l.email || l.phone}</p>
                         <p className="text-slate-500 text-xs font-mono">{l.id}</p>
                       </td>
                       <td className="px-4 py-3 hidden md:table-cell"><Badge variant="outline" className="border-white/15 text-slate-300">{VERTICAL_LABELS[l.vertical] || l.vertical}</Badge></td>
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
                   <span className="text-xs font-mono text-slate-500">{selected.id}</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <p className="flex items-center gap-2 text-slate-300"><Mail className="w-4 h-4 text-[#2563EB]" /> {selected.email}</p>
+                  <p className="flex items-center gap-2 text-slate-300"><Mail className="w-4 h-4 text-[#2563EB]" /> {selected.email || "-"}</p>
                   {selected.phone && <p className="flex items-center gap-2 text-slate-300"><Phone className="w-4 h-4 text-[#2563EB]" /> {selected.phone}</p>}
                   {selected.company && <p className="flex items-center gap-2 text-slate-300"><Building2 className="w-4 h-4 text-[#2563EB]" /> {selected.company}</p>}
                 </div>

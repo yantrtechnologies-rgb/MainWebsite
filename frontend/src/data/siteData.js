@@ -66,8 +66,8 @@ export const JOURNEY = [
 export const COMPANY = {
   name: "Yantr Technologies",
   tagline: "Engineered for Growth. Hardware for Power. Mastery for Tomorrow.",
-  email: "amtrks79@gmail.com",
-  phone: "[Add phone number]",
-  address: "[Add office address]",
+  email: "yantrtechnologies@gmail.com",
+  phone: "9692791725",
+  address: "Pragati Vihar, Ainthapali, Sambalpur, Odisha",
   hours: "Mon–Sat, 9:30am – 6:30pm",
 };

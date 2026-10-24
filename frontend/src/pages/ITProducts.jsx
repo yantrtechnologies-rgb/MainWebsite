@@ -51,7 +51,7 @@ export default function ITProducts() {
                       <h3 className="font-display font-bold text-slate-900 mt-1 leading-snug">{p.name}</h3>
                       <p className="text-xs text-slate-500 mt-2 font-mono">{p.specs}</p>
                       <div className="mt-auto pt-4 flex items-center justify-between">
-                        <span className="font-display text-xl font-extrabold text-slate-900">{p.price}</span>
+                        <span className="text-sm font-semibold text-[#2563EB]">Price on request</span>
                         <span className="text-xs font-medium text-[#84CC16] bg-[#84CC16]/10 px-2 py-1 rounded-md">{p.stock}</span>
                       </div>
                       <Button data-testid={`products-page-quote-${i}`} onClick={() => openEnquiry("products", p.name)} className="mt-4 w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm">Request a Quote</Button>
@@ -69,7 +69,7 @@ export default function ITProducts() {
               <Button data-testid="bulk-quote-cta" onClick={() => openEnquiry("corporate")} className="mt-6 bg-[#84CC16] text-[#0B0F19] hover:bg-white rounded-full h-12 px-8 font-semibold">Request Bulk Quote</Button>
             </div>
           </div>
-          <p className="text-center text-xs text-slate-400 mt-6">Prices and availability shown are demonstration content and easy to replace with verified live data.</p>
+          <p className="text-center text-xs text-slate-400 mt-6">Request a quote and we'll share the best price for your requirement by phone or email.</p>
         </div>
       </section>
     </>

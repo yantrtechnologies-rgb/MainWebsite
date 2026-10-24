@@ -1,26 +1,24 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Zap, Mail, MapPin, Clock, Linkedin, Twitter, Instagram, Facebook } from "lucide-react";
+import { Mail, MapPin, Phone, Linkedin, Twitter, Instagram, Facebook } from "lucide-react";
 import { COMPANY } from "@/data/siteData";
-import { useEnquiry } from "@/context/contexts";
 
 const COLS = [
-  { title: "Digital Marketing", links: ["SEO", "Social Media", "Performance Ads", "Branding", "Web Development"] },
-  { title: "IT Products", links: ["Laptops", "Desktops", "Monitors", "Networking", "Accessories"] },
-  { title: "Training Academy", links: ["Full-Stack", "Cloud & DevOps", "Cyber Security", "Data & AI", "Corporate Training"] },
+  { title: "Digital Marketing", to: "/digital-marketing", links: ["SEO", "Social Media", "Performance Ads", "Branding", "Web Development"] },
+  { title: "IT Products", to: "/it-products", links: ["Laptops", "Desktops", "Monitors", "Networking", "Accessories"] },
+  { title: "Training Academy", to: "/it-training", links: ["Full-Stack", "Cloud & DevOps", "Cyber Security", "Data & AI", "Corporate Training"] },
 ];
 
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+
 export const Footer = () => {
-  const { openEnquiry } = useEnquiry();
   return (
     <footer data-testid="site-footer" className="relative bg-[#0B0F19] text-slate-300 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <span className="grid place-items-center w-9 h-9 rounded-lg bg-[#2563EB] text-white">
-                <Zap className="w-5 h-5" strokeWidth={2.5} />
-              </span>
+            <Link to="/" data-testid="footer-brand-logo" className="flex items-center gap-2 mb-4">
+              <img src="/logo.webp" alt="Yantr Technologies logo" className="w-9 h-9 rounded-lg object-cover" />
               <span className="font-display font-extrabold text-xl text-white">YANTR</span>
             </Link>
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">{COMPANY.tagline}</p>
@@ -38,11 +36,11 @@ export const Footer = () => {
 
           {COLS.map((c) => (
             <div key={c.title}>
-              <h4 className="font-semibold text-white text-sm mb-4">{c.title}</h4>
+              <Link to={c.to} data-testid={`footer-col-${slug(c.title)}`} className="block font-semibold text-white text-sm mb-4 hover:text-[#84CC16] transition-colors">{c.title}</Link>
               <ul className="space-y-2.5">
                 {c.links.map((l) => (
                   <li key={l}>
-                    <button onClick={() => openEnquiry("general")} className="text-sm text-slate-400 hover:text-[#84CC16] transition-colors">{l}</button>
+                    <Link to={c.to} data-testid={`footer-link-${slug(c.title)}-${slug(l)}`} className="text-sm text-slate-400 hover:text-[#84CC16] transition-colors">{l}</Link>
                   </li>
                 ))}
               </ul>
@@ -51,9 +49,9 @@ export const Footer = () => {
         </div>
 
         <div className="grid sm:grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10 text-sm text-slate-400">
-          <span className="flex items-center gap-2"><Mail className="w-4 h-4 text-[#2563EB]" /> {COMPANY.email}</span>
-          <span className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#2563EB]" /> {COMPANY.address}</span>
-          <span className="flex items-center gap-2"><Clock className="w-4 h-4 text-[#2563EB]" /> {COMPANY.hours}</span>
+          <a href={`mailto:${COMPANY.email}`} data-testid="footer-email" className="flex items-center gap-2 hover:text-white"><Mail className="w-4 h-4 text-[#2563EB]" /> {COMPANY.email}</a>
+          <a href={`tel:+91${COMPANY.phone}`} data-testid="footer-phone" className="flex items-center gap-2 hover:text-white"><Phone className="w-4 h-4 text-[#2563EB]" /> {COMPANY.phone}</a>
+          <span data-testid="footer-address" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#2563EB]" /> {COMPANY.address}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-white/10">

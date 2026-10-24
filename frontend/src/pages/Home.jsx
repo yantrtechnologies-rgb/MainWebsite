@@ -205,7 +205,7 @@ const FeaturedProducts = () => {
                   <h3 className="font-display font-bold text-slate-900 mt-1 leading-snug">{p.name}</h3>
                   <p className="text-xs text-slate-500 mt-2 font-mono">{p.specs}</p>
                   <div className="mt-auto pt-4 flex items-center justify-between">
-                    <span className="font-display text-xl font-extrabold text-slate-900">{p.price}</span>
+                    <span className="text-sm font-semibold text-[#2563EB]">Price on request</span>
                     <span className="text-xs font-medium text-[#84CC16] bg-[#84CC16]/10 px-2 py-1 rounded-md">{p.stock}</span>
                   </div>
                   <Button data-testid={`product-quote-${i}`} onClick={() => openEnquiry("products", p.name)} className="mt-4 w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm">Request a Quote</Button>

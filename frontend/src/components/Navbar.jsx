@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Menu, X, Moon, Sun, Zap, ChevronRight, LayoutDashboard } from "lucide-react";
+import { Menu, X, Moon, Sun, ChevronRight, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme, useEnquiry, useAuth } from "@/context/contexts";
 
@@ -36,9 +36,7 @@ export const Navbar = () => {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" data-testid="nav-brand-logo" className="flex items-center gap-2 group">
-          <span className="grid place-items-center w-9 h-9 rounded-lg bg-[#2563EB] text-white group-hover:bg-[#84CC16] group-hover:text-[#0B0F19] transition-colors">
-            <Zap className="w-5 h-5" strokeWidth={2.5} />
-          </span>
+          <img src="/logo.webp" alt="Yantr Technologies logo" className="w-9 h-9 rounded-lg object-cover group-hover:scale-105 transition-transform" />
           <span className="font-display font-extrabold text-xl tracking-tight text-white">YANTR</span>
         </Link>
 

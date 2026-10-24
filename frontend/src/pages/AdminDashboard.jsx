@@ -61,8 +61,11 @@ export default function AdminDashboard() {
     } finally { setLoading(false); }
   }, [statusFilter, verticalFilter, search]);
 
-  useEffect(() => { if (user) load(); }, [user, load]);
-
+  useEffect(() => {
+    if (!user) return;
+    const t = setTimeout(load, 350);
+    return () => clearTimeout(t);
+  }, [user, load]);
   const changeStatus = async (id, status) => {
     try {
       await api.patch(`/admin/enquiries/${id}/status`, { status });
@@ -78,6 +81,7 @@ export default function AdminDashboard() {
     try {
       const { data } = await api.post(`/admin/enquiries/${selected.id}/notes`, { note });
       setSelected((s) => ({ ...s, notes: [...(s.notes || []), data.note] }));
+      setLeads((ls) => ls.map((l) => (l.id === selected.id ? { ...l, notes: [...(l.notes || []), data.note] } : l)));
       setNote("");
       toast.success("Note added");
     } catch (e) { toast.error("Could not add note."); }

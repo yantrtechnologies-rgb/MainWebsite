@@ -1,0 +1,47 @@
+{
+  "summary": "First build E2E test of Yantr Technologies. Backend: 18/20 pytest pass (auth, admin protection, enquiry create->list, search/filter, status, notes, followup, metrics). Frontend: homepage + hero cards, multi-step enquiry modal (YT-XXXX ref), contact form, product quote/course enrol prefill, products search/category, training mode, work filters, admin login/redirect/protection, metrics, lead table, row status change, drawer note, status filter, CSV export, logout all working. Failures: rate limiter keyed on ingress pod IP (global, not per-client), admin search 500 on regex special chars, drawer notes lost on reopen (stale state).",
+  "backend_issues": {
+    "critical": [
+      {"endpoint": "POST /api/enquiries", "issue": "Rate limiter uses request.client.host which is the k8s ingress pod IP (logs show 10.81.4.212 / 10.81.4.213), not the real visitor. Result: limit is shared by ALL visitors per ingress pod (~16 enquiries/5min site-wide) and genuine users will get 429; per-IP limiting does not work (10 sequential requests all 200 in one run, later run mixed 200/429 depending on pod). Fix: key on first IP of X-Forwarded-For (fallback X-Real-IP, then client.host).", "priority": "HIGH"}
+    ],
+    "minor": [
+      {"endpoint": "GET /api/admin/enquiries?search=(", "issue": "Returns 500 - search is passed raw into Mongo $regex. Use re.escape(search)."},
+      {"endpoint": "POST /api/auth/login", "issue": "No brute-force lockout (7 consecutive wrong passwords all 401, no 429). Playbook requires lockout after 5 failures."},
+      {"endpoint": "POST /api/enquiries", "issue": "send_email is awaited inline (30s httpx timeout) so a slow email provider delays the user response; use asyncio.create_task / BackgroundTasks for truly non-blocking. Email provider also returned 429 rate_limited during tests (enquiry still saved - OK)."},
+      {"endpoint": "startup seed", "issue": "ADMIN_EMAIL/ADMIN_PASSWORD fall back to hardcoded defaults admin@example.com/admin123; should fail fast if missing."},
+      {"endpoint": "POST /api/admin/enquiries/{id}/notes", "issue": "Accepts empty note string; no length validation on note/message fields."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "AdminDashboard lead drawer", "issue": "After adding a note, closing and re-opening the drawer for the same lead shows 'No notes yet' - addNote only updates `selected`, not the `leads` array (setSelected(l) reopens with stale lead). Fix: also update leads state in addNote (setLeads(ls => ls.map(...))).", "selector": "[data-testid='drawer-add-note']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin dashboard", "issues": ["Search input triggers a full API reload (2 requests) on every keystroke - add debounce."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_yantr_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix rate limiter key to use X-Forwarded-For client IP instead of request.client.host",
+    "re.escape the admin search term before $regex",
+    "AdminDashboard addNote: sync note into leads state so reopened drawer shows notes",
+    "Add login brute-force lockout (5 fails) per auth playbook",
+    "Make lead email notification non-blocking (background task)",
+    "Remove hardcoded admin default credentials fallback"
+  ],
+  "critical_code_review_comments": [
+    "server.py rate limiter is in-memory and per-process; resets on restart and breaks with multiple workers",
+    "CORS allow_origins=* with allow_credentials=False is acceptable since auth is Bearer header (no cookies) - playbook cookie checks N/A by design",
+    "bcrypt hash verified $2b$; seed_admin updates password if changed - OK",
+    "ITProducts page product cards/quote buttons had no data-testid (added by tester)"
+  ],
+  "updated_files": ["/app/backend/tests/test_yantr_api.py", "/app/frontend/src/pages/ITProducts.jsx (added data-testid products-page-card-<i>, products-page-quote-<i>)"],
+  "success_rate": {"backend": "90% (18/20)", "frontend": "95%"},
+  "test_credentials": "Admin amtrks79@gmail.com / YantrAdmin@2026 (from /app/memory/test_credentials.md) - works",
+  "seed_data_creation": "Created TEST_ prefixed enquiries during testing; all deleted afterwards (18 removed). Backend restarted once to reset in-memory rate-limit bucket.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run pytest backend/tests/test_yantr_api.py (test_zz_rate_limit exhausts bucket - restart backend afterwards before UI tests). Rate-limit test may pass by chance after fix depending on ingress pods; verify by sending X-Forwarded-For header variations. Recheck drawer note persistence on reopen.",
+  "rca of the issue": "Rate limit: behind ingress, request.client.host = ingress pod IP; multiple pods => bucket per pod shared by all users. Search 500: unescaped user input to $regex raises Mongo regex compile error. Drawer notes: React state only updated on `selected` copy, leads list holds stale object."
+}

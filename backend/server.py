@@ -8,6 +8,7 @@ load_dotenv(ROOT_DIR / '.env')
 import logging
 import uuid
 import re
+import asyncio
 import ipaddress
 import jwt
 import bcrypt
@@ -246,6 +247,17 @@ VALID_STATUSES = ["New", "Contacted", "Qualified", "Proposal Sent", "Converted",
 
 # simple in-memory rate limiter for public enquiry submissions
 _rate: dict = {}
+_login_attempts: dict = {}
+
+
+def _client_ip(request: Request) -> str:
+    xff = request.headers.get("x-forwarded-for")
+    if xff:
+        return xff.split(",")[0].strip()
+    xri = request.headers.get("x-real-ip")
+    if xri:
+        return xri.strip()
+    return request.client.host if request.client else "anon"
 
 
 def _rate_limit(key: str, limit: int = 8, window_sec: int = 300):
@@ -282,11 +294,19 @@ async def register(payload: RegisterInput):
 
 
 @api_router.post("/auth/login")
-async def login(payload: LoginInput):
+async def login(payload: LoginInput, request: Request):
     email = payload.email.lower()
+    key = f"{_client_ip(request)}:{email}"
+    now = datetime.now(timezone.utc).timestamp()
+    attempts = [t for t in _login_attempts.get(key, []) if now - t < 900]
+    if len(attempts) >= 5:
+        raise HTTPException(status_code=429, detail="Too many failed attempts. Try again in 15 minutes.")
     user = await db.users.find_one({"email": email})
     if not user or not verify_password(payload.password, user["password_hash"]):
+        attempts.append(now)
+        _login_attempts[key] = attempts
         raise HTTPException(status_code=401, detail="Invalid email or password")
+    _login_attempts.pop(key, None)
     token = create_access_token(user["id"], email, user["role"])
     return {"token": token, "user": {"id": user["id"], "name": user["name"], "email": email, "role": user["role"]}}
 
@@ -298,7 +318,7 @@ async def me(user: dict = Depends(get_current_user)):
 
 @api_router.post("/enquiries")
 async def create_enquiry(payload: EnquiryInput, request: Request):
-    _rate_limit(request.client.host if request.client else "anon")
+    _rate_limit(_client_ip(request))
     enquiry_id = "YT-" + uuid.uuid4().hex[:8].upper()
     doc = payload.model_dump()
     doc.update({
@@ -335,7 +355,7 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
             'We never ask for your password or card details by email.</p>'
             '</td></tr></table>'
         )
-        await send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html)
+        asyncio.create_task(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html))
 
     return {"id": enquiry_id, "status": "received",
             "message": "Thank you! Your enquiry has been received. Our team will reach out shortly."}
@@ -354,11 +374,12 @@ async def list_enquiries(user: dict = Depends(require_admin),
     if vertical and vertical != "All":
         query["vertical"] = vertical
     if search:
+        safe = re.escape(search)
         query["$or"] = [
-            {"name": {"$regex": search, "$options": "i"}},
-            {"email": {"$regex": search, "$options": "i"}},
-            {"company": {"$regex": search, "$options": "i"}},
-            {"id": {"$regex": search, "$options": "i"}},
+            {"name": {"$regex": safe, "$options": "i"}},
+            {"email": {"$regex": safe, "$options": "i"}},
+            {"company": {"$regex": safe, "$options": "i"}},
+            {"id": {"$regex": safe, "$options": "i"}},
         ]
     items = await db.enquiries.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
     return items

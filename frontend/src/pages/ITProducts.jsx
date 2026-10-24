@@ -41,7 +41,7 @@ export default function ITProducts() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               {filtered.map((p, i) => (
                 <Reveal key={p.name} delay={0.05 * i}>
-                  <div className="group h-full rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-xl transition-all flex flex-col">
+                  <div data-testid={`products-page-card-${i}`} className="group h-full rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-xl transition-all flex flex-col">
                     <div className="relative h-44 bg-slate-100 overflow-hidden">
                       <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <Badge className="absolute top-3 left-3 bg-[#2563EB] text-white border-0">{p.badge}</Badge>
@@ -54,7 +54,7 @@ export default function ITProducts() {
                         <span className="font-display text-xl font-extrabold text-slate-900">{p.price}</span>
                         <span className="text-xs font-medium text-[#84CC16] bg-[#84CC16]/10 px-2 py-1 rounded-md">{p.stock}</span>
                       </div>
-                      <Button onClick={() => openEnquiry("products", p.name)} className="mt-4 w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm">Request a Quote</Button>
+                      <Button data-testid={`products-page-quote-${i}`} onClick={() => openEnquiry("products", p.name)} className="mt-4 w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm">Request a Quote</Button>
                     </div>
                   </div>
                 </Reveal>

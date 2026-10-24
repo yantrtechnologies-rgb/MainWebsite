@@ -1,0 +1,46 @@
+{
+  "summary": "Retest of follow-up requests (logo/favicon, contact info, free-text budget, no prices + Request Quote, phone OR email required, footer Digital Marketing nav, Contact enquiry-type dropdown transparency). All requested features verified working. Backend 9/9 new pytest pass. Frontend: all flows pass at 1280 desktop and 390 mobile, in light and dark theme.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/enquiries", "issue": "The rate limiter uses the first X-Forwarded-For value without checking it, so a client can spoof the header and bypass the limit. Check that the ingress overwrites or appends XFF, and if it appends, use the right-most trusted hop."},
+      {"endpoint": "POST /api/enquiries", "issue": "'vertical' is free text and is not checked against the allowed values (e.g. 'x' is accepted)."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Admin lead drawer", "issues": ["For leads without an email, the drawer still shows the mail icon followed by '-'. Hide that line like the phone line is hidden (cosmetic)."]}
+    ]
+  },
+  "verified": [
+    "nav-brand-logo and footer-brand-logo use /logo.webp (it loads, naturalWidth 512); title 'Yantr Technologies'; favicon /favicon.png",
+    "footer-email/phone/address are correct; mailto: link and tel:+919692791725 link; Contact cards show the same values",
+    "footer-col-digital-marketing and footer-link-digital-marketing-seo / -web-development go to /digital-marketing with no modal; IT Products links go to /it-products and Training links go to /it-training; page scrolls to top",
+    "Home and /it-products: no $ prices; 4x 'Price on request'; Request a Quote opens the modal with the product prefilled",
+    "enquiry-budget is input[type=text]; the typed value is in the payload, saved, and shown in the admin drawer",
+    "No email and no phone: error toast and no request sent. Phone only: success. Email only: success. Invalid email: backend validation message in a toast",
+    "Contact dropdown: bg rgb(255,255,255), opacity 1, z-50, dark slate text, hover #2563EB with white text; correct at 1280 and 390 and in dark theme; contact submit with phone only succeeds",
+    "Backend: 422 when both are missing, empty, whitespace-only, or null+empty; 200 with phone only or email only; budget free text saved; email stored as null",
+    "Admin list shows the phone for leads without an email; the iteration 1 drawer-note sync bug is fixed in code (setLeads in addNote)"
+  ],
+  "test_report_links": ["/app/backend/tests/test_enquiry_contact_rules.py", "/app/backend/tests/test_yantr_api.py", "/app/test_reports/pytest/pytest_results_iter2.xml"],
+  "action_items": [
+    "(Optional) Hide the email row in the admin drawer when there is no email",
+    "(Optional) Check 'vertical' against an allowed list (Literal)",
+    "(Optional) Make the X-Forwarded-For rate-limit key harder to spoof"
+  ],
+  "critical_code_review_comments": [
+    "EnquiryModal/Contact send phone untrimmed and email as null; the backend _blank_to_none handles both. OK",
+    "The contact-required rule is enforced on both the frontend and the backend. Good",
+    "Contact TYPES has 3 entries with vertical 'general'. SelectItem values use labels, which are unique, so this is OK"
+  ],
+  "updated_files": ["/app/backend/tests/test_enquiry_contact_rules.py"],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100%"},
+  "test_credentials": "Admin amtrks79@gmail.com / YantrAdmin@2026 works",
+  "seed_data_creation": "TEST_ enquiries were created and then deleted (5 removed). Non-TEST leads ('A') created by the main agent were left in place.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "test_enquiry_contact_rules.py sends random X-Forwarded-For values to avoid the rate limit. In Playwright, route /api/enquiries to inject an x-forwarded-for header. The admin drawer opens through lead-view-<id>."
+}

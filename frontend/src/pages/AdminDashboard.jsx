@@ -213,7 +213,7 @@ export default function AdminDashboard() {
                   <span className="text-xs font-mono text-slate-500">{selected.id}</span>
                 </div>
                 <div className="space-y-2 text-sm">
-                  <p className="flex items-center gap-2 text-slate-300"><Mail className="w-4 h-4 text-[#2563EB]" /> {selected.email || "-"}</p>
+                  {selected.email && <p className="flex items-center gap-2 text-slate-300"><Mail className="w-4 h-4 text-[#2563EB]" /> {selected.email}</p>}
                   {selected.phone && <p className="flex items-center gap-2 text-slate-300"><Phone className="w-4 h-4 text-[#2563EB]" /> {selected.phone}</p>}
                   {selected.company && <p className="flex items-center gap-2 text-slate-300"><Building2 className="w-4 h-4 text-[#2563EB]" /> {selected.company}</p>}
                 </div>

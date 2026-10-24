@@ -14,7 +14,7 @@ import jwt
 import bcrypt
 import httpx
 from datetime import datetime, timezone, timedelta
-from typing import List, Optional
+from typing import List, Literal, Optional
 from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
@@ -215,7 +215,7 @@ class LoginInput(BaseModel):
 
 
 class EnquiryInput(BaseModel):
-    vertical: str                      # marketing | products | academy | corporate | general
+    vertical: Literal["marketing", "products", "academy", "corporate", "general"]
     category: Optional[str] = None
     name: str
     email: Optional[EmailStr] = None

@@ -82,7 +82,37 @@ class ProductIn(BaseModel):
     order: int = 0
 
 
-MODELS = {"courses": CourseIn, "packages": PackageIn, "products": ProductIn}
+class TestimonialIn(BaseModel):
+    name: str = Field(min_length=1, max_length=80)
+    org: str = ""
+    service: str = ""
+    quote: str = Field(min_length=1, max_length=600)
+    rating: int = Field(default=5, ge=1, le=5)
+    label: str = ""
+    image: str = ""
+    order: int = 0
+
+
+class ClientIn(BaseModel):
+    name: str = Field(min_length=1, max_length=80)
+    image: str = ""
+    order: int = 0
+
+
+MODELS = {"courses": CourseIn, "packages": PackageIn, "products": ProductIn,
+          "testimonials": TestimonialIn, "clients": ClientIn}
+
+SEED_TESTIMONIALS = [
+    ("Priya Mohanty", "Full Stack Development student", "IT Training", "The trainers explained every concept with real projects. Within six months I built my own portfolio and cracked my first developer interview."),
+    ("Rakesh Agarwal", "Retail business owner, Sambalpur", "IT Products", "We bought laptops, a printer and CCTV for our shop. Yantr gave the best quote in town, installed everything on time and still supports us."),
+    ("Sneha Patel", "Boutique owner", "Social Media Marketing", "Our Instagram enquiries doubled in three months. The team plans our posts and reels so I can focus on running the store."),
+    ("Amit Behera", "Cyber Security student", "IT Training", "The hands-on labs were the best part. I learned tools I now use every day at work. Highly recommend the faculty."),
+    ("Sunita Das", "Office administrator", "Bulk IT Procurement", "Quick quotations, genuine products and proper billing. They handled our complete office setup including networking."),
+    ("Manoj Sahu", "Restaurant owner", "SEO & Google Business", "Customers now find us on Google Maps easily. Our weekend footfall has clearly gone up since Yantr took over our online presence."),
+]
+
+SEED_CLIENTS = ["Adobe", "Malabar Jewellers", "Tanishq", "Anand Super Market", "Dell", "HP", "Lenovo",
+                "Reliance Digital", "Croma", "Airtel", "HDFC Bank", "Tata Motors", "Asian Paints", "Infosys", "Mahindra"]
 
 
 # ---------------------------------------------------------------------------
@@ -171,6 +201,11 @@ def _seed_docs(kind: str) -> List[dict]:
     elif kind == "packages":
         rows = [PackageIn(title=t, icon=ic, description=d, features=f, order=i)
                 for i, (t, ic, d, f) in enumerate(SEED_PACKAGES)]
+    elif kind == "testimonials":
+        rows = [TestimonialIn(name=n, org=o, service=s, quote=q, rating=5, label="Sample review", order=i)
+                for i, (n, o, s, q) in enumerate(SEED_TESTIMONIALS)]
+    elif kind == "clients":
+        rows = [ClientIn(name=n, order=i) for i, n in enumerate(SEED_CLIENTS)]
     else:
         rows = [ProductIn(name=n, category=c, image=img, badge="", order=i,
                           description=f"{n} from leading brands — tell us your requirement for the best price.")

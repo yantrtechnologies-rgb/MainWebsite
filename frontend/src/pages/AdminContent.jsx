@@ -45,6 +45,27 @@ const CONFIGS = {
       { key: "order", label: "Display order (lower shows first)", type: "number" },
     ],
   },
+  testimonials: {
+    label: "Success Stories", singular: "Story", plural: "Stories", titleKey: "name", subKey: "quote",
+    fields: [
+      { key: "name", label: "Client / student name", required: true },
+      { key: "org", label: "Company or course", hint: "e.g. Full Stack Development student" },
+      { key: "service", label: "Service used", hint: "e.g. Social Media Marketing" },
+      { key: "quote", label: "What they said", type: "textarea" },
+      { key: "rating", label: "Rating (1–5)", type: "number" },
+      { key: "label", label: "Tag (optional)", hint: "e.g. Sample review — clear it for genuine reviews" },
+      { key: "image", label: "Photo (optional)", type: "image" },
+      { key: "order", label: "Display order (lower shows first)", type: "number" },
+    ],
+  },
+  clients: {
+    label: "Client Logos", singular: "Client", plural: "Clients", titleKey: "name", subKey: "name",
+    fields: [
+      { key: "name", label: "Client name", required: true },
+      { key: "image", label: "Logo (optional — name is shown if empty)", type: "image" },
+      { key: "order", label: "Display order (lower shows first)", type: "number" },
+    ],
+  },
 };
 
 export default function AdminContent() {

@@ -9,13 +9,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/Reveal";
 import { useEnquiry } from "@/context/contexts";
-import { useCatalog } from "@/lib/catalog";
+import { useCatalog, imgUrl } from "@/lib/catalog";
 import { ProductCard } from "@/pages/ITProducts";
 import { CourseCard } from "@/pages/ITTraining";
 import { ExpertsSection } from "@/components/ExpertsSection";
+import { ClientMarquee } from "@/components/ClientMarquee";
 import {
   VERTICALS, WHY_US, PORTFOLIO, PORTFOLIO_FILTERS,
-  TESTIMONIALS, JOURNEY,
+  JOURNEY,
 } from "@/data/siteData";
 
 const ICONS = { TrendingUp, Laptop, GraduationCap, Workflow, Sparkles, ReceiptText, LifeBuoy };
@@ -244,20 +245,28 @@ const Journey = () => (
   </section>
 );
 
-const Testimonials = () => (
-  <section className="py-20 lg:py-28 bg-[#FAFAFA]">
+const Testimonials = () => {
+  const { items } = useCatalog("testimonials");
+  return (
+  <section className="py-20 lg:py-28 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading eyebrow="/// Trust & Testimonials" title="Success stories (demonstration placeholders)." desc="Clearly-labelled sample feedback — replace with verified testimonials from your admin content." />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-        {TESTIMONIALS.map((t, i) => (
-          <Reveal key={i} delay={0.08 * i}>
-            <div className="h-full rounded-2xl border border-slate-200 bg-white p-6">
-              <Quote className="w-8 h-8 text-[#2563EB]/30" />
-              <div className="flex gap-0.5 mt-3">{Array.from({ length: t.rating }).map((_, k) => <Star key={k} className="w-4 h-4 fill-[#F97316] text-[#F97316]" />)}</div>
-              <p className="text-slate-700 mt-4 leading-relaxed">"{t.quote}"</p>
-              <div className="mt-5 pt-4 border-t border-slate-100">
-                <p className="font-semibold text-slate-900">{t.name}</p>
-                <p className="text-sm text-slate-500">{t.org} • {t.service}</p>
+      <SectionHeading eyebrow="/// Success Stories" title="What our clients and students say." desc="Real outcomes from businesses and learners who grew with Yantr Technologies." />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+        {items.map((t, i) => (
+          <Reveal key={t.id} delay={0.06 * (i % 3)}>
+            <div data-testid={`testimonial-card-${i}`} className="h-full rounded-2xl border border-slate-200 bg-[#FAFAFA] p-6 flex flex-col">
+              <div className="flex items-center justify-between">
+                <Quote className="w-8 h-8 text-[#2563EB]/30" />
+                {t.label && <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 border border-slate-200 rounded-full px-2 py-0.5">{t.label}</span>}
+              </div>
+              <div className="flex gap-0.5 mt-3">{Array.from({ length: t.rating || 5 }).map((_, k) => <Star key={k} className="w-4 h-4 fill-[#F97316] text-[#F97316]" />)}</div>
+              <p className="text-slate-700 mt-4 leading-relaxed flex-1">"{t.quote}"</p>
+              <div className="mt-5 pt-4 border-t border-slate-200 flex items-center gap-3">
+                {t.image ? <img src={imgUrl(t.image)} alt={t.name} className="w-10 h-10 rounded-full object-cover" /> : <span className="grid place-items-center w-10 h-10 rounded-full bg-[#2563EB] text-white font-bold">{t.name[0]}</span>}
+                <div>
+                  <p className="font-semibold text-slate-900">{t.name}</p>
+                  <p className="text-sm text-slate-500">{[t.org, t.service].filter(Boolean).join(" • ")}</p>
+                </div>
               </div>
             </div>
           </Reveal>
@@ -265,7 +274,8 @@ const Testimonials = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
 const LeadCTA = () => {
   const { openEnquiry } = useEnquiry();
@@ -307,6 +317,7 @@ export default function Home() {
       <FeaturedCourses />
       <ExpertsSection />
       <Journey />
+      <ClientMarquee />
       <Testimonials />
       <LeadCTA />
     </>

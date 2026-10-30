@@ -14,6 +14,8 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote
   - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (Emergent Object Storage) or pasted link
+- Success Stories (6 sample reviews tagged "Sample review") + 15 client names in a left→right scrolling strip on Home; both editable at /admin/content (tabs Success Stories, Client Logos)
+- PAUSED: Razorpay payment requests (user skipped key entry; razorpay pip installed, no code yet)
 - Meet Our Experts section on Home (15+ years overall experience)
 - Testing: iteration_4 passed (18/18 catalog tests, frontend 100%)
 - Enquiries need phone OR email (enforced on the frontend and backend); vertical restricted to allowed values

@@ -7,7 +7,7 @@ from typing import List, Optional
 
 import requests
 from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 
 logger = logging.getLogger(__name__)
 
@@ -172,7 +172,7 @@ def _seed_docs(kind: str) -> List[dict]:
         rows = [PackageIn(title=t, icon=ic, description=d, features=f, order=i)
                 for i, (t, ic, d, f) in enumerate(SEED_PACKAGES)]
     else:
-        rows = [ProductIn(name=n, category=c, image=img, badge="Ask for Quote", order=i,
+        rows = [ProductIn(name=n, category=c, image=img, badge="", order=i,
                           description=f"{n} from leading brands — tell us your requirement for the best price.")
                 for i, (n, c, img) in enumerate(SEED_PRODUCTS)]
     now = datetime.now(timezone.utc).isoformat()
@@ -198,6 +198,13 @@ def create_catalog_router(db, require_admin) -> APIRouter:
             raise HTTPException(status_code=404, detail="Unknown catalog")
         return MODELS[kind]
 
+    def _validate(kind: str, payload: dict) -> dict:
+        model = _check_kind(kind)
+        try:
+            return model(**payload).model_dump()
+        except ValidationError as e:
+            raise HTTPException(status_code=422, detail=e.errors(include_url=False, include_context=False))
+
     @router.get("/catalog/{kind}")
     async def list_items(kind: str):
         _check_kind(kind)
@@ -205,7 +212,7 @@ def create_catalog_router(db, require_admin) -> APIRouter:
 
     @router.post("/admin/catalog/{kind}")
     async def create_item(kind: str, payload: dict, user: dict = Depends(require_admin)):
-        data = _check_kind(kind)(**payload).model_dump()
+        data = _validate(kind, payload)
         now = datetime.now(timezone.utc).isoformat()
         doc = {"id": str(uuid.uuid4()), **data, "created_at": now, "updated_at": now}
         await db[kind].insert_one(doc)
@@ -214,7 +221,7 @@ def create_catalog_router(db, require_admin) -> APIRouter:
 
     @router.put("/admin/catalog/{kind}/{item_id}")
     async def update_item(kind: str, item_id: str, payload: dict, user: dict = Depends(require_admin)):
-        data = _check_kind(kind)(**payload).model_dump()
+        data = _validate(kind, payload)
         data["updated_at"] = datetime.now(timezone.utc).isoformat()
         res = await db[kind].find_one_and_update({"id": item_id}, {"$set": data},
                                                  projection={"_id": 0}, return_document=True)

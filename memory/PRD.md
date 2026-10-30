@@ -13,7 +13,10 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
   - Contact: yantrtechnologies@gmail.com, 9692791725, Pragati Vihar, Ainthapali, Sambalpur, Odisha
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote
-  - Enquiries need phone OR email (enforced on the frontend and backend); vertical restricted to allowed values
+  - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (Emergent Object Storage) or pasted link
+- Meet Our Experts section on Home (15+ years overall experience)
+- Testing: iteration_4 passed (18/18 catalog tests, frontend 100%)
+- Enquiries need phone OR email (enforced on the frontend and backend); vertical restricted to allowed values
   - Floating WhatsApp button (wa.me/919692791725 with a ready-made hello message) on all public pages
   - Customer thank-you email (reference ID, request summary, company contacts), sent when the customer gives an email; retries on 429
   - Google Map embed + directions link on the Contact page

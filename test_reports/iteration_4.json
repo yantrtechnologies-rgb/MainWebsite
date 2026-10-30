@@ -1,0 +1,36 @@
+{
+  "summary": "Tested the catalog features end to end: public catalog APIs, admin CRUD with role checks (RBAC), image upload and file serving, the public pages (IT Training, IT Products, Digital Marketing, Home and the Meet Our Experts section), the admin content manager, and the mobile layout. One backend bug was found and fixed: a missing title/name returned 500 instead of 422. After the fix, all 18 new catalog tests pass and every frontend flow works. The 2 failures left in the older email test file come from the email provider's rate limit (429), not from this feature.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST/PUT /api/admin/catalog/{kind}", "issue": "FIXED BY TESTER: the payload was a raw dict validated inside the handler, so a pydantic ValidationError escaped and returned 500. Added a _validate() helper that turns it into HTTPException 422."},
+      {"endpoint": "startup seed_admin (server.py L530-533)", "issue": "On every startup, if the existing admin's password does not match ADMIN_PASSWORD, it is overwritten with the env value. This goes against the playbook rule: 'never changes an existing admin's password'."},
+      {"endpoint": "POST /api/enquiries (email)", "issue": "The email provider returns 429 rate_limited, and the retries add extra 'email/send' log lines. This breaks the old log-counting tests in test_customer_email_whatsapp.py (2 failures). Environmental, not caused by this feature."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/it-products cards", "issues": ["Each card shows both an 'Ask for Quote' badge and a 'Price — Ask for Quote' line, which repeats the same message. Consider changing the default badge in the product seed."]}
+    ]
+  },
+  "test_report_links": ["/app/backend/tests/test_catalog_admin.py", "/app/test_reports/pytest/pytest_catalog.xml"],
+  "action_items": [
+    "Decide whether seed_admin should stop overwriting an existing admin's password on startup (playbook rule)",
+    "Optional: remove the duplicate 'Ask for Quote' badge on product cards",
+    "Optional: change the old email log-count tests to tolerate provider retries and 429s"
+  ],
+  "critical_code_review_comments": [
+    "catalog.py: endpoints accept `payload: dict` instead of typed Pydantic bodies, so OpenAPI has no schema. Validation is now wrapped manually. Typed bodies per kind would be cleaner.",
+    "catalog.py: sync `requests` calls are correctly wrapped in asyncio.to_thread.",
+    "serve_file loads the whole object into memory. Fine at the 5MB limit.",
+    "Uploads stay in storage when their item is deleted or the image is replaced (no cleanup or soft-delete)."
+  ],
+  "updated_files": ["/app/backend/catalog.py", "/app/backend/tests/test_catalog_admin.py"],
+  "success_rate": {"backend": "100% of catalog tests (18/18) after the fix; whole suite 50/52 (2 email rate-limit failures)", "frontend": "100%"},
+  "seed_data_creation": "None. TEST_ catalog items were created and deleted through the UI, and test student users were removed. Counts are back to 9/9/40.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Admin creds: amtrks79@gmail.com / YantrAdmin@2026. The enquiry modal is multi-step: click enquiry-next-btn to reach enquiry-interest. Product cards: products-page-card-N / products-page-quote-N. Course cards: training-course-N / training-enrol-N. Home: product-card-N / home-course-N. Admin upload: set_input_files on image-field-file. The URL is written into image-field-url as /api/files/yantr/uploads/<uuid>.png. Delete uses window.confirm. Run pytest with xdist enabled (pytest.ini adds -n)."
+}

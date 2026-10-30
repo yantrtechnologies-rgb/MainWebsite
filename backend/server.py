@@ -23,6 +23,7 @@ from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr, field_validator, model_validator
+from catalog import create_catalog_router, seed_catalog, init_storage
 
 # ---------------------------------------------------------------------------
 # DB + App setup
@@ -494,6 +495,7 @@ async def update_followup(enquiry_id: str, payload: FollowUpInput, user: dict = 
 
 
 app.include_router(api_router)
+app.include_router(create_catalog_router(db, require_admin))
 
 app.add_middleware(
     CORSMiddleware,
@@ -509,6 +511,12 @@ async def startup():
     await db.users.create_index("email", unique=True)
     await db.users.create_index("id")
     await db.enquiries.create_index("id")
+    await seed_catalog(db)
+    try:
+        await asyncio.to_thread(init_storage)
+        logger.info("Storage initialized")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
     admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
     admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
     existing = await db.users.find_one({"email": admin_email})

@@ -121,6 +121,9 @@ export default function AdminDashboard() {
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm text-slate-400 hidden sm:block">{user.name}</span>
+            <Button data-testid="admin-content-link" size="sm" onClick={() => navigate("/admin/content")} className="bg-[#84CC16] text-[#0B0F19] hover:bg-white font-semibold rounded-full">
+              Edit Website Content
+            </Button>
             <Button data-testid="admin-logout" variant="ghost" size="sm" onClick={() => { logout(); navigate("/"); }} className="text-slate-300 hover:text-white hover:bg-white/10">
               <LogOut className="w-4 h-4 mr-1.5" /> Logout
             </Button>

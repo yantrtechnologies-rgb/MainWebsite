@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";
 import { useEnquiry } from "@/context/contexts";
-import { SERVICES } from "@/data/siteData";
+import { useCatalog, imgUrl } from "@/lib/catalog";
 
 const PROCESS = [
   { t: "Discovery", d: "We audit your brand, market and goals to find the biggest opportunities." },
@@ -16,6 +16,7 @@ const PROCESS = [
 
 export default function DigitalMarketing() {
   const { openEnquiry } = useEnquiry();
+  const { items: packages } = useCatalog("packages");
   return (
     <>
       <PageHero
@@ -32,16 +33,28 @@ export default function DigitalMarketing() {
       <section className="py-20 lg:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal><p className="eyebrow text-[#2563EB] mb-3">/// What We Do</p></Reveal>
-          <Reveal delay={0.06}><h2 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 max-w-2xl">A full-stack marketing team, on demand.</h2></Reveal>
+          <Reveal delay={0.06}><h2 className="font-display text-3xl sm:text-4xl font-extrabold text-slate-900 max-w-2xl">Digital marketing packages, built around your goals.</h2></Reveal>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-12">
-            {SERVICES.map((s, i) => {
+            {packages.map((s, i) => {
               const Icon = Icons[s.icon] || Icons.Sparkles;
               return (
-                <Reveal key={s.title} delay={0.04 * i}>
-                  <div data-testid={`service-card-${i}`} className="group h-full rounded-2xl border border-slate-200 bg-[#FAFAFA] p-6 hover:border-[#2563EB]/40 hover:bg-white hover:shadow-lg transition-all">
-                    <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#2563EB]/10 text-[#2563EB] mb-5 group-hover:bg-[#2563EB] group-hover:text-white transition-colors"><Icon className="w-5 h-5" /></span>
-                    <h3 className="font-display text-lg font-bold text-slate-900">{s.title}</h3>
-                    <p className="text-sm text-slate-600 mt-2 leading-relaxed">{s.desc}</p>
+                <Reveal key={s.id} delay={0.04 * (i % 6)}>
+                  <div data-testid={`package-card-${i}`} className="group h-full rounded-2xl border border-slate-200 bg-[#FAFAFA] overflow-hidden hover:border-[#2563EB]/40 hover:bg-white hover:shadow-lg transition-all flex flex-col">
+                    {s.image && <img src={imgUrl(s.image)} alt={s.title} loading="lazy" className="w-full h-40 object-cover" />}
+                    <div className="p-6 flex flex-col flex-1">
+                      <div className="flex items-center justify-between mb-5">
+                        <span className="grid place-items-center w-11 h-11 rounded-xl bg-[#2563EB]/10 text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition-colors"><Icon className="w-5 h-5" /></span>
+                        {s.badge && <span className="text-xs font-semibold text-[#0B0F19] bg-[#84CC16] px-2.5 py-1 rounded-full">{s.badge}</span>}
+                      </div>
+                      <h3 className="font-display text-lg font-bold text-slate-900">{s.title}</h3>
+                      <p className="text-sm text-slate-600 mt-2 leading-relaxed">{s.description}</p>
+                      <ul className="mt-4 space-y-1.5">
+                        {(s.features || []).map((f) => (
+                          <li key={f} className="flex items-start gap-2 text-sm text-slate-700"><CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0 text-[#84CC16]" /> {f}</li>
+                        ))}
+                      </ul>
+                      <Button data-testid={`package-enquire-${i}`} onClick={() => openEnquiry("marketing", s.title)} className="mt-auto w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm" style={{ marginTop: "1.5rem" }}>Ask for Quote</Button>
+                    </div>
                   </div>
                 </Reveal>
               );

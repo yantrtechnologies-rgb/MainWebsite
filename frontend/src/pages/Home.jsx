@@ -9,8 +9,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Reveal } from "@/components/Reveal";
 import { useEnquiry } from "@/context/contexts";
+import { useCatalog } from "@/lib/catalog";
+import { ProductCard } from "@/pages/ITProducts";
+import { CourseCard } from "@/pages/ITTraining";
+import { ExpertsSection } from "@/components/ExpertsSection";
 import {
-  VERTICALS, WHY_US, PORTFOLIO, PORTFOLIO_FILTERS, PRODUCTS, COURSES,
+  VERTICALS, WHY_US, PORTFOLIO, PORTFOLIO_FILTERS,
   TESTIMONIALS, JOURNEY,
 } from "@/data/siteData";
 
@@ -184,34 +188,17 @@ const Work = () => {
 };
 
 const FeaturedProducts = () => {
-  const { openEnquiry } = useEnquiry();
+  const { items } = useCatalog("products");
   return (
     <section className="py-20 lg:py-28 bg-[#FAFAFA]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <SectionHeading eyebrow="/// Featured IT Products" title="Hardware built for serious work." />
-          <Link to="/it-products"><Button variant="outline" className="rounded-full border-slate-300">View Full Catalog <ArrowRight className="w-4 h-4 ml-1" /></Button></Link>
+          <SectionHeading eyebrow="/// IT Products & Accessories" title="Hardware built for serious work." />
+          <Link to="/it-products"><Button data-testid="home-view-catalog" variant="outline" className="rounded-full border-slate-300">View All {items.length || ""} Products <ArrowRight className="w-4 h-4 ml-1" /></Button></Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
-          {PRODUCTS.map((p, i) => (
-            <Reveal key={p.name} delay={0.06 * i}>
-              <div data-testid={`product-card-${i}`} className="group h-full rounded-2xl border border-slate-200 bg-white overflow-hidden hover:shadow-xl transition-all flex flex-col">
-                <div className="relative h-44 bg-slate-100 overflow-hidden">
-                  <img src={p.image} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <Badge className="absolute top-3 left-3 bg-[#2563EB] text-white border-0">{p.badge}</Badge>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <p className="text-xs font-mono text-slate-400">{p.brand}</p>
-                  <h3 className="font-display font-bold text-slate-900 mt-1 leading-snug">{p.name}</h3>
-                  <p className="text-xs text-slate-500 mt-2 font-mono">{p.specs}</p>
-                  <div className="mt-auto pt-4 flex items-center justify-between">
-                    <span className="text-sm font-semibold text-[#2563EB]">Price on request</span>
-                    <span className="text-xs font-medium text-[#84CC16] bg-[#84CC16]/10 px-2 py-1 rounded-md">{p.stock}</span>
-                  </div>
-                  <Button data-testid={`product-quote-${i}`} onClick={() => openEnquiry("products", p.name)} className="mt-4 w-full bg-[#0B0F19] hover:bg-[#2563EB] text-white rounded-lg text-sm">Request a Quote</Button>
-                </div>
-              </div>
-            </Reveal>
+          {items.slice(0, 8).map((p, i) => (
+            <Reveal key={p.id} delay={0.04 * i}><ProductCard p={p} i={i} testid="product" /></Reveal>
           ))}
         </div>
       </div>
@@ -220,32 +207,17 @@ const FeaturedProducts = () => {
 };
 
 const FeaturedCourses = () => {
-  const { openEnquiry } = useEnquiry();
+  const { items } = useCatalog("courses");
   return (
     <section className="py-20 lg:py-28 bg-[#111827] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <SectionHeading light eyebrow="/// Yantr Academy" title="Career-grade bootcamps, built with industry." />
-          <Link to="/it-training"><Button variant="outline" className="rounded-full border-white/25 text-white bg-transparent hover:bg-white/10">All Courses <ArrowRight className="w-4 h-4 ml-1" /></Button></Link>
+          <SectionHeading light eyebrow="/// Yantr Academy" title="Job-ready IT courses, taught by experts." />
+          <Link to="/it-training"><Button data-testid="home-all-courses" variant="outline" className="rounded-full border-white/25 text-white bg-transparent hover:bg-white/10">All Courses <ArrowRight className="w-4 h-4 ml-1" /></Button></Link>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-          {COURSES.map((c, i) => (
-            <Reveal key={c.title} delay={0.08 * i}>
-              <div data-testid={`course-card-${i}`} className="group h-full rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden hover:border-[#F97316]/40 transition-all flex flex-col">
-                <div className="relative h-44 overflow-hidden">
-                  <img src={c.image} alt={c.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <Badge className="absolute top-3 left-3 bg-[#F97316] text-white border-0">{c.badge}</Badge>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <p className="text-xs font-mono text-[#F97316]">{c.duration} • {c.mode}</p>
-                  <h3 className="font-display font-bold mt-1.5 leading-snug">{c.title}</h3>
-                  <div className="flex flex-wrap gap-1.5 mt-3">
-                    {c.stack.map((s) => <span key={s} className="text-[11px] font-mono px-2 py-0.5 rounded bg-white/5 text-slate-300">{s}</span>)}
-                  </div>
-                  <Button data-testid={`course-enrol-${i}`} onClick={() => openEnquiry("academy", c.title)} className="mt-5 w-full bg-[#F97316] hover:bg-white hover:text-[#0B0F19] text-white rounded-lg text-sm font-semibold">Enrol / Enquire</Button>
-                </div>
-              </div>
-            </Reveal>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+          {items.slice(0, 6).map((c, i) => (
+            <Reveal key={c.id} delay={0.06 * i}><CourseCard c={c} i={i} testid="home" /></Reveal>
           ))}
         </div>
       </div>
@@ -333,6 +305,7 @@ export default function Home() {
       <Work />
       <FeaturedProducts />
       <FeaturedCourses />
+      <ExpertsSection />
       <Journey />
       <Testimonials />
       <LeadCTA />

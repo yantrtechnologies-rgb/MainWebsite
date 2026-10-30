@@ -13,6 +13,7 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import AdminDashboard from "@/pages/AdminDashboard";
+import AdminContent from "@/pages/AdminContent";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/content" element={<AdminContent />} />
             </Routes>
             <EnquiryModal />
             <Toaster position="top-right" richColors />

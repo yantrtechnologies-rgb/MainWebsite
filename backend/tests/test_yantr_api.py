@@ -13,7 +13,10 @@ ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 @pytest.fixture(scope="module")
 def s():
     x = requests.Session()
-    x.headers.update({"Content-Type": "application/json"})
+    # unique client IP per run so the per-IP enquiry rate limit isn't shared across runs
+    import uuid
+    x.headers.update({"Content-Type": "application/json",
+                      "X-Forwarded-For": f"10.251.{uuid.uuid4().int % 250}.{uuid.uuid4().int % 250}"})
     return x
 
 

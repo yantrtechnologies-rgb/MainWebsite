@@ -177,7 +177,7 @@ async def send_email(*, to: str, subject: str, html: str) -> Optional[str]:
         logger.warning(f"Email send failed ({code}): {e.response.status_code} {e.response.text}")
         return None
     except Exception as e:
-        logger.error(f"Email send error: {e}")
+        logger.error(f"Email send error: {e!r}")
         return None
 
 
@@ -540,8 +540,8 @@ async def startup():
         logger.info("Storage initialized")
     except Exception as e:
         logger.error(f"Storage init failed: {e}")
-    admin_email = os.environ.get("ADMIN_EMAIL", "admin@example.com").lower()
-    admin_password = os.environ.get("ADMIN_PASSWORD", "admin123")
+    admin_email = os.environ["ADMIN_EMAIL"].lower()
+    admin_password = os.environ["ADMIN_PASSWORD"]
     existing = await db.users.find_one({"email": admin_email})
     if existing is None:
         await db.users.insert_one({

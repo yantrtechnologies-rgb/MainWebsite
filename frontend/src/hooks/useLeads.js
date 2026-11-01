@@ -41,9 +41,10 @@ export const useLeads = (enabled) => {
       await api.patch(`/admin/enquiries/${id}/status`, { status });
       toast.success(`Moved to ${status}`);
       patchLead(id, (l) => ({ ...l, status }));
+      if (filters.status !== "All" && filters.status !== status) setLeads((ls) => ls.filter((l) => l.id !== id));
       refreshMetrics();
     } catch (e) { toast.error("Update failed."); }
-  }, [patchLead, refreshMetrics]);
+  }, [patchLead, refreshMetrics, filters.status]);
 
   const addNote = useCallback(async (id, note) => {
     try {

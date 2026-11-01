@@ -17,7 +17,7 @@ const Progress = ({ step }) => (
 
 const Footer = ({ step, setStep, submitting, submit }) => (
   <div className="px-6 py-4 border-t border-white/10 flex items-center justify-between">
-    <Button variant="ghost" disabled={step === 1} onClick={() => setStep((s) => s - 1)} className="text-slate-400 hover:text-white disabled:opacity-30">
+    <Button data-testid="enquiry-back-btn" variant="ghost" disabled={step === 1} onClick={() => setStep((s) => s - 1)} className="text-slate-400 hover:text-white disabled:opacity-30">
       <ChevronLeft className="w-4 h-4 mr-1" /> Back
     </Button>
     {step < 3 ? (
@@ -43,7 +43,7 @@ export const EnquiryModal = () => {
           {f.step < 4 && <Progress step={f.step} />}
         </div>
         <div className="px-6 py-6 max-h-[60vh] overflow-y-auto">
-          {Step && <Step form={f.form} set={f.set} />}
+          {Step && <Step form={f.form} set={f.set} showInterest={!!interest} />}
           {f.step === 4 && f.done && <EnquirySuccess done={f.done} onClose={close} />}
         </div>
         {f.step < 4 && <Footer step={f.step} setStep={f.setStep} submitting={f.submitting} submit={f.submit} />}

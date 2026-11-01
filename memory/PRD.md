@@ -16,6 +16,8 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
   - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (Emergent Object Storage) or pasted link
 - Success Stories (6 sample reviews tagged "Sample review") + 15 client names in a left→right scrolling strip on Home; both editable at /admin/content (tabs Success Stories, Client Logos)
 - PAUSED: Razorpay payment requests (user skipped key entry; razorpay pip installed, no code yet)
+- Code-review refactor (2026-10): AdminDashboard split into admin/* components + useLeads; EnquiryModal split into enquiry/EnquirySteps + useEnquiryForm; backend email checks and catalog routes split into helpers; tests read admin creds from backend/.env; shell=True removed. Regression iteration_5 passed.
+- Known: seed_admin resets the admin password to ADMIN_PASSWORD on every restart (auth change pending user approval)
 - Meet Our Experts section on Home (15+ years overall experience)
 - Testing: iteration_4 passed (18/18 catalog tests, frontend 100%)
 - Enquiries need phone OR email (enforced on the frontend and backend); vertical restricted to allowed values

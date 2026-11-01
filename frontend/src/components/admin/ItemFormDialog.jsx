@@ -11,11 +11,11 @@ const fieldCls = "mt-1.5 bg-white/5 border-white/10 text-white placeholder:text-
 
 const toFormValue = (f, v) => {
   if (f.type === "list") return (v || []).join("\n");
-  return v ?? (f.type === "number" ? 0 : "");
+  return v ?? f.default ?? (f.type === "number" ? 0 : "");
 };
 
 const toPayloadValue = (f, v) => {
-  if (f.type === "list") return (v || "").split(/\n|,/).map((x) => x.trim()).filter(Boolean);
+  if (f.type === "list") return (v || "").split("\n").map((x) => x.trim()).filter(Boolean);
   if (f.type === "number") return Number(v) || 0;
   return v;
 };

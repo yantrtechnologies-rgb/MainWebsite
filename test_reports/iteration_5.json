@@ -1,0 +1,43 @@
+{
+  "summary": "Regression test after the refactor (meant to change no behaviour) of the admin dashboard, enquiry modal, ItemFormDialog, contexts, server.py and catalog.py. Backend suite: 50 of 52 pass. The 2 failures are the known email-provider 429 retry log-count tests. Before I fixed a test-only issue, 6 tests in test_yantr_api.py errored because the session sent no X-Forwarded-For, so every run shared one enquiry rate-limit bucket. The frontend regressions all pass: enquiry modal, admin dashboard, content editor CRUD for courses and testimonials with image upload, theme toggle and footer social icons. I found no regression from the refactor. A few older bugs are listed below.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/enquiries (send_email)", "issue": "The email provider returns 429 rate_limited (environmental). The retry loop logs extra 'email/send' lines, so the 2 log-count tests in test_customer_email_whatsapp.py fail. In a parallel burst, about 11 lines read 'Email send error: ' with an empty message: the exception's str() is empty. Log type(e).__name__ / repr(e) instead. The enquiry API itself returned 200 quickly (emails are sent in the background)."},
+      {"endpoint": "startup seed_admin (server.py L553-556)", "issue": "Still overwrites the existing admin's password when it does not match ADMIN_PASSWORD. This breaks the playbook rule 'never change an existing admin's password' (older issue, reported in iteration_4)."},
+      {"endpoint": "server.py L543-544", "issue": "ADMIN_EMAIL/ADMIN_PASSWORD read from os.environ.get with hardcoded defaults (admin@example.com/admin123). The config rule says to fail fast instead."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "ItemFormDialog (Success Stories add)", "issue": "Number fields start at 0, so a new testimonial gets rating=0. Saving without touching the rating returns the 422 toast 'Input should be greater than or equal to 1'. Older bug, not a regression. Default the rating to 5 (for example via a per-field default in the config).", "selector": "[data-testid='item-field-rating']", "priority": "MEDIUM"},
+      {"component": "ItemFormDialog list fields", "issue": "toPayloadValue splits list fields on newlines AND commas (/\\n|,/). The label says 'one per line', yet seeded package features such as 'Posts, reels & stories' get split into 2 items on any edit and save. Older bug.", "selector": "[data-testid='item-field-features'], [data-testid='item-field-topics']", "priority": "MEDIUM"},
+      {"component": "EnquirySteps StepDetails", "issue": "The interest field is only rendered while form.interest is non-empty (`{form.interest && <Field .../>}`). If the user clears the prefilled interest, the input disappears and can't be retyped. Older bug. Base the condition on the initial prefill instead.", "selector": "[data-testid='enquiry-interest']", "priority": "LOW"}
+    ],
+    "integration_issues": [
+      {"flow": "Admin dashboard status change while a status filter is active", "issue": "The optimistic patchLead does not re-apply filters. A lead moved out of the filtered status still shows in the filtered table until filters change. Minor UX issue.", "affected_selectors": ["[data-testid^='lead-status-']", "[data-testid='drawer-status-select']"]}
+    ],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_yantr_api.py", "/app/backend/tests/test_catalog_admin.py", "/app/backend/tests/test_enquiry_contact_rules.py", "/app/backend/tests/test_customer_email_whatsapp.py", "/app/test_reports/pytest/pytest_iter5.xml"],
+  "action_items": [
+    "Default the testimonial rating to 5 in ItemFormDialog / AdminContent config so 'Add Story' works without editing the rating",
+    "Split list fields on newlines only (labels say 'one per line'), to stop commas inside items breaking them up",
+    "Keep enquiry-interest visible after the user clears it",
+    "Optional: improve the send_email exception log (empty message); stop seed_admin overwriting an existing admin's password; remove the ADMIN_* env defaults"
+  ],
+  "critical_code_review_comments": [
+    "The refactor is clean: AdminDashboard is split into AdminHeader/LeadMetrics/LeadFilters/LeadTable/LeadDrawer/LeadNotes plus useLeads; EnquiryModal is split into EnquirySteps plus useEnquiryForm. Behaviour matches the old code.",
+    "useLeads: patchLead updates both leads and selected, so a new note appears immediately and is still there after reopening the drawer (verified).",
+    "useLeads.load runs metrics inside Promise.all, so a metrics failure also drops the lead list with a generic toast. Consider Promise.allSettled.",
+    "LeadNotes key uses at-by-text(0,20). Fine, but a note id from the backend would be sturdier.",
+    "catalog._storage_call retries on 404 with a fresh key. A truly missing object triggers 2 calls (fine since the db record is checked first).",
+    "server.py _assert_safe_email helpers are well split and behave correctly (emails are still attempted, sent in the background)."
+  ],
+  "updated_files": ["/app/backend/tests/test_yantr_api.py (session now sends a random X-Forwarded-For so the per-IP rate limit is not shared across runs)", "/app/frontend/src/components/EnquiryModal.jsx (added data-testid='enquiry-back-btn')"],
+  "success_rate": {"backend": "96% (50/52; 2 environmental email 429 log-count failures)", "frontend": "100% of regression flows; 3 older bugs noted"},
+  "seed_data_creation": "None. Cleaned up TEST_ enquiries (2) and 3 test_stu_* student users. Catalog counts are back to 9/9/40/6/15.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Run pytest with `export REACT_APP_BACKEND_URL=...` (tests load backend/.env, which does not define it). pytest.ini forces -n 2; for serial runs use -n 0. Enquiry modal Back button: enquiry-back-btn. Dashboard selects: use get_by_role('option', name=..., exact=True) after clicking the trigger. Content editor delete uses window.confirm, so accept the dialog. Upload: set_input_files on image-field-file, then wait for image-field-url to start with /api/files/."
+}

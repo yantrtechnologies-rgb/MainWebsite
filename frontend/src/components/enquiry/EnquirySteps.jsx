@@ -44,9 +44,9 @@ export const StepService = ({ form, set }) => (
   </div>
 );
 
-export const StepDetails = ({ form, set }) => (
+export const StepDetails = ({ form, set, showInterest }) => (
   <div className="space-y-4">
-    {form.interest && <Field label="Interested in" k="interest" form={form} set={set} />}
+    {showInterest && <Field label="Interested in" k="interest" form={form} set={set} />}
     <Field label="Your budget range" k="budget" form={form} set={set} placeholder="e.g. ₹50,000 – ₹1,00,000" />
     <Field label="Timeline" k="timeline" form={form} set={set} placeholder="e.g. Within 2 weeks" />
     <Field label="Project / requirement details" k="message" form={form} set={set} placeholder="Tell us a bit about your goals…" area />

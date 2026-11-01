@@ -52,7 +52,7 @@ const CONFIGS = {
       { key: "org", label: "Company or course", hint: "e.g. Full Stack Development student" },
       { key: "service", label: "Service used", hint: "e.g. Social Media Marketing" },
       { key: "quote", label: "What they said", type: "textarea" },
-      { key: "rating", label: "Rating (1–5)", type: "number" },
+      { key: "rating", label: "Rating (1–5)", type: "number", default: 5 },
       { key: "label", label: "Tag (optional)", hint: "e.g. Sample review — clear it for genuine reviews" },
       { key: "image", label: "Photo (optional)", type: "image" },
       { key: "order", label: "Display order (lower shows first)", type: "number" },

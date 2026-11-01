@@ -1,11 +1,15 @@
 # Iteration 3: customer thank-you email (non-blocking) + phone/email rule regression
+import glob
 import os
 import time
+from pathlib import Path
 import uuid
 import subprocess
 import pytest
 import requests
+from dotenv import load_dotenv
 
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL").rstrip("/")
 CUSTOMER_EMAIL = "amtrks79@gmail.com"
 LOG_GLOB = "/var/log/supervisor/backend.err.log"
@@ -21,15 +25,17 @@ def _post(payload):
 
 
 def _log_tail(n=300):
-    out = subprocess.run(f"tail -n {n} /var/log/supervisor/backend.*.log", shell=True,
-                         capture_output=True, text=True)
+    files = sorted(glob.glob("/var/log/supervisor/backend.*.log"))
+    if not files:
+        return ""
+    out = subprocess.run(["tail", "-n", str(n), *files], capture_output=True, text=True)
     return out.stdout
 
 
 @pytest.fixture(scope="module")
 def admin_token():
     r = requests.post(f"{BASE_URL}/api/auth/login",
-                      json={"email": "amtrks79@gmail.com", "password": "YantrAdmin@2026"},
+                      json={"email": os.environ["ADMIN_EMAIL"], "password": os.environ["ADMIN_PASSWORD"]},
                       headers={"X-Forwarded-For": _ip()}, timeout=20)
     if r.status_code != 200:
         pytest.skip("admin login failed")

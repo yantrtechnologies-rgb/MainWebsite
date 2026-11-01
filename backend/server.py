@@ -22,7 +22,7 @@ from urllib.parse import urlparse
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, EmailStr, field_validator, model_validator
+from pydantic import BaseModel, EmailStr, field_validator, model_validator
 from catalog import create_catalog_router, seed_catalog, init_storage
 
 # ---------------------------------------------------------------------------
@@ -96,31 +96,47 @@ class _EmailScan(HTMLParser):
             self._href, self._text = None, []
 
 
-def _assert_safe_email(subject: str, html: str) -> None:
-    scan = _EmailScan()
-    scan.feed(html)
+def _check_no_forms(scan: _EmailScan) -> None:
     if scan.tags & {"form", "input", "textarea", "select"}:
         raise ValueError("No forms or input fields in email (G2)")
+
+
+def _check_no_credential_asks(subject: str, html: str) -> None:
     body = f"{subject}\n{html}".lower()
     for p in _CRED_ASK:
         if p in body:
             raise ValueError(f"Email asks the recipient for credentials: {p!r} (G2)")
+
+
+def _check_url(url: str) -> None:
+    low = url.strip().lower()
+    if low.startswith(("mailto:", "tel:", "cid:", "#")):
+        return
+    if not low.startswith("https://"):
+        raise ValueError(f"Email links/assets must be absolute https: {url!r} (G3)")
+    parsed = urlparse(low)
+    if not _host_ok(parsed.hostname or "") or parsed.username is not None:
+        raise ValueError(f"Shortened, numeric-host or credential-bearing URL: {url!r} (G3)")
+
+
+def _check_anchor(href: str, text: str) -> None:
+    real = urlparse(href.strip().lower()).hostname or ""
+    if not real:
+        return
+    for m in _HOSTISH.finditer(text):
+        if not _same_site(m.group(1).lower(), real):
+            raise ValueError(f"Anchor text {m.group(1)!r} != real link host {real!r} (G3)")
+
+
+def _assert_safe_email(subject: str, html: str) -> None:
+    scan = _EmailScan()
+    scan.feed(html)
+    _check_no_forms(scan)
+    _check_no_credential_asks(subject, html)
     for url in scan.urls:
-        low = url.strip().lower()
-        if low.startswith(("mailto:", "tel:", "cid:", "#")):
-            continue
-        if not low.startswith("https://"):
-            raise ValueError(f"Email links/assets must be absolute https: {url!r} (G3)")
-        host = urlparse(low).hostname or ""
-        if not _host_ok(host) or urlparse(low).username is not None:
-            raise ValueError(f"Shortened, numeric-host or credential-bearing URL: {url!r} (G3)")
+        _check_url(url)
     for href, text in scan.anchors:
-        real = urlparse(href.strip().lower()).hostname or ""
-        if not real:
-            continue
-        for m in _HOSTISH.finditer(text):
-            if not _same_site(m.group(1).lower(), real):
-                raise ValueError(f"Anchor text {m.group(1)!r} != real link host {real!r} (G3)")
+        _check_anchor(href, text)
 
 
 _bg_tasks: set = set()
@@ -374,10 +390,7 @@ async def me(user: dict = Depends(get_current_user)):
     return user
 
 
-@api_router.post("/enquiries")
-async def create_enquiry(payload: EnquiryInput, request: Request):
-    _rate_limit(_client_ip(request))
-    enquiry_id = "YT-" + uuid.uuid4().hex[:8].upper()
+def _new_enquiry_doc(payload: EnquiryInput, enquiry_id: str) -> dict:
     doc = payload.model_dump()
     doc.update({
         "id": enquiry_id,
@@ -387,33 +400,43 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
         "notes": [],
         "created_at": datetime.now(timezone.utc).isoformat(),
     })
-    await db.enquiries.insert_one(doc)
+    return doc
+
+
+def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
+    rows = "".join(
+        f'<tr><td style="padding:4px 12px 4px 0;color:#64748b;font-size:13px">{escape(k)}</td>'
+        f'<td style="padding:4px 0;color:#0f172a;font-size:13px"><strong>{escape(str(v))}</strong></td></tr>'
+        for k, v in [
+            ("Enquiry ID", enquiry_id), ("Vertical", payload.vertical),
+            ("Category", payload.category or "-"), ("Name", payload.name),
+            ("Email", payload.email or "-"), ("Phone", payload.phone or "-"),
+            ("Company", payload.company or "-"), ("Budget", payload.budget or "-"),
+            ("Interest", payload.interest or "-"),
+            ("Message", (payload.message or "-")[:500]),
+        ]
+    )
+    return (
+        '<table role="presentation" width="100%" style="font-family:Arial,sans-serif">'
+        '<tr><td style="padding:24px">'
+        '<h2 style="color:#0B0F19;margin:0 0 8px">New lead received</h2>'
+        '<p style="color:#475569;margin:0 0 16px">A new enquiry was submitted on the Yantr Technologies website.</p>'
+        f'<table role="presentation">{rows}</table>'
+        '<p style="font-size:12px;color:#94a3b8;margin-top:20px">Sent by Yantr Technologies. '
+        'We never ask for your password or card details by email.</p>'
+        '</td></tr></table>'
+    )
+
+
+@api_router.post("/enquiries")
+async def create_enquiry(payload: EnquiryInput, request: Request):
+    _rate_limit(_client_ip(request))
+    enquiry_id = "YT-" + uuid.uuid4().hex[:8].upper()
+    await db.enquiries.insert_one(_new_enquiry_doc(payload, enquiry_id))
 
     if LEAD_NOTIFY_EMAIL:
         subject = f"New {payload.vertical.title()} Enquiry — {enquiry_id}"
-        rows = "".join(
-            f'<tr><td style="padding:4px 12px 4px 0;color:#64748b;font-size:13px">{escape(k)}</td>'
-            f'<td style="padding:4px 0;color:#0f172a;font-size:13px"><strong>{escape(str(v))}</strong></td></tr>'
-            for k, v in [
-                ("Enquiry ID", enquiry_id), ("Vertical", payload.vertical),
-                ("Category", payload.category or "-"), ("Name", payload.name),
-                ("Email", payload.email or "-"), ("Phone", payload.phone or "-"),
-                ("Company", payload.company or "-"), ("Budget", payload.budget or "-"),
-                ("Interest", payload.interest or "-"),
-                ("Message", (payload.message or "-")[:500]),
-            ]
-        )
-        html = (
-            '<table role="presentation" width="100%" style="font-family:Arial,sans-serif">'
-            '<tr><td style="padding:24px">'
-            f'<h2 style="color:#0B0F19;margin:0 0 8px">New lead received</h2>'
-            f'<p style="color:#475569;margin:0 0 16px">A new enquiry was submitted on the Yantr Technologies website.</p>'
-            f'<table role="presentation">{rows}</table>'
-            '<p style="font-size:12px;color:#94a3b8;margin-top:20px">Sent by Yantr Technologies. '
-            'We never ask for your password or card details by email.</p>'
-            '</td></tr></table>'
-        )
-        _spawn(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=html))
+        _spawn(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=_admin_email_html(payload, enquiry_id)))
 
     if payload.email:
         _spawn(send_email(

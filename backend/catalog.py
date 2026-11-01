@@ -29,13 +29,12 @@ def init_storage(force: bool = False) -> str:
     return _storage_key
 
 
-def _storage_call(method: str, path: str, **kwargs) -> requests.Response:
-    for attempt in range(2):
-        resp = requests.request(method, f"{STORAGE_URL}/objects/{path}",
-                                headers={"X-Storage-Key": init_storage(force=attempt > 0), **kwargs.pop("headers", {})},
-                                **kwargs)
-        if resp.status_code != 404 or attempt:
-            break
+def _storage_call(method: str, path: str, headers: Optional[dict] = None, **kwargs) -> requests.Response:
+    url = f"{STORAGE_URL}/objects/{path}"
+    extra = headers or {}
+    resp = requests.request(method, url, headers={"X-Storage-Key": init_storage(), **extra}, **kwargs)
+    if resp.status_code == 404:
+        resp = requests.request(method, url, headers={"X-Storage-Key": init_storage(force=True), **extra}, **kwargs)
     resp.raise_for_status()
     return resp
 
@@ -225,21 +224,62 @@ async def seed_catalog(db) -> None:
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
+def _check_kind(kind: str):
+    if kind not in MODELS:
+        raise HTTPException(status_code=404, detail="Unknown catalog")
+    return MODELS[kind]
+
+
+def _validate(kind: str, payload: dict) -> dict:
+    model = _check_kind(kind)
+    try:
+        return model(**payload).model_dump()
+    except ValidationError as e:
+        raise HTTPException(status_code=422, detail=e.errors(include_url=False, include_context=False))
+
+
+async def _store_upload(db, file: UploadFile, user: dict) -> str:
+    ext = ALLOWED_TYPES.get(file.content_type or "")
+    if not ext:
+        raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
+    data = await file.read()
+    if len(data) > MAX_UPLOAD:
+        raise HTTPException(status_code=400, detail="Image must be 5 MB or smaller")
+    path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
+    try:
+        stored = await asyncio.to_thread(put_object, path, data, file.content_type)
+    except Exception as e:
+        logger.error(f"Upload failed: {e}")
+        raise HTTPException(status_code=502, detail="Image upload failed, please try again")
+    await db.files.insert_one({
+        "id": str(uuid.uuid4()), "storage_path": stored["path"], "original_filename": file.filename,
+        "content_type": file.content_type, "size": stored.get("size", len(data)), "is_deleted": False,
+        "uploaded_by": user["id"], "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    return stored["path"]
+
+
+async def _load_file(db, path: str) -> Response:
+    record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
+    if not record:
+        raise HTTPException(status_code=404, detail="File not found")
+    try:
+        content = await asyncio.to_thread(get_object, path)
+    except Exception as e:
+        logger.error(f"File fetch failed: {e}")
+        raise HTTPException(status_code=502, detail="Could not load file")
+    return Response(content=content, media_type=record["content_type"],
+                    headers={"Cache-Control": "public, max-age=86400"})
+
+
 def create_catalog_router(db, require_admin) -> APIRouter:
     router = APIRouter(prefix="/api")
+    _register_item_routes(router, db, require_admin)
+    _register_file_routes(router, db, require_admin)
+    return router
 
-    def _check_kind(kind: str):
-        if kind not in MODELS:
-            raise HTTPException(status_code=404, detail="Unknown catalog")
-        return MODELS[kind]
 
-    def _validate(kind: str, payload: dict) -> dict:
-        model = _check_kind(kind)
-        try:
-            return model(**payload).model_dump()
-        except ValidationError as e:
-            raise HTTPException(status_code=422, detail=e.errors(include_url=False, include_context=False))
-
+def _register_item_routes(router: APIRouter, db, require_admin) -> None:
     @router.get("/catalog/{kind}")
     async def list_items(kind: str):
         _check_kind(kind)
@@ -272,38 +312,12 @@ def create_catalog_router(db, require_admin) -> APIRouter:
             raise HTTPException(status_code=404, detail="Item not found")
         return {"ok": True}
 
+
+def _register_file_routes(router: APIRouter, db, require_admin) -> None:
     @router.post("/admin/upload")
     async def upload_image(file: UploadFile = File(...), user: dict = Depends(require_admin)):
-        ext = ALLOWED_TYPES.get(file.content_type or "")
-        if not ext:
-            raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
-        data = await file.read()
-        if len(data) > MAX_UPLOAD:
-            raise HTTPException(status_code=400, detail="Image must be 5 MB or smaller")
-        path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
-        try:
-            result = await asyncio.to_thread(put_object, path, data, file.content_type)
-        except Exception as e:
-            logger.error(f"Upload failed: {e}")
-            raise HTTPException(status_code=502, detail="Image upload failed, please try again")
-        await db.files.insert_one({
-            "id": str(uuid.uuid4()), "storage_path": result["path"], "original_filename": file.filename,
-            "content_type": file.content_type, "size": result.get("size", len(data)), "is_deleted": False,
-            "uploaded_by": user["id"], "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        return {"url": f"/api/files/{result['path']}"}
+        return {"url": f"/api/files/{await _store_upload(db, file, user)}"}
 
     @router.get("/files/{path:path}")
     async def serve_file(path: str):
-        record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
-        if not record:
-            raise HTTPException(status_code=404, detail="File not found")
-        try:
-            data = await asyncio.to_thread(get_object, path)
-        except Exception as e:
-            logger.error(f"File fetch failed: {e}")
-            raise HTTPException(status_code=502, detail="Could not load file")
-        return Response(content=data, media_type=record["content_type"],
-                        headers={"Cache-Control": "public, max-age=86400"})
-
-    return router
+        return await _load_file(db, path)

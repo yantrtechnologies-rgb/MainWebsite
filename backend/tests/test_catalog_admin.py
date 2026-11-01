@@ -1,13 +1,15 @@
 # Catalog (courses/packages/products), admin CRUD, image upload & file serving tests
-import io
 import os
 import uuid
+from pathlib import Path
 
 import pytest
 import requests
+from dotenv import load_dotenv
 
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL").rstrip("/")
-ADMIN = {"email": "amtrks79@gmail.com", "password": "YantrAdmin@2026"}
+ADMIN = {"email": os.environ["ADMIN_EMAIL"], "password": os.environ["ADMIN_PASSWORD"]}
 
 EXPECTED_PRODUCTS = ["Harddisk", "CPU", "Tablet PC", "DVD Writer", "Pen Drive", "LAN Card", "Server", "Cabinet",
                      "Networking", "Laptop-Keyboard", "RAM", "Motherboard", "K/B-Mouse", "Scanner", "Headphone",

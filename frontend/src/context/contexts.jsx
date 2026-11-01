@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from "react";
+import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import api from "@/lib/api";
 
 /* ----------------------------- Auth ----------------------------- */
@@ -29,11 +29,8 @@ export function AuthProvider({ children }) {
     setUser(null);
   }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const value = useMemo(() => ({ user, loading, login, logout }), [user, loading, login, logout]);
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 export const useAuth = () => useContext(AuthContext);
 
@@ -48,8 +45,8 @@ export function ThemeProvider({ children }) {
     else root.classList.remove("dark");
     localStorage.setItem("yantr_theme", theme);
   }, [theme]);
-  const toggle = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
-  return <ThemeContext.Provider value={{ theme, toggle }}>{children}</ThemeContext.Provider>;
+  const value = useMemo(() => ({ theme, toggle: () => setTheme((t) => (t === "dark" ? "light" : "dark")) }), [theme]);
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 export const useTheme = () => useContext(ThemeContext);
 
@@ -58,13 +55,9 @@ const EnquiryContext = createContext(null);
 
 export function EnquiryProvider({ children }) {
   const [state, setState] = useState({ open: false, vertical: "marketing", interest: "" });
-  const openEnquiry = (vertical = "marketing", interest = "") =>
-    setState({ open: true, vertical, interest });
-  const close = () => setState((s) => ({ ...s, open: false }));
-  return (
-    <EnquiryContext.Provider value={{ ...state, openEnquiry, close }}>
-      {children}
-    </EnquiryContext.Provider>
-  );
+  const openEnquiry = useCallback((vertical = "marketing", interest = "") => setState({ open: true, vertical, interest }), []);
+  const close = useCallback(() => setState((s) => ({ ...s, open: false })), []);
+  const value = useMemo(() => ({ ...state, openEnquiry, close }), [state, openEnquiry, close]);
+  return <EnquiryContext.Provider value={value}>{children}</EnquiryContext.Provider>;
 }
 export const useEnquiry = () => useContext(EnquiryContext);

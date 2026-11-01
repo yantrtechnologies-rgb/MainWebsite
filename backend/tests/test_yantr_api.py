@@ -1,10 +1,13 @@
 import os
+from pathlib import Path
 import pytest
 import requests
+from dotenv import load_dotenv
 
+load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 BASE_URL = os.environ.get('REACT_APP_BACKEND_URL').rstrip('/')
-ADMIN_EMAIL = "amtrks79@gmail.com"
-ADMIN_PASSWORD = "YantrAdmin@2026"
+ADMIN_EMAIL = os.environ["ADMIN_EMAIL"]
+ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
 
 
 @pytest.fixture(scope="module")

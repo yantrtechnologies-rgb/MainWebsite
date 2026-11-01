@@ -259,7 +259,7 @@ const Testimonials = () => {
                 <Quote className="w-8 h-8 text-[#2563EB]/30" />
                 {t.label && <span className="text-[10px] uppercase tracking-wider font-semibold text-slate-400 border border-slate-200 rounded-full px-2 py-0.5">{t.label}</span>}
               </div>
-              <div className="flex gap-0.5 mt-3">{Array.from({ length: t.rating || 5 }).map((_, k) => <Star key={k} className="w-4 h-4 fill-[#F97316] text-[#F97316]" />)}</div>
+              <div className="flex gap-0.5 mt-3">{Array.from({ length: t.rating || 5 }, (_, k) => `star-${k}`).map((sk) => <Star key={sk} className="w-4 h-4 fill-[#F97316] text-[#F97316]" />)}</div>
               <p className="text-slate-700 mt-4 leading-relaxed flex-1">"{t.quote}"</p>
               <div className="mt-5 pt-4 border-t border-slate-200 flex items-center gap-3">
                 {t.image ? <img src={imgUrl(t.image)} alt={t.name} className="w-10 h-10 rounded-full object-cover" /> : <span className="grid place-items-center w-10 h-10 rounded-full bg-[#2563EB] text-white font-bold">{t.name[0]}</span>}

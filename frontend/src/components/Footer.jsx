@@ -26,8 +26,8 @@ export const Footer = () => {
               One ecosystem uniting creative digital marketing, enterprise IT hardware, and hands-on technology training.
             </p>
             <div className="flex gap-3 mt-6">
-              {[Linkedin, Twitter, Instagram, Facebook].map((Icon, i) => (
-                <a key={i} href="#" aria-label="social" className="grid place-items-center w-9 h-9 rounded-md bg-white/5 hover:bg-[#84CC16] hover:text-[#0B0F19] transition-colors">
+              {[["LinkedIn", Linkedin], ["Twitter", Twitter], ["Instagram", Instagram], ["Facebook", Facebook]].map(([name, Icon]) => (
+                <a key={name} href="#" aria-label={name} data-testid={`footer-social-${name.toLowerCase()}`} className="grid place-items-center w-9 h-9 rounded-md bg-white/5 hover:bg-[#84CC16] hover:text-[#0B0F19] transition-colors">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}

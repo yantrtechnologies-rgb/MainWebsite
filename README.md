@@ -17,10 +17,12 @@ Neon stores users, enquiries, catalog records, and uploaded images as JSONB docu
 
 Production: https://xolnet-technologies.vercel.app
 
-Email delivery is optional and currently unconfigured. Enquiries are saved and accessible in the admin dashboard; automatic emails require `EMERGENT_EMAIL_KEY` or a separately configured email provider.
+Transactional email uses Brevo. Configure `BREVO_API_KEY`, a verified `EMAIL_FROM_ADDRESS`, `EMAIL_REPLY_TO`, and `LEAD_NOTIFY_EMAIL` in Vercel Production settings. `EMAIL_FROM_NAME` defaults to XOLNET Technologies. Admin enquiry notifications and customer acknowledgements use ASGI background tasks, so Vercel waits for the jobs to finish after responding. Each enquiry stores `email_admin` and `email_customer` acceptance/failure details. Provider acceptance does not guarantee inbox delivery; consult Brevo transactional logs for delivery/bounce events.
 
 GitHub auto-deployment requires adding the GitHub login connection in Vercel and connecting this repository. Direct CLI production deployment is configured and available.
 
 ## Verification
 
 Run `python backend/tests/test_postgres_persistence.py` with the local environment configured. This checks authentication, authorization, catalog reads, enquiry persistence, updates, notes, and metrics, and removes its test enquiry.
+
+Email regression tests: `python backend/tests/test_brevo_email.py` and `python backend/tests/test_email_lifecycle.py`. These tests do not send real emails.

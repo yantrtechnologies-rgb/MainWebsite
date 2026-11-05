@@ -19,7 +19,7 @@ from html import escape
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request, BackgroundTasks
 from starlette.middleware.cors import CORSMiddleware
 from postgres import Database
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
@@ -40,12 +40,13 @@ JWT_SECRET = os.environ["JWT_SECRET"]
 JWT_ALGORITHM = "HS256"
 
 # ---------------------------------------------------------------------------
-# Email (Emergent managed Resend)
+# Transactional email (Brevo Free)
 # ---------------------------------------------------------------------------
-EMAIL_BASE_URL = "https://integrations.emergentagent.com"
-EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY")
+EMAIL_BASE_URL = "https://api.brevo.com/v3"
+EMAIL_KEY = os.environ.get("BREVO_API_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "XOLNET Technologies")
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
+EMAIL_FROM_ADDRESS = os.environ.get("EMAIL_FROM_ADDRESS") or EMAIL_REPLY_TO
 LEAD_NOTIFY_EMAIL = os.environ.get("LEAD_NOTIFY_EMAIL")
 
 _SHORTENERS = ("bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "goo.gl", "rebrand.ly")
@@ -137,46 +138,49 @@ def _assert_safe_email(subject: str, html: str) -> None:
         _check_anchor(href, text)
 
 
-_bg_tasks: set = set()
-
-
-def _spawn(coro) -> None:
-    task = asyncio.create_task(coro)
-    _bg_tasks.add(task)
-    task.add_done_callback(_bg_tasks.discard)
-
-
 async def send_email(*, to: str, subject: str, html: str) -> Optional[str]:
-    if not EMAIL_KEY:
-        logger.warning("EMERGENT_EMAIL_KEY not set; skipping email send")
+    if not EMAIL_KEY or not EMAIL_FROM_ADDRESS:
+        logger.warning("BREVO_API_KEY or EMAIL_FROM_ADDRESS not set; skipping email send")
         return None
-    payload = {"to": [to], "subject": subject, "html": html, "from_name": EMAIL_FROM_NAME}
+    payload = {"to": [{"email": to}], "subject": subject, "htmlContent": html,
+               "sender": {"email": EMAIL_FROM_ADDRESS, "name": EMAIL_FROM_NAME}}
     if EMAIL_REPLY_TO:
-        payload["contact_email"] = EMAIL_REPLY_TO
+        payload["replyTo"] = {"email": EMAIL_REPLY_TO, "name": EMAIL_FROM_NAME}
     try:
         _assert_safe_email(subject, html)
-        async with httpx.AsyncClient(timeout=30) as http_client:
-            for attempt in range(3):
+        async with httpx.AsyncClient(timeout=10) as http_client:
+            for attempt in range(2):
                 resp = await http_client.post(
-                    f"{EMAIL_BASE_URL}/api/v1/email/send",
-                    headers={"X-Email-Key": EMAIL_KEY},
+                    f"{EMAIL_BASE_URL}/smtp/email",
+                    headers={"api-key": EMAIL_KEY},
                     json=payload,
                 )
-                if resp.status_code != 429:
+                if resp.status_code != 429 or attempt == 1:
                     break
                 await asyncio.sleep(2 ** (attempt + 1))
         resp.raise_for_status()
-        return resp.json().get("id")
+        message_id = resp.json().get("messageId")
+        logger.info("Brevo accepted email: %s", message_id)
+        return message_id
     except httpx.HTTPStatusError as e:
         try:
             code = e.response.json().get("code", "")
         except ValueError:
             code = ""
-        logger.warning(f"Email send failed ({code}): {e.response.status_code} {e.response.text}")
+        logger.warning("Brevo email failed (%s): HTTP %s", code, e.response.status_code)
         return None
     except Exception as e:
         logger.error(f"Email send error: {e!r}")
         return None
+
+
+async def send_enquiry_email(enquiry_id: str, kind: str, **kwargs) -> None:
+    message_id = await send_email(**kwargs)
+    await db.enquiries.update_one({"id": enquiry_id}, {"$set": {
+        f"email_{kind}": {"status": "accepted" if message_id else "failed",
+                          "message_id": message_id,
+                          "attempted_at": datetime.now(timezone.utc).isoformat()}
+    }})
 
 
 VERTICAL_LABELS = {"marketing": "Digital Marketing", "products": "IT Products", "academy": "IT Training",
@@ -427,21 +431,21 @@ def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
 
 
 @api_router.post("/enquiries")
-async def create_enquiry(payload: EnquiryInput, request: Request):
+async def create_enquiry(payload: EnquiryInput, request: Request, background_tasks: BackgroundTasks):
     _rate_limit(_client_ip(request))
     enquiry_id = "XL-" + uuid.uuid4().hex[:8].upper()
     await db.enquiries.insert_one(_new_enquiry_doc(payload, enquiry_id))
 
     if LEAD_NOTIFY_EMAIL:
         subject = f"New {payload.vertical.title()} Enquiry — {enquiry_id}"
-        _spawn(send_email(to=LEAD_NOTIFY_EMAIL, subject=subject, html=_admin_email_html(payload, enquiry_id)))
+        background_tasks.add_task(send_enquiry_email, enquiry_id, "admin", to=LEAD_NOTIFY_EMAIL, subject=subject, html=_admin_email_html(payload, enquiry_id))
 
     if payload.email:
-        _spawn(send_email(
+        background_tasks.add_task(send_enquiry_email, enquiry_id, "customer",
             to=payload.email,
             subject=f"Thank you for contacting XOLNET Technologies — {enquiry_id}",
             html=_customer_email_html(payload, enquiry_id),
-        ))
+        )
 
     return {"id": enquiry_id, "status": "received",
             "message": "Thank you! Your enquiry has been received. Our team will reach out shortly."}

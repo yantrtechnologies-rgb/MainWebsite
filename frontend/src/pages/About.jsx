@@ -15,7 +15,7 @@ export default function About() {
   const { openEnquiry } = useEnquiry();
   return (
     <>
-      <PageHero eyebrow="/// About Yantr Technologies" title="Creativity, hardware and talent — under one roof." desc="Yantr Technologies unites a creative digital agency, an enterprise IT store and a hands-on technology academy into one dependable partner." />
+      <PageHero eyebrow="/// About XOLNET Technologies" title="Creativity, hardware and talent — under one roof." desc="XOLNET Technologies unites a creative digital agency, an enterprise IT store and a hands-on technology academy into one dependable partner." />
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-6">

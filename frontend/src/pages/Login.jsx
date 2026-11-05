@@ -34,7 +34,7 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
           <span className="grid place-items-center w-10 h-10 rounded-lg bg-[#2563EB] text-white"><Zap className="w-5 h-5" strokeWidth={2.5} /></span>
-          <span className="font-display font-extrabold text-2xl">YANTR</span>
+          <span className="font-display font-extrabold text-2xl">XOLNET</span>
         </Link>
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-8">
           <div className="flex items-center gap-2 text-[#84CC16] mb-1"><Lock className="w-4 h-4" /><span className="eyebrow">Admin & Staff Login</span></div>

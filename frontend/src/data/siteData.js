@@ -22,10 +22,10 @@ export const PORTFOLIO = [
 export const PORTFOLIO_FILTERS = ["All", "Digital Marketing", "Branding & Social", "Performance Ads", "Web Apps"];
 
 export const PRODUCTS = [
-  { name: "Yantr Workstation Pro M3", brand: "Yantr", specs: "64GB RAM • 2TB NVMe • RTX 4090", price: "$3,299", badge: "Top Seller", stock: "In Stock", image: "https://images.unsplash.com/photo-1515343480029-43cdfe6b6aae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Desktops" },
-  { name: "Enterprise UltraBook X15", brand: "Yantr", specs: "32GB RAM • 1TB SSD • OLED 120Hz", price: "$1,899", badge: "New Arrival", stock: "In Stock", image: "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Laptops" },
-  { name: 'Dual Curved 34" Dev Display', brand: "Yantr", specs: "4K HDR1000 • 144Hz • USB-C 90W", price: "$899", badge: "Featured", stock: "In Stock", image: "https://images.pexels.com/photos/20263137/pexels-photo-20263137.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", category: "Monitors" },
-  { name: "Mechanical Pro Keyboard", brand: "Yantr", specs: "Hot-swap • RGB • Wireless", price: "$149", badge: "Accessory", stock: "In Stock", image: "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Accessories" },
+  { name: "XOLNET Workstation Pro M3", brand: "XOLNET", specs: "64GB RAM • 2TB NVMe • RTX 4090", price: "$3,299", badge: "Top Seller", stock: "In Stock", image: "https://images.unsplash.com/photo-1515343480029-43cdfe6b6aae?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHw0fHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Desktops" },
+  { name: "Enterprise UltraBook X15", brand: "XOLNET", specs: "32GB RAM • 1TB SSD • OLED 120Hz", price: "$1,899", badge: "New Arrival", stock: "In Stock", image: "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Laptops" },
+  { name: 'Dual Curved 34" Dev Display', brand: "XOLNET", specs: "4K HDR1000 • 144Hz • USB-C 90W", price: "$899", badge: "Featured", stock: "In Stock", image: "https://images.pexels.com/photos/20263137/pexels-photo-20263137.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940", category: "Monitors" },
+  { name: "Mechanical Pro Keyboard", brand: "XOLNET", specs: "Hot-swap • RGB • Wireless", price: "$149", badge: "Accessory", stock: "In Stock", image: "https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NjZ8MHwxfHNlYXJjaHwzfHxtb2Rlcm4lMjBsYXB0b3AlMjB3b3Jrc3RhdGlvbiUyMHNldHVwJTIwdGVjaG5vbG9neXxlbnwwfHx8fDE3OTI4MzcwMTV8MA&ixlib=rb-4.1.0&q=85", category: "Accessories" },
 ];
 
 export const PRODUCT_CATEGORIES = ["Laptops", "Desktops", "Monitors", "Accessories", "Networking", "Storage", "Printers"];
@@ -51,7 +51,7 @@ export const SERVICES = [
 ];
 
 export const TESTIMONIALS = [
-  { name: "Placeholder Client", org: "Acme Retail (demo)", service: "Performance Marketing", quote: "Replace with a genuine client testimonial. Yantr makes it easy to manage and showcase real feedback once available.", rating: 5 },
+  { name: "Placeholder Client", org: "Acme Retail (demo)", service: "Performance Marketing", quote: "Replace with a genuine client testimonial. XOLNET makes it easy to manage and showcase real feedback once available.", rating: 5 },
   { name: "Placeholder Student", org: "Academy Graduate (demo)", service: "Full-Stack Bootcamp", quote: "Demonstration quote. Swap in verified student success stories from your admin content.", rating: 5 },
   { name: "Placeholder CTO", org: "Nexus SaaS (demo)", service: "IT Procurement", quote: "Sample testimonial text. Real organisation feedback can be added at any time.", rating: 5 },
 ];
@@ -60,11 +60,11 @@ export const JOURNEY = [
   { step: "01", name: "Audit & Growth Strategy", desc: "Deep-dive analysis of your brand positioning, tech stack and talent gaps." },
   { step: "02", name: "Creative Agency Execution", desc: "High-impact social, SEO and performance marketing to generate revenue." },
   { step: "03", name: "IT Infrastructure Scaling", desc: "Deploying the right hardware, laptops and workstations for your workforce." },
-  { step: "04", name: "Talent & Upskilling", desc: "Training your engineering and marketing teams via Yantr Academy bootcamps." },
+  { step: "04", name: "Talent & Upskilling", desc: "Training your engineering and marketing teams via XOLNET Academy bootcamps." },
 ];
 
 export const COMPANY = {
-  name: "Yantr Technologies",
+  name: "XOLNET Technologies",
   tagline: "Engineered for Growth. Hardware for Power. Mastery for Tomorrow.",
   email: "yantrtechnologies@gmail.com",
   phone: "9692791725",

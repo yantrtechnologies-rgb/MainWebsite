@@ -105,7 +105,7 @@ export default function Contact() {
             </div>
             <iframe
               data-testid="contact-map-iframe"
-              title="Yantr Technologies office location"
+              title="XOLNET Technologies office location"
               src={`https://maps.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&z=15&output=embed`}
               className="w-full h-[320px] sm:h-[400px] border-0"
               loading="lazy"

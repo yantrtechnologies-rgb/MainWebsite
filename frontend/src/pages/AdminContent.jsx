@@ -81,7 +81,7 @@ export default function AdminContent() {
       <header className="border-b border-white/10 bg-[#0B0F19]/90 backdrop-blur sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo.webp" alt="Yantr" className="w-9 h-9 rounded-lg object-cover" />
+            <img src="/logo.svg" alt="XOLNET" className="w-9 h-9 rounded-lg object-cover" />
             <div>
               <p className="font-display font-bold leading-none">Website Content</p>
               <p className="text-xs text-slate-400">Courses, packages & accessories</p>

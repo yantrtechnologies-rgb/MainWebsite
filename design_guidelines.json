@@ -1,6 +1,6 @@
 {
   "brand_identity": {
-    "name": "Yantr Technologies",
+    "name": "XOLNET Technologies",
     "tagline": "Engineered for Growth. Hardware for Power. Mastery for Tomorrow.",
     "positioning": "A high-octane multi-vertical technology power-house blending creative digital agency energy (inspired by Social Panga), high-performance IT hardware e-commerce, and cutting-edge tech academy.",
     "verticals": [
@@ -87,14 +87,14 @@
     "header_nav": {
       "style": "Sticky top bar with backdrop-blur-xl bg-white/80 dark:bg-slate-900/80 border-b border-slate-200/50 dark:border-slate-800/50 z-50",
       "elements": [
-        "Brand Logo: 'YANTR' with geometric pulse symbol",
+        "Brand Logo: 'XOLNET' with geometric pulse symbol",
         "Vertical Jump Links: Agency | IT Products | Academy | Why Us | Work",
         "Actions: Dark/Light Mode Toggle, 'Enquire Now' primary button with electric pulse hover, Admin Dashboard quick launcher button"
       ]
     },
     "hero_section": {
       "theme": "Dark navy background (#0B0F19) with subtle grid scanlines and radial electric blue ambient lighting",
-      "eyebrow": "/// YANTR TECHNOLOGIES — THREE POWERHOUSE VERTICALS",
+      "eyebrow": "/// XOLNET TECHNOLOGIES — THREE POWERHOUSE VERTICALS",
       "headline": "Transforming Brands, Equipping Teams & Educating Tech Leaders.",
       "subheadline": "We unite creative digital marketing agency power, enterprise hardware deployment, and hands-on IT career bootcamps under one ecosystem.",
       "cards": [
@@ -178,7 +178,7 @@
       "style": "Clean e-commerce cards with price, availability badge, quick add to quote button, and specs rating.",
       "products": [
         {
-          "name": "Yantr Workstation Pro M3",
+          "name": "XOLNET Workstation Pro M3",
           "specs": "64GB RAM | 2TB NVMe | RTX 4090",
           "price": "$3,299",
           "badge": "Top Seller",
@@ -240,7 +240,7 @@
         {
           "step": "04",
           "name": "Talent & Upskilling",
-          "description": "Training your engineering and marketing team via specialized Yantr Academy bootcamps."
+          "description": "Training your engineering and marketing team via specialized XOLNET Academy bootcamps."
         }
       ]
     },
@@ -257,7 +257,7 @@
       ]
     },
     "admin_dashboard": {
-      "title": "Yantr Lead Management & CRM",
+      "title": "XOLNET Lead Management & CRM",
       "features": [
         "Kanban Status Pipeline: New -> Contacted -> Qualified -> Proposal Sent -> Converted -> Lost",
         "Search & Filter leads by Vertical, Date, Value, Status",

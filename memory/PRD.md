@@ -1,7 +1,7 @@
-# Yantr Technologies — PRD
+# XOLNET Technologies — PRD
 
 ## Original problem
-Premium responsive website for Yantr Technologies combining Digital Marketing, IT Products (quote-only) and IT Training. First release: homepage + marketing pages + enquiry/lead forms + admin lead dashboard, JWT auth with seeded admin, email notification on new enquiries, no payments.
+Premium responsive website for XOLNET Technologies combining Digital Marketing, IT Products (quote-only) and IT Training. First release: homepage + marketing pages + enquiry/lead forms + admin lead dashboard, JWT auth with seeded admin, email notification on new enquiries, no payments.
 
 ## Architecture
 React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-managed email for lead notifications.
@@ -9,7 +9,7 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
 ## Implemented
 - Initial build: pages (Home, Digital Marketing, IT Products, IT Training, Work, About, Contact, Login, Admin), enquiry modal, admin lead dashboard (status, notes, follow-up, search, CSV)
 - Follow-up update:
-  - Gold logo in navbar, footer and as favicon (/logo.webp, /favicon.png); title "Yantr Technologies"
+  - Gold logo in navbar, footer and as favicon (/logo.webp, /favicon.png); title "XOLNET Technologies"
   - Contact: yantrtechnologies@gmail.com, 9692791725, Pragati Vihar, Ainthapali, Sambalpur, Odisha
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote

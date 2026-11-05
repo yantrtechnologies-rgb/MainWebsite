@@ -21,22 +21,20 @@ from urllib.parse import urlparse
 
 from fastapi import FastAPI, APIRouter, HTTPException, Depends, Request
 from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
+from postgres import Database
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
-from catalog import create_catalog_router, seed_catalog, init_storage
+from catalog import create_catalog_router, seed_catalog
 
 # ---------------------------------------------------------------------------
 # DB + App setup
 # ---------------------------------------------------------------------------
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = Database(os.environ['DATABASE_URL'])
 
-app = FastAPI(title="Yantr Technologies API")
+app = FastAPI(title="XOLNET Technologies API")
 api_router = APIRouter(prefix="/api")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger("yantr")
+logger = logging.getLogger("xolnet")
 
 JWT_SECRET = os.environ["JWT_SECRET"]
 JWT_ALGORITHM = "HS256"
@@ -46,7 +44,7 @@ JWT_ALGORITHM = "HS256"
 # ---------------------------------------------------------------------------
 EMAIL_BASE_URL = "https://integrations.emergentagent.com"
 EMAIL_KEY = os.environ.get("EMERGENT_EMAIL_KEY")
-EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "Yantr Technologies")
+EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "XOLNET Technologies")
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
 LEAD_NOTIFY_EMAIL = os.environ.get("LEAD_NOTIFY_EMAIL")
 
@@ -198,7 +196,7 @@ def _customer_email_html(p: "EnquiryInput", enquiry_id: str) -> str:
         '<table role="presentation" width="100%" style="font-family:Arial,sans-serif;background:#f8fafc">'
         '<tr><td style="padding:24px"><table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px">'
         '<tr><td style="background:#0B0F19;padding:20px 24px;border-radius:12px 12px 0 0">'
-        '<span style="color:#ffffff;font-size:20px;font-weight:bold">Yantr Technologies</span></td></tr>'
+        '<span style="color:#ffffff;font-size:20px;font-weight:bold">XOLNET Technologies</span></td></tr>'
         '<tr><td style="padding:24px">'
         f'<h2 style="color:#0B0F19;margin:0 0 8px">Thank you, {escape(p.name)}!</h2>'
         '<p style="color:#475569;margin:0 0 16px;font-size:14px">We have received your enquiry. Our team will get back to you shortly. '
@@ -209,7 +207,7 @@ def _customer_email_html(p: "EnquiryInput", enquiry_id: str) -> str:
         'Email: <a href="mailto:yantrtechnologies@gmail.com" style="color:#2563EB">yantrtechnologies@gmail.com</a><br>'
         'Phone / WhatsApp: <a href="tel:+919692791725" style="color:#2563EB">+91 9692791725</a><br>'
         'Office: Pragati Vihar, Ainthapali, Sambalpur, Odisha</p>'
-        '<p style="font-size:12px;color:#94a3b8;margin-top:24px">You received this because you submitted an enquiry on the Yantr Technologies website.</p>'
+        '<p style="font-size:12px;color:#94a3b8;margin-top:24px">You received this because you submitted an enquiry on the XOLNET Technologies website.</p>'
         '</td></tr></table></td></tr></table>'
     )
 
@@ -348,7 +346,7 @@ def _rate_limit(key: str, limit: int = 8, window_sec: int = 300):
 # ---------------------------------------------------------------------------
 @api_router.get("/")
 async def root():
-    return {"message": "Yantr Technologies API", "status": "ok"}
+    return {"message": "XOLNET Technologies API", "status": "ok"}
 
 
 @api_router.post("/auth/register")
@@ -420,9 +418,9 @@ def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
         '<table role="presentation" width="100%" style="font-family:Arial,sans-serif">'
         '<tr><td style="padding:24px">'
         '<h2 style="color:#0B0F19;margin:0 0 8px">New lead received</h2>'
-        '<p style="color:#475569;margin:0 0 16px">A new enquiry was submitted on the Yantr Technologies website.</p>'
+        '<p style="color:#475569;margin:0 0 16px">A new enquiry was submitted on the XOLNET Technologies website.</p>'
         f'<table role="presentation">{rows}</table>'
-        '<p style="font-size:12px;color:#94a3b8;margin-top:20px">Sent by Yantr Technologies. '
+        '<p style="font-size:12px;color:#94a3b8;margin-top:20px">Sent by XOLNET Technologies. '
         'We never ask for your password or card details by email.</p>'
         '</td></tr></table>'
     )
@@ -431,7 +429,7 @@ def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
 @api_router.post("/enquiries")
 async def create_enquiry(payload: EnquiryInput, request: Request):
     _rate_limit(_client_ip(request))
-    enquiry_id = "YT-" + uuid.uuid4().hex[:8].upper()
+    enquiry_id = "XL-" + uuid.uuid4().hex[:8].upper()
     await db.enquiries.insert_one(_new_enquiry_doc(payload, enquiry_id))
 
     if LEAD_NOTIFY_EMAIL:
@@ -441,7 +439,7 @@ async def create_enquiry(payload: EnquiryInput, request: Request):
     if payload.email:
         _spawn(send_email(
             to=payload.email,
-            subject=f"Thank you for contacting Yantr Technologies — {enquiry_id}",
+            subject=f"Thank you for contacting XOLNET Technologies — {enquiry_id}",
             html=_customer_email_html(payload, enquiry_id),
         ))
 
@@ -535,17 +533,12 @@ async def startup():
     await db.users.create_index("id")
     await db.enquiries.create_index("id")
     await seed_catalog(db)
-    try:
-        await asyncio.to_thread(init_storage)
-        logger.info("Storage initialized")
-    except Exception as e:
-        logger.error(f"Storage init failed: {e}")
     admin_email = os.environ["ADMIN_EMAIL"].lower()
     admin_password = os.environ["ADMIN_PASSWORD"]
     existing = await db.users.find_one({"email": admin_email})
     if existing is None:
         await db.users.insert_one({
-            "id": str(uuid.uuid4()), "name": "Yantr Admin", "email": admin_email,
+            "id": str(uuid.uuid4()), "name": "XOLNET Admin", "email": admin_email,
             "password_hash": hash_password(admin_password), "role": "admin",
             "created_at": datetime.now(timezone.utc).isoformat(),
         })
@@ -558,4 +551,4 @@ async def startup():
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
-    client.close()
+    pass

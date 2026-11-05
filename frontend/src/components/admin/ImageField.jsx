@@ -12,7 +12,7 @@ export const ImageField = ({ value, onChange }) => {
 
   const upload = async (file) => {
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { toast.error("Image must be 5 MB or smaller"); return; }
+    if (file.size > 3 * 1024 * 1024) { toast.error("Image must be 3 MB or smaller"); return; }
     const fd = new FormData();
     fd.append("file", file);
     setBusy(true);

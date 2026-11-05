@@ -9,23 +9,23 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("yantr_token");
+    const token = localStorage.getItem("xolnet_token");
     if (!token) { setLoading(false); return; }
     api.get("/auth/me")
       .then((res) => setUser(res.data))
-      .catch(() => { localStorage.removeItem("yantr_token"); })
+      .catch(() => { localStorage.removeItem("xolnet_token"); })
       .finally(() => setLoading(false));
   }, []);
 
   const login = useCallback(async (email, password) => {
     const { data } = await api.post("/auth/login", { email, password });
-    localStorage.setItem("yantr_token", data.token);
+    localStorage.setItem("xolnet_token", data.token);
     setUser(data.user);
     return data.user;
   }, []);
 
   const logout = useCallback(() => {
-    localStorage.removeItem("yantr_token");
+    localStorage.removeItem("xolnet_token");
     setUser(null);
   }, []);
 
@@ -38,12 +38,12 @@ export const useAuth = () => useContext(AuthContext);
 const ThemeContext = createContext(null);
 
 export function ThemeProvider({ children }) {
-  const [theme, setTheme] = useState(() => localStorage.getItem("yantr_theme") || "light");
+  const [theme, setTheme] = useState(() => localStorage.getItem("xolnet_theme") || "light");
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "dark") root.classList.add("dark");
     else root.classList.remove("dark");
-    localStorage.setItem("yantr_theme", theme);
+    localStorage.setItem("xolnet_theme", theme);
   }, [theme]);
   const value = useMemo(() => ({ theme, toggle: () => setTheme((t) => (t === "dark" ? "light" : "dark")) }), [theme]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

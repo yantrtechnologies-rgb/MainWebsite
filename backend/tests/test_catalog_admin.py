@@ -157,4 +157,4 @@ class TestUpload:
         assert r.status_code in (400, 413)
 
     def test_missing_file_404(self):
-        assert requests.get(f"{BASE_URL}/api/files/yantr/uploads/nope.png").status_code == 404
+        assert requests.get(f"{BASE_URL}/api/files/xolnet/uploads/nope.png").status_code == 404

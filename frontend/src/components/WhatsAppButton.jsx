@@ -1,7 +1,7 @@
 import React from "react";
 import { COMPANY } from "@/data/siteData";
 
-const MSG = "Hi Yantr Technologies, I'd like to know more about your services.";
+const MSG = "Hi XOLNET Technologies, I'd like to know more about your services.";
 
 export const WhatsAppButton = () => (
   <a

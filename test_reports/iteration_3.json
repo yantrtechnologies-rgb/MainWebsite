@@ -1,5 +1,5 @@
 {
-  "summary": "Iteration 3: tested the WhatsApp floating button, Contact page Google Map, customer thank-you email and the enquiry/contact regression. Everything requested passed. Backend: 14/14 pytest passed, including the earlier rule tests. The customer email was confirmed in the backend log: an enquiry with an email gave 2 email sends (admin + customer), both 202 Accepted, and the API answered in under 3s. Phone-only gave 1 send (admin) with no errors. Frontend: the WhatsApp button shows on /, /digital-marketing, /it-products and /contact at 1280 and 390. It has the correct wa.me/919692791725 link with the encoded 'Hi Yantr Technologies' message and target=_blank. On mobile it shows the icon only (56x56, bottom-right) and does not cover CTAs. The enquiry modal overlay (z-50) correctly sits above it. The map iframe and directions link are correct and lay out well at both widths. The contact form and the multi-step modal submit successfully, and the phone-or-email toast is enforced.",
+  "summary": "Iteration 3: tested the WhatsApp floating button, Contact page Google Map, customer thank-you email and the enquiry/contact regression. Everything requested passed. Backend: 14/14 pytest passed, including the earlier rule tests. The customer email was confirmed in the backend log: an enquiry with an email gave 2 email sends (admin + customer), both 202 Accepted, and the API answered in under 3s. Phone-only gave 1 send (admin) with no errors. Frontend: the WhatsApp button shows on /, /digital-marketing, /it-products and /contact at 1280 and 390. It has the correct wa.me/919692791725 link with the encoded 'Hi XOLNET Technologies' message and target=_blank. On mobile it shows the icon only (56x56, bottom-right) and does not cover CTAs. The enquiry modal overlay (z-50) correctly sits above it. The map iframe and directions link are correct and lay out well at both widths. The contact form and the multi-step modal submit successfully, and the phone-or-email toast is enforced.",
   "backend_issues": {
     "critical": [],
     "minor": [
@@ -22,7 +22,7 @@
   ],
   "updated_files": ["/app/backend/tests/test_customer_email_whatsapp.py"],
   "success_rate": {"backend": "100%", "frontend": "100%"},
-  "test_credentials": "Admin amtrks79@gmail.com / YantrAdmin@2026 (from /app/memory/test_credentials.md) - works",
+  "test_credentials": "Admin amtrks79@gmail.com / XOLNETAdmin@2026 (from /app/memory/test_credentials.md) - works",
   "seed_data_creation": "TEST_ leads were created and then deleted via mongo cleanup in test_cleanup",
   "retest_needed": false,
   "should_main_agent_self_test": false,

@@ -15,6 +15,6 @@ export const exportLeadsCsv = (leads) => {
   const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(",")).join("\n");
   const url = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
   const a = document.createElement("a");
-  a.href = url; a.download = "yantr-leads.csv"; a.click();
+  a.href = url; a.download = "xolnet-leads.csv"; a.click();
   URL.revokeObjectURL(url);
 };

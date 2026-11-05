@@ -30,7 +30,7 @@ const Hero = () => {
       <div className="absolute top-20 right-10 w-72 h-72 rounded-full bg-[#84CC16]/10 blur-[120px]" />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <Reveal>
-          <p className="eyebrow text-[#84CC16] mb-5">/// Yantr Technologies — Three Powerhouse Verticals</p>
+          <p className="eyebrow text-[#84CC16] mb-5">/// XOLNET Technologies — Three Powerhouse Verticals</p>
         </Reveal>
         <Reveal delay={0.08}>
           <h1 className="font-display font-black tracking-tight leading-[0.98] text-4xl sm:text-5xl lg:text-6xl max-w-4xl text-balance">
@@ -130,7 +130,7 @@ const WhyUs = () => (
   <section className="py-20 lg:py-28 bg-[#0B0F19] text-white relative overflow-hidden">
     <div className="absolute inset-0 grid-lines opacity-40" />
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <SectionHeading light eyebrow="/// Why Choose Yantr" title="One partner. Three powerhouses. Zero compromise." desc="We bring marketing, hardware and training together so your growth never stalls at a gap in capability." />
+      <SectionHeading light eyebrow="/// Why Choose XOLNET" title="One partner. Three powerhouses. Zero compromise." desc="We bring marketing, hardware and training together so your growth never stalls at a gap in capability." />
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-12">
         {WHY_US.map((w, i) => {
           const Icon = ICONS[w.icon];
@@ -213,7 +213,7 @@ const FeaturedCourses = () => {
     <section className="py-20 lg:py-28 bg-[#111827] text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
-          <SectionHeading light eyebrow="/// Yantr Academy" title="Job-ready IT courses, taught by experts." />
+          <SectionHeading light eyebrow="/// XOLNET Academy" title="Job-ready IT courses, taught by experts." />
           <Link to="/it-training"><Button data-testid="home-all-courses" variant="outline" className="rounded-full border-white/25 text-white bg-transparent hover:bg-white/10">All Courses <ArrowRight className="w-4 h-4 ml-1" /></Button></Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
@@ -250,7 +250,7 @@ const Testimonials = () => {
   return (
   <section className="py-20 lg:py-28 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <SectionHeading eyebrow="/// Success Stories" title="What our clients and students say." desc="Real outcomes from businesses and learners who grew with Yantr Technologies." />
+      <SectionHeading eyebrow="/// Success Stories" title="What our clients and students say." desc="Real outcomes from businesses and learners who grew with XOLNET Technologies." />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
         {items.map((t, i) => (
           <Reveal key={t.id} delay={0.06 * (i % 3)}>

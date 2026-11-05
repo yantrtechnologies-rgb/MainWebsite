@@ -1,5 +1,5 @@
 {
-  "summary": "Regression test after the refactor (meant to change no behaviour) of the admin dashboard, enquiry modal, ItemFormDialog, contexts, server.py and catalog.py. Backend suite: 50 of 52 pass. The 2 failures are the known email-provider 429 retry log-count tests. Before I fixed a test-only issue, 6 tests in test_yantr_api.py errored because the session sent no X-Forwarded-For, so every run shared one enquiry rate-limit bucket. The frontend regressions all pass: enquiry modal, admin dashboard, content editor CRUD for courses and testimonials with image upload, theme toggle and footer social icons. I found no regression from the refactor. A few older bugs are listed below.",
+  "summary": "Regression test after the refactor (meant to change no behaviour) of the admin dashboard, enquiry modal, ItemFormDialog, contexts, server.py and catalog.py. Backend suite: 50 of 52 pass. The 2 failures are the known email-provider 429 retry log-count tests. Before I fixed a test-only issue, 6 tests in test_xolnet_api.py errored because the session sent no X-Forwarded-For, so every run shared one enquiry rate-limit bucket. The frontend regressions all pass: enquiry modal, admin dashboard, content editor CRUD for courses and testimonials with image upload, theme toggle and footer social icons. I found no regression from the refactor. A few older bugs are listed below.",
   "backend_issues": {
     "critical": [],
     "minor": [
@@ -19,7 +19,7 @@
     ],
     "design_issues": []
   },
-  "test_report_links": ["/app/backend/tests/test_yantr_api.py", "/app/backend/tests/test_catalog_admin.py", "/app/backend/tests/test_enquiry_contact_rules.py", "/app/backend/tests/test_customer_email_whatsapp.py", "/app/test_reports/pytest/pytest_iter5.xml"],
+  "test_report_links": ["/app/backend/tests/test_xolnet_api.py", "/app/backend/tests/test_catalog_admin.py", "/app/backend/tests/test_enquiry_contact_rules.py", "/app/backend/tests/test_customer_email_whatsapp.py", "/app/test_reports/pytest/pytest_iter5.xml"],
   "action_items": [
     "Default the testimonial rating to 5 in ItemFormDialog / AdminContent config so 'Add Story' works without editing the rating",
     "Split list fields on newlines only (labels say 'one per line'), to stop commas inside items breaking them up",
@@ -34,7 +34,7 @@
     "catalog._storage_call retries on 404 with a fresh key. A truly missing object triggers 2 calls (fine since the db record is checked first).",
     "server.py _assert_safe_email helpers are well split and behave correctly (emails are still attempted, sent in the background)."
   ],
-  "updated_files": ["/app/backend/tests/test_yantr_api.py (session now sends a random X-Forwarded-For so the per-IP rate limit is not shared across runs)", "/app/frontend/src/components/EnquiryModal.jsx (added data-testid='enquiry-back-btn')"],
+  "updated_files": ["/app/backend/tests/test_xolnet_api.py (session now sends a random X-Forwarded-For so the per-IP rate limit is not shared across runs)", "/app/frontend/src/components/EnquiryModal.jsx (added data-testid='enquiry-back-btn')"],
   "success_rate": {"backend": "96% (50/52; 2 environmental email 429 log-count failures)", "frontend": "100% of regression flows; 3 older bugs noted"},
   "seed_data_creation": "None. Cleaned up TEST_ enquiries (2) and 3 test_stu_* student users. Catalog counts are back to 9/9/40/6/15.",
   "retest_needed": false,

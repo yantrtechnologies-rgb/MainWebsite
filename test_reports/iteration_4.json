@@ -32,5 +32,5 @@
   "seed_data_creation": "None. TEST_ catalog items were created and deleted through the UI, and test student users were removed. Counts are back to 9/9/40.",
   "retest_needed": false,
   "should_main_agent_self_test": true,
-  "context_for_next_testing_agent": "Admin creds: amtrks79@gmail.com / YantrAdmin@2026. The enquiry modal is multi-step: click enquiry-next-btn to reach enquiry-interest. Product cards: products-page-card-N / products-page-quote-N. Course cards: training-course-N / training-enrol-N. Home: product-card-N / home-course-N. Admin upload: set_input_files on image-field-file. The URL is written into image-field-url as /api/files/yantr/uploads/<uuid>.png. Delete uses window.confirm. Run pytest with xdist enabled (pytest.ini adds -n)."
+  "context_for_next_testing_agent": "Admin creds: amtrks79@gmail.com / XOLNETAdmin@2026. The enquiry modal is multi-step: click enquiry-next-btn to reach enquiry-interest. Product cards: products-page-card-N / products-page-quote-N. Course cards: training-course-N / training-enrol-N. Home: product-card-N / home-course-N. Admin upload: set_input_files on image-field-file. The URL is written into image-field-url as /api/files/xolnet/uploads/<uuid>.png. Delete uses window.confirm. Run pytest with xdist enabled (pytest.ini adds -n)."
 }

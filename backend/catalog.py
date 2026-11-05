@@ -1,3 +1,4 @@
+import base64
 import asyncio
 import logging
 import os
@@ -11,45 +12,10 @@ from pydantic import BaseModel, Field, ValidationError
 
 logger = logging.getLogger(__name__)
 
-STORAGE_BASE = (os.environ.get("INTEGRATION_PROXY_URL") or "").strip() or "https://integrations.emergentagent.com"
-STORAGE_URL = STORAGE_BASE.rstrip("/") + "/objstore/api/v1/storage"
-APP_NAME = "yantr"
-MAX_UPLOAD = 5 * 1024 * 1024
+APP_NAME = "xolnet"
+MAX_UPLOAD = 3 * 1024 * 1024
 ALLOWED_TYPES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
-_storage_key: Optional[str] = None
 
-
-def init_storage(force: bool = False) -> str:
-    global _storage_key
-    if _storage_key and not force:
-        return _storage_key
-    resp = requests.post(f"{STORAGE_URL}/init", json={"emergent_key": os.environ.get("EMERGENT_LLM_KEY")}, timeout=30)
-    resp.raise_for_status()
-    _storage_key = resp.json()["storage_key"]
-    return _storage_key
-
-
-def _storage_call(method: str, path: str, headers: Optional[dict] = None, **kwargs) -> requests.Response:
-    url = f"{STORAGE_URL}/objects/{path}"
-    extra = headers or {}
-    resp = requests.request(method, url, headers={"X-Storage-Key": init_storage(), **extra}, **kwargs)
-    if resp.status_code == 404:
-        resp = requests.request(method, url, headers={"X-Storage-Key": init_storage(force=True), **extra}, **kwargs)
-    resp.raise_for_status()
-    return resp
-
-
-def put_object(path: str, data: bytes, content_type: str) -> dict:
-    return _storage_call("PUT", path, headers={"Content-Type": content_type}, data=data, timeout=120).json()
-
-
-def get_object(path: str) -> bytes:
-    return _storage_call("GET", path, timeout=60).content
-
-
-# ---------------------------------------------------------------------------
-# Models
-# ---------------------------------------------------------------------------
 class CourseIn(BaseModel):
     title: str = Field(min_length=1, max_length=120)
     description: str = ""
@@ -103,11 +69,11 @@ MODELS = {"courses": CourseIn, "packages": PackageIn, "products": ProductIn,
 
 SEED_TESTIMONIALS = [
     ("Priya Mohanty", "Full Stack Development student", "IT Training", "The trainers explained every concept with real projects. Within six months I built my own portfolio and cracked my first developer interview."),
-    ("Rakesh Agarwal", "Retail business owner, Sambalpur", "IT Products", "We bought laptops, a printer and CCTV for our shop. Yantr gave the best quote in town, installed everything on time and still supports us."),
+    ("Rakesh Agarwal", "Retail business owner, Sambalpur", "IT Products", "We bought laptops, a printer and CCTV for our shop. XOLNET gave the best quote in town, installed everything on time and still supports us."),
     ("Sneha Patel", "Boutique owner", "Social Media Marketing", "Our Instagram enquiries doubled in three months. The team plans our posts and reels so I can focus on running the store."),
     ("Amit Behera", "Cyber Security student", "IT Training", "The hands-on labs were the best part. I learned tools I now use every day at work. Highly recommend the faculty."),
     ("Sunita Das", "Office administrator", "Bulk IT Procurement", "Quick quotations, genuine products and proper billing. They handled our complete office setup including networking."),
-    ("Manoj Sahu", "Restaurant owner", "SEO & Google Business", "Customers now find us on Google Maps easily. Our weekend footfall has clearly gone up since Yantr took over our online presence."),
+    ("Manoj Sahu", "Restaurant owner", "SEO & Google Business", "Customers now find us on Google Maps easily. Our weekend footfall has clearly gone up since XOLNET took over our online presence."),
 ]
 
 SEED_CLIENTS = ["Adobe", "Malabar Jewellers", "Tanishq", "Anand Super Market", "Dell", "HP", "Lenovo",
@@ -244,15 +210,11 @@ async def _store_upload(db, file: UploadFile, user: dict) -> str:
         raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
     data = await file.read()
     if len(data) > MAX_UPLOAD:
-        raise HTTPException(status_code=400, detail="Image must be 5 MB or smaller")
+        raise HTTPException(status_code=400, detail="Image must be 3 MB or smaller")
     path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
-    try:
-        stored = await asyncio.to_thread(put_object, path, data, file.content_type)
-    except Exception as e:
-        logger.error(f"Upload failed: {e}")
-        raise HTTPException(status_code=502, detail="Image upload failed, please try again")
+    stored = {"path": path, "size": len(data)}
     await db.files.insert_one({
-        "id": str(uuid.uuid4()), "storage_path": stored["path"], "original_filename": file.filename,
+        "id": str(uuid.uuid4()), "data": base64.b64encode(data).decode("ascii"), "storage_path": stored["path"], "original_filename": file.filename,
         "content_type": file.content_type, "size": stored.get("size", len(data)), "is_deleted": False,
         "uploaded_by": user["id"], "created_at": datetime.now(timezone.utc).isoformat(),
     })
@@ -263,11 +225,7 @@ async def _load_file(db, path: str) -> Response:
     record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
     if not record:
         raise HTTPException(status_code=404, detail="File not found")
-    try:
-        content = await asyncio.to_thread(get_object, path)
-    except Exception as e:
-        logger.error(f"File fetch failed: {e}")
-        raise HTTPException(status_code=502, detail="Could not load file")
+    content = base64.b64decode(record["data"])
     return Response(content=content, media_type=record["content_type"],
                     headers={"Cache-Control": "public, max-age=86400"})
 

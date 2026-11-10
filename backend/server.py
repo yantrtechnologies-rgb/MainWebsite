@@ -405,6 +405,42 @@ def _new_enquiry_doc(payload: EnquiryInput, enquiry_id: str) -> dict:
     return doc
 
 
+async def sync_enquiry_to_crm(payload: EnquiryInput, enquiry_id: str):
+    endpoint = os.environ.get("ORBIT_CRM_ENQUIRY_URL", "").strip()
+    secret = os.environ.get("XOLNET_CRM_SECRET", "").strip()
+    if not endpoint or not secret:
+        return
+
+    context = [
+        ("Category", payload.category), ("Interest", payload.interest),
+        ("Services", ", ".join(payload.services or [])), ("Website", payload.website),
+        ("Industry", payload.industry), ("Budget", payload.budget),
+        ("Timeline", payload.timeline), ("Message", payload.message),
+    ]
+    body = {
+        "reference": enquiry_id, "vertical": payload.vertical,
+        "name": payload.name.strip()[:200], "company": (payload.company or "").strip()[:200],
+        "email": payload.email, "phone": payload.phone,
+        "title": (payload.interest or payload.category or "Website enquiry").strip()[:200],
+        "notes": "\n".join(f"{label}: {value}" for label, value in context if value)[:4900],
+    }
+    async with httpx.AsyncClient(timeout=5) as client:
+        for attempt in range(3):
+            if attempt:
+                await asyncio.sleep(attempt)
+            try:
+                response = await client.post(endpoint, json=body, headers={"Authorization": f"Bearer {secret}"})
+                if response.status_code in (200, 201):
+                    await db.enquiries.update_one({"id": enquiry_id}, {"$set": {"crm_sync_status": "synced"}})
+                    return
+                if response.status_code < 500 and response.status_code != 429:
+                    break
+            except httpx.RequestError:
+                continue
+    logger.warning("Orbit CRM sync failed for %s", enquiry_id)
+    await db.enquiries.update_one({"id": enquiry_id}, {"$set": {"crm_sync_status": "failed"}})
+
+
 def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
     rows = "".join(
         f'<tr><td style="padding:4px 12px 4px 0;color:#64748b;font-size:13px">{escape(k)}</td>'
@@ -447,6 +483,7 @@ async def create_enquiry(payload: EnquiryInput, request: Request, background_tas
             html=_customer_email_html(payload, enquiry_id),
         )
 
+    background_tasks.add_task(sync_enquiry_to_crm, payload, enquiry_id)
     return {"id": enquiry_id, "status": "received",
             "message": "Thank you! Your enquiry has been received. Our team will reach out shortly."}
 

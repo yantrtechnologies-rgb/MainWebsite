@@ -46,6 +46,11 @@ EMAIL_BASE_URL = "https://api.brevo.com/v3"
 EMAIL_KEY = os.environ.get("BREVO_API_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "XOLNET Technologies")
 PRIMARY_EMAIL = "xolnettechnologies@gmail.com"
+EMAIL_LOGO = (
+    '<img src="https://xolnet-technologies.vercel.app/xolnet.png" '
+    'width="88" height="88" alt="XOLNET Technologies logo" '
+    'style="display:block;border:0;margin:0 0 12px">'
+)
 EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO") or PRIMARY_EMAIL
 EMAIL_FROM_ADDRESS = os.environ.get("EMAIL_FROM_ADDRESS") or EMAIL_REPLY_TO
 LEAD_NOTIFY_EMAIL = os.environ.get("LEAD_NOTIFY_EMAIL") or PRIMARY_EMAIL
@@ -201,7 +206,7 @@ def _customer_email_html(p: "EnquiryInput", enquiry_id: str) -> str:
         '<table role="presentation" width="100%" style="font-family:Arial,sans-serif;background:#f8fafc">'
         '<tr><td style="padding:24px"><table role="presentation" width="100%" style="max-width:560px;margin:0 auto;background:#ffffff;border-radius:12px">'
         '<tr><td style="background:#0B0F19;padding:20px 24px;border-radius:12px 12px 0 0">'
-        '<span style="color:#ffffff;font-size:20px;font-weight:bold">XOLNET Technologies</span></td></tr>'
+        f'{EMAIL_LOGO}<span style="color:#ffffff;font-size:20px;font-weight:bold">XOLNET Technologies</span></td></tr>'
         '<tr><td style="padding:24px">'
         f'<h2 style="color:#0B0F19;margin:0 0 8px">Thank you, {escape(p.name)}!</h2>'
         '<p style="color:#475569;margin:0 0 16px;font-size:14px">We have received your enquiry. Our team will get back to you shortly. '
@@ -458,7 +463,7 @@ def _admin_email_html(payload: EnquiryInput, enquiry_id: str) -> str:
     return (
         '<table role="presentation" width="100%" style="font-family:Arial,sans-serif">'
         '<tr><td style="padding:24px">'
-        '<h2 style="color:#0B0F19;margin:0 0 8px">New lead received</h2>'
+        f'{EMAIL_LOGO}<h2 style="color:#0B0F19;margin:0 0 8px">New lead received</h2>'
         '<p style="color:#475569;margin:0 0 16px">A new enquiry was submitted on the XOLNET Technologies website.</p>'
         f'<table role="presentation">{rows}</table>'
         '<p style="font-size:12px;color:#94a3b8;margin-top:20px">Sent by XOLNET Technologies. '

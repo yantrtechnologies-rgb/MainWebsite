@@ -45,9 +45,10 @@ JWT_ALGORITHM = "HS256"
 EMAIL_BASE_URL = "https://api.brevo.com/v3"
 EMAIL_KEY = os.environ.get("BREVO_API_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "XOLNET Technologies")
-EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO")
+PRIMARY_EMAIL = "xolnettechnologies@gmail.com"
+EMAIL_REPLY_TO = os.environ.get("EMAIL_REPLY_TO") or PRIMARY_EMAIL
 EMAIL_FROM_ADDRESS = os.environ.get("EMAIL_FROM_ADDRESS") or EMAIL_REPLY_TO
-LEAD_NOTIFY_EMAIL = os.environ.get("LEAD_NOTIFY_EMAIL")
+LEAD_NOTIFY_EMAIL = os.environ.get("LEAD_NOTIFY_EMAIL") or PRIMARY_EMAIL
 
 _SHORTENERS = ("bit.ly", "tinyurl.com", "t.co", "is.gd", "cutt.ly", "goo.gl", "rebrand.ly")
 _CRED_ASK = ("reply with your password", "reply with the code", "send your password", "cvv",
@@ -208,7 +209,7 @@ def _customer_email_html(p: "EnquiryInput", enquiry_id: str) -> str:
         f'<table role="presentation">{rows}</table>'
         '<p style="color:#0B0F19;font-size:14px;margin:24px 0 6px"><strong>Need to reach us?</strong></p>'
         '<p style="color:#475569;font-size:13px;margin:0;line-height:1.7">'
-        'Email: <a href="mailto:yantrtechnologies@gmail.com" style="color:#2563EB">yantrtechnologies@gmail.com</a><br>'
+        f'Email: <a href="mailto:{PRIMARY_EMAIL}" style="color:#2563EB">{PRIMARY_EMAIL}</a><br>'
         'Phone / WhatsApp: <a href="tel:+919692791725" style="color:#2563EB">+91 9692791725</a><br>'
         'Office: Pragati Vihar, Ainthapali, Sambalpur, Odisha</p>'
         '<p style="font-size:12px;color:#94a3b8;margin-top:24px">You received this because you submitted an enquiry on the XOLNET Technologies website.</p>'

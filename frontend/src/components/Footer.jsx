@@ -18,7 +18,7 @@ export const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
             <Link to="/" data-testid="footer-brand-logo" className="flex items-center gap-2 mb-4">
-              <img src="/logo.svg" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-cover" />
+              <img src="/xolnet.png" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-contain" />
               <span className="font-display font-extrabold text-xl text-white">XOLNET</span>
             </Link>
             <p className="text-sm text-slate-400 max-w-sm leading-relaxed">{COMPANY.tagline}</p>

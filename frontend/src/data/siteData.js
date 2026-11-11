@@ -66,7 +66,7 @@ export const JOURNEY = [
 export const COMPANY = {
   name: "XOLNET Technologies",
   tagline: "Engineered for Growth. Hardware for Power. Mastery for Tomorrow.",
-  email: "yantrtechnologies@gmail.com",
+  email: "xolnettechnologies@gmail.com",
   phone: "9692791725",
   address: "Pragati Vihar, Ainthapali, Sambalpur, Odisha",
   hours: "Mon–Sat, 9:30am – 6:30pm",

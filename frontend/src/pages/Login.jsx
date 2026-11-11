@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { Zap, Loader2, Lock } from "lucide-react";
+import { Loader2, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +33,7 @@ export default function Login() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-[#2563EB]/20 blur-[130px]" />
       <div className="relative z-10 w-full max-w-md">
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
-          <span className="grid place-items-center w-10 h-10 rounded-lg bg-[#2563EB] text-white"><Zap className="w-5 h-5" strokeWidth={2.5} /></span>
+          <img src="/xolnet.png" alt="XOLNET Technologies logo" className="w-12 h-12 rounded-lg object-contain" />
           <span className="font-display font-extrabold text-2xl">XOLNET</span>
         </Link>
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-sm p-8">

@@ -10,7 +10,7 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
 - Initial build: pages (Home, Digital Marketing, IT Products, IT Training, Work, About, Contact, Login, Admin), enquiry modal, admin lead dashboard (status, notes, follow-up, search, CSV)
 - Follow-up update:
   - Gold logo in navbar, footer and as favicon (/logo.webp, /favicon.png); title "XOLNET Technologies"
-  - Contact: yantrtechnologies@gmail.com, 9692791725, Pragati Vihar, Ainthapali, Sambalpur, Odisha
+  - Contact: xolnettechnologies@gmail.com, 9692791725, Pragati Vihar, Ainthapali, Sambalpur, Odisha
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote
   - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (Emergent Object Storage) or pasted link

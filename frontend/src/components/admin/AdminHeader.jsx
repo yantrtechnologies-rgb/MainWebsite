@@ -11,7 +11,7 @@ export const AdminHeader = () => {
     <header className="border-b border-white/10 bg-[#0B0F19]/90 backdrop-blur sticky top-0 z-30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-cover" />
+          <img src="/xolnet.png" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-contain" />
           <div>
             <p className="font-display font-bold leading-none">XOLNET CRM</p>
             <p className="text-xs text-slate-400">Lead Management</p>

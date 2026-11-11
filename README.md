@@ -15,7 +15,7 @@ The root `vercel.json` builds `frontend/build`, serves SPA routes, and routes `/
 
 Neon stores users, enquiries, catalog records, and uploaded images as JSONB documents. Image uploads are limited to 3 MB to fit Vercel request limits and the free database. The initial catalog is seeded on API startup. Existing catalogue items and admin records are preserved across deployments.
 
-Production: https://xolnet-technologies.vercel.app
+Production: https://www.xolnet.in
 
 Transactional email uses Brevo. Configure `BREVO_API_KEY`, a verified `EMAIL_FROM_ADDRESS`, `EMAIL_REPLY_TO`, and `LEAD_NOTIFY_EMAIL` in Vercel Production settings. `EMAIL_FROM_NAME` defaults to XOLNET Technologies. Admin enquiry notifications and customer acknowledgements use ASGI background tasks, so Vercel waits for the jobs to finish after responding. Each enquiry stores `email_admin` and `email_customer` acceptance/failure details. Provider acceptance does not guarantee inbox delivery; consult Brevo transactional logs for delivery/bounce events.
 

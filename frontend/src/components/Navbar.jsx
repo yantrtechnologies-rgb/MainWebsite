@@ -36,7 +36,7 @@ export const Navbar = () => {
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link to="/" data-testid="nav-brand-logo" className="flex items-center gap-2 group">
-          <img src="/logo.svg" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-cover group-hover:scale-105 transition-transform" />
+          <img src="/xolnet.png" alt="XOLNET Technologies logo" className="w-9 h-9 rounded-lg object-contain group-hover:scale-105 transition-transform" />
           <span className="font-display font-extrabold text-xl tracking-tight text-white">XOLNET</span>
         </Link>
 

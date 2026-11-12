@@ -17,6 +17,7 @@ const PROCESS = [
 export default function DigitalMarketing() {
   const { openEnquiry } = useEnquiry();
   const { items: packages } = useCatalog("packages");
+  const { items: influencerOffers } = useCatalog("influencer-offers");
   return (
     <>
       <PageHero
@@ -27,6 +28,7 @@ export default function DigitalMarketing() {
         <div className="flex flex-wrap gap-3 mt-8">
           <Button data-testid="dm-proposal-cta" onClick={() => openEnquiry("marketing")} className="bg-[#84CC16] text-[#0B0F19] hover:bg-white font-semibold rounded-full h-12 px-7">Get a Proposal <ArrowRight className="w-5 h-5 ml-1" /></Button>
           <Button data-testid="dm-consult-cta" onClick={() => openEnquiry("general")} variant="outline" className="border-white/25 text-white bg-transparent hover:bg-white/10 rounded-full h-12 px-7">Book a Consultation</Button>
+          <a href="#influencer-marketing" className="self-center text-white underline underline-offset-4">Influencer Marketing</a>
         </div>
       </PageHero>
 
@@ -60,6 +62,31 @@ export default function DigitalMarketing() {
               );
             })}
           </div>
+        </div>
+      </section>
+
+      <section id="influencer-marketing" className="scroll-mt-24 bg-slate-50 py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="font-display text-3xl font-extrabold text-slate-900">Influencer Marketing</h2>
+          <p className="mt-3 max-w-2xl text-slate-600">Find creators who fit your audience. We help plan campaigns, coordinate creator content and measure results.</p>
+          <Button className="mt-5" onClick={() => openEnquiry("marketing", "Influencer Marketing")}>Request a Quote</Button>
+          {influencerOffers.length > 0 && (
+            <div className="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+              {influencerOffers.map((offer) => (
+                <article key={offer.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white p-5">
+                  <div className="flex flex-wrap gap-2">
+                    {[offer.image, offer.second_image, offer.third_image].filter(Boolean).map((photo, index) => (
+                      <img key={index} src={imgUrl(photo)} alt={`${offer.title} photo ${index + 1}`} loading="lazy" className="min-w-0 flex-1 rounded-lg object-cover h-32" />
+                    ))}
+                  </div>
+                  <h3 className="mt-4 text-xl font-bold text-slate-900">{offer.title}</h3>
+                  <p className="mt-2 whitespace-pre-line text-slate-600">{offer.description}</p>
+                  {offer.pricing && <p className="mt-3 font-semibold text-slate-900">{offer.pricing}</p>}
+                  <Button className="mt-4" onClick={() => openEnquiry("marketing", `Influencer Marketing: ${offer.title}`)}>Request a Quote</Button>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

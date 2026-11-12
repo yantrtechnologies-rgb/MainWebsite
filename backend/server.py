@@ -24,6 +24,7 @@ from starlette.middleware.cors import CORSMiddleware
 from postgres import Database
 from pydantic import BaseModel, EmailStr, field_validator, model_validator
 from catalog import create_catalog_router, seed_catalog
+from website_analytics import create_analytics_router
 
 # ---------------------------------------------------------------------------
 # DB + App setup
@@ -564,6 +565,9 @@ async def update_followup(enquiry_id: str, payload: FollowUpInput, user: dict = 
 
 app.include_router(api_router)
 app.include_router(create_catalog_router(db, require_admin))
+app.include_router(create_analytics_router(
+    db, require_admin, lambda request: _rate_limit(f"analytics:{_client_ip(request)}", limit=120)
+))
 
 app.add_middleware(
     CORSMiddleware,

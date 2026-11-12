@@ -64,7 +64,18 @@ class ClientIn(BaseModel):
     order: int = 0
 
 
+class InfluencerOfferIn(BaseModel):
+    title: str = Field(min_length=1, max_length=120)
+    description: str = Field(default="", max_length=3000)
+    pricing: str = Field(default="", max_length=200)
+    image: str = ""
+    second_image: str = ""
+    third_image: str = ""
+    order: int = 0
+
+
 MODELS = {"courses": CourseIn, "packages": PackageIn, "products": ProductIn,
+          "influencer-offers": InfluencerOfferIn,
           "testimonials": TestimonialIn, "clients": ClientIn}
 
 SEED_TESTIMONIALS = [
@@ -181,6 +192,8 @@ def _seed_docs(kind: str) -> List[dict]:
 
 async def seed_catalog(db) -> None:
     for kind in MODELS:
+        if kind == "influencer-offers":
+            continue
         if await db[kind].count_documents({}) == 0:
             await db[kind].insert_many(_seed_docs(kind))
             logger.info(f"Seeded {kind}")

@@ -9,6 +9,7 @@ import { LeadMetrics } from "@/components/admin/LeadMetrics";
 import { LeadFilters } from "@/components/admin/LeadFilters";
 import { LeadTable } from "@/components/admin/LeadTable";
 import { LeadDrawer } from "@/components/admin/LeadDrawer";
+import { WebsiteAnalytics } from "@/components/admin/WebsiteAnalytics";
 
 const isTeam = (u) => u && (u.role === "admin" || u.role === "staff");
 
@@ -30,6 +31,7 @@ export default function AdminDashboard() {
       <AdminHeader />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <LeadMetrics metrics={crm.metrics} />
+        {isTeam(user) && <WebsiteAnalytics />}
         <LeadFilters filters={crm.filters} setFilter={crm.setFilter} onExport={() => exportLeadsCsv(crm.leads)} />
         <LeadTable leads={crm.leads} loading={crm.loading} onStatus={crm.changeStatus} onView={crm.setSelected} />
       </div>

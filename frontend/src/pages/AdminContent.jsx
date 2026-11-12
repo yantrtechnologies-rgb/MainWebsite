@@ -8,6 +8,18 @@ import { CatalogManager } from "@/components/admin/CatalogManager";
 const ICON_HINT = "Search, Share2, Target, Palette, Clapperboard, Code2, PenTool, Mail, LineChart, Sparkles";
 
 const CONFIGS = {
+  "influencer-offers": {
+    label: "Influencer Marketing", singular: "Influencer Offer", plural: "Influencer Offers", titleKey: "title", subKey: "description",
+    fields: [
+      { key: "title", label: "Offer name", required: true },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "pricing", label: "Pricing note", hint: "e.g. From ₹15,000 or leave blank for custom pricing" },
+      { key: "image", label: "Main photo", type: "image" },
+      { key: "second_image", label: "Second photo (optional)", type: "image" },
+      { key: "third_image", label: "Third photo (optional)", type: "image" },
+      { key: "order", label: "Display order (lower shows first)", type: "number" },
+    ],
+  },
   courses: {
     label: "IT Courses", singular: "Course", plural: "Courses", titleKey: "title", subKey: "duration",
     fields: [

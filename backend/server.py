@@ -45,7 +45,7 @@ JWT_ALGORITHM = "HS256"
 EMAIL_BASE_URL = "https://api.brevo.com/v3"
 EMAIL_KEY = os.environ.get("BREVO_API_KEY")
 EMAIL_FROM_NAME = os.environ.get("EMAIL_FROM_NAME", "XOLNET Technologies")
-PRIMARY_EMAIL = "xolnettechnologies@gmail.com"
+PRIMARY_EMAIL = "info@xolnet.in"
 EMAIL_LOGO = (
     '<img src="https://xolnet-technologies.vercel.app/xolnet.png" '
     'width="88" height="88" alt="XOLNET Technologies logo" '

@@ -43,7 +43,7 @@ export const EnquiryModal = () => {
           {f.step < 4 && <Progress step={f.step} />}
         </div>
         <div className="px-6 py-6 max-h-[60vh] overflow-y-auto">
-          {Step && <Step form={f.form} set={f.set} showInterest={!!interest} />}
+          {Step && <Step form={f.form} set={f.set} showInterest={!!interest} fixedVertical={vertical} interest={interest} />}
           {f.step === 4 && f.done && <EnquirySuccess done={f.done} onClose={close} />}
         </div>
         {f.step < 4 && <Footer step={f.step} setStep={f.setStep} submitting={f.submitting} submit={f.submit} />}

@@ -79,7 +79,7 @@ export const Navbar = () => {
           )}
           <Button
             data-testid="nav-enquire-btn"
-            onClick={() => openEnquiry("marketing")}
+            onClick={() => openEnquiry("general")}
             className="hidden sm:flex bg-[#84CC16] text-[#0B0F19] hover:bg-[#2563EB] hover:text-white font-semibold rounded-full px-5"
           >
             Enquire Now <ChevronRight className="w-4 h-4 ml-1" />
@@ -109,7 +109,7 @@ export const Navbar = () => {
           ))}
           <div className="flex gap-2 pt-2">
             <Button
-              onClick={() => { setOpen(false); openEnquiry("marketing"); }}
+              onClick={() => { setOpen(false); openEnquiry("general"); }}
               className="flex-1 bg-[#84CC16] text-[#0B0F19] font-semibold rounded-full"
             >
               Enquire Now

@@ -25,7 +25,18 @@ const Field = ({ label, k, form, set, type = "text", placeholder, area }) => (
   </div>
 );
 
-export const StepService = ({ form, set }) => (
+export const StepService = ({ form, set, fixedVertical, interest }) => {
+  const service = VERTICAL_OPTIONS.find(({ id }) => id === fixedVertical);
+  if (service) {
+    return (
+      <div className="rounded-xl border border-[#84CC16]/40 bg-[#84CC16]/10 p-4">
+        <p className="text-sm text-slate-300">Your enquiry is for</p>
+        <p className="mt-1 font-semibold">{service.label}</p>
+        {interest && <p className="mt-1 text-sm text-slate-300">{interest}</p>}
+      </div>
+    );
+  }
+  return (
   <div>
     <Label className="text-slate-300 mb-3 block">Which service are you interested in?</Label>
     <div className="grid grid-cols-2 gap-3">
@@ -42,7 +53,8 @@ export const StepService = ({ form, set }) => (
       })}
     </div>
   </div>
-);
+  );
+};
 
 export const StepDetails = ({ form, set, showInterest }) => (
   <div className="space-y-4">

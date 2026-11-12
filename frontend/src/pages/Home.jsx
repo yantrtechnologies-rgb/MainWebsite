@@ -46,7 +46,7 @@ const Hero = () => {
         </Reveal>
         <Reveal delay={0.24}>
           <div className="flex flex-wrap gap-3 mt-8">
-            <Button data-testid="hero-primary-cta" onClick={() => openEnquiry("marketing")} className="bg-[#84CC16] text-[#0B0F19] hover:bg-white font-semibold rounded-full px-7 h-12 text-base">
+            <Button data-testid="hero-primary-cta" onClick={() => openEnquiry("general")} className="bg-[#84CC16] text-[#0B0F19] hover:bg-white font-semibold rounded-full px-7 h-12 text-base">
               Explore Our Services <ChevronRight className="w-5 h-5 ml-1" />
             </Button>
             <Button data-testid="hero-secondary-cta" onClick={() => openEnquiry("general")} variant="outline" className="border-white/25 text-white bg-transparent hover:bg-white/10 rounded-full px-7 h-12 text-base">

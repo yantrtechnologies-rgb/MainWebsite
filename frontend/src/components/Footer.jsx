@@ -26,8 +26,8 @@ export const Footer = () => {
               One ecosystem uniting creative digital marketing, enterprise IT hardware, and hands-on technology training.
             </p>
             <div className="flex gap-3 mt-6">
-              {[["LinkedIn", Linkedin], ["Twitter", Twitter], ["Instagram", Instagram], ["Facebook", Facebook]].map(([name, Icon]) => (
-                <a key={name} href="#" aria-label={name} data-testid={`footer-social-${name.toLowerCase()}`} className="grid place-items-center w-9 h-9 rounded-md bg-white/5 hover:bg-[#84CC16] hover:text-[#0B0F19] transition-colors">
+              {[["LinkedIn", Linkedin, COMPANY.social.linkedin], ["X (Twitter)", Twitter, COMPANY.social.x], ["Instagram", Instagram, COMPANY.social.instagram], ["Facebook", Facebook, COMPANY.social.facebook]].map(([name, Icon, href]) => (
+                <a key={name} href={href} target="_blank" rel="noopener noreferrer me" aria-label={`XOLNET Technologies on ${name}`} data-testid={`footer-social-${name.split(" ")[0].toLowerCase()}`} className="grid place-items-center w-9 h-9 rounded-md bg-white/5 hover:bg-[#84CC16] hover:text-[#0B0F19] transition-colors">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -48,14 +48,15 @@ export const Footer = () => {
           ))}
         </div>
 
-        <div className="grid sm:grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/10 text-sm text-slate-400">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 pt-8 border-t border-white/10 text-sm text-slate-400">
           <a href={`mailto:${COMPANY.email}`} data-testid="footer-email" className="flex items-center gap-2 hover:text-white"><Mail className="w-4 h-4 text-[#2563EB]" /> {COMPANY.email}</a>
+          <a href={COMPANY.reviewUrl} target="_blank" rel="noopener noreferrer" data-testid="footer-review" className="flex items-center gap-2 hover:text-white">★ Review us on Google</a>
           <a href={`tel:+91${COMPANY.phone}`} data-testid="footer-phone" className="flex items-center gap-2 hover:text-white"><Phone className="w-4 h-4 text-[#2563EB]" /> {COMPANY.phone}</a>
           <span data-testid="footer-address" className="flex items-center gap-2"><MapPin className="w-4 h-4 text-[#2563EB]" /> {COMPANY.address}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-white/10">
-          <p className="text-xs text-slate-500">© {new Date().getFullYear()} XOLNET Technologies. All rights reserved.</p>
+          <p className="text-xs text-slate-500">© {new Date().getFullYear()} XOLNET Technologies Private Limited. All rights reserved.</p>
           <div className="flex flex-wrap gap-4 text-xs text-slate-500">
             {["Privacy Policy", "Terms & Conditions", "Refund Policy", "Shipping Policy", "Warranty & Returns"].map((p) => (
               <a key={p} href="#" className="hover:text-slate-300">{p}</a>

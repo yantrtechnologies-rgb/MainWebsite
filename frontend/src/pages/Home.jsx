@@ -15,7 +15,7 @@ import { CourseCard } from "@/pages/ITTraining";
 import { ExpertsSection } from "@/components/ExpertsSection";
 import { ClientMarquee } from "@/components/ClientMarquee";
 import {
-  VERTICALS, WHY_US, PORTFOLIO, PORTFOLIO_FILTERS,
+  COMPANY, VERTICALS, WHY_US, PORTFOLIO, PORTFOLIO_FILTERS,
   JOURNEY,
 } from "@/data/siteData";
 
@@ -152,6 +152,7 @@ const WhyUs = () => (
 const Work = () => {
   const [filter, setFilter] = useState("All");
   const items = filter === "All" ? PORTFOLIO : PORTFOLIO.filter((p) => p.category === filter);
+  if (!PORTFOLIO.length) return null;
   return (
     <section className="py-20 lg:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -251,6 +252,10 @@ const Testimonials = () => {
   <section className="py-20 lg:py-28 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <SectionHeading eyebrow="/// Success Stories" title="What our clients and students say." desc="Real outcomes from businesses and learners who grew with XOLNET Technologies." />
+      <div className="flex flex-wrap gap-3 mt-6">
+        <a href={COMPANY.reviewUrl} target="_blank" rel="noopener noreferrer" data-testid="home-review-google"><Button className="rounded-full bg-[#0B0F19] text-white hover:bg-[#2563EB]"><Star className="w-4 h-4 mr-1 fill-[#F97316] text-[#F97316]" /> Review us on Google</Button></a>
+        <a href={COMPANY.mapsUrl} target="_blank" rel="noopener noreferrer" data-testid="home-read-reviews"><Button variant="outline" className="rounded-full border-slate-300">Read our Google reviews</Button></a>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
         {items.map((t, i) => (
           <Reveal key={t.id} delay={0.06 * (i % 3)}>

@@ -88,6 +88,8 @@ class Collection:
                 return None
             doc = row[1]
             doc.update(update.get("$set", {}))
+            for key in update.get("$unset", {}):
+                doc.pop(key, None)
             for key, value in update.get("$push", {}).items():
                 doc.setdefault(key, []).append(value)
             await conn.execute("UPDATE xolnet_documents SET document=%s WHERE row_id=%s", [Jsonb(doc), row[0]])

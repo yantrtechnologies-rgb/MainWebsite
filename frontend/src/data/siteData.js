@@ -1,8 +1,7 @@
-// NOTE: Demonstration content — easy to replace with real data later.
 export const VERTICALS = [
-  { id: "grow", title: "Grow Your Brand", vertical: "Digital Marketing", tag: "Creative Agency", metric: "+240% ROI Avg", icon: "TrendingUp", to: "/digital-marketing" },
-  { id: "power", title: "Power Your Business", vertical: "IT Products Store", tag: "Hardware & Gear", metric: "5000+ Items", icon: "Laptop", to: "/it-products" },
-  { id: "build", title: "Build Your Future", vertical: "Training Academy", tag: "Career Bootcamps", metric: "94% Hiring Rate", icon: "GraduationCap", to: "/it-training" },
+  { id: "grow", title: "Grow Your Brand", vertical: "Digital Marketing", tag: "Creative Agency", metric: "SEO · Social · Ads · Web", icon: "TrendingUp", to: "/digital-marketing" },
+  { id: "power", title: "Power Your Business", vertical: "IT Products Store", tag: "Hardware & Gear", metric: "Laptops · Desktops · Networking", icon: "Laptop", to: "/it-products" },
+  { id: "build", title: "Build Your Future", vertical: "Training Academy", tag: "Career Bootcamps", metric: "Online & Classroom Batches", icon: "GraduationCap", to: "/it-training" },
 ];
 
 export const WHY_US = [
@@ -12,12 +11,7 @@ export const WHY_US = [
   { title: "Dedicated Support", desc: "Account managers, certified technicians and course mentors available when you need them.", icon: "LifeBuoy" },
 ];
 
-export const PORTFOLIO = [
-  { title: "FinPulse Global Rebrand", category: "Branding & Social", industry: "Fintech", stat: "3.8M Impressions", challenge: "A legacy fintech needed a modern identity to attract Gen-Z investors.", solution: "Full rebrand, social system and launch campaign.", image: "https://images.unsplash.com/photo-1758873271824-a3216c80d1ac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwzfHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85" },
-  { title: "HyperDrive Performance Campaign", category: "Performance Ads", industry: "E-Commerce", stat: "4.2x ROAS", challenge: "Scaling paid acquisition without inflating CAC.", solution: "Full-funnel Meta + Google strategy with creative testing.", image: "https://images.pexels.com/photos/7688336/pexels-photo-7688336.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
-  { title: "Nexus AI Web Application", category: "Web Apps", industry: "SaaS", stat: "120k Users Onboarded", challenge: "Launch an AI product with a conversion-first marketing site.", solution: "Design, build and growth engineering end-to-end.", image: "https://images.unsplash.com/photo-1758873268695-1b55590e507a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTZ8MHwxfHNlYXJjaHwyfHxjcmVhdGl2ZSUyMGFnZW5jeSUyMGRpZ2l0YWwlMjBtYXJrZXRpbmclMjBtb2Rlcm4lMjBvZmZpY2UlMjB0ZWFtfGVufDB8fHx8MTc5MjgzNzAwOHww&ixlib=rb-4.1.0&q=85" },
-  { title: "Volt Retail SEO Overhaul", category: "Digital Marketing", industry: "Retail", stat: "+310% Organic", challenge: "Invisible on search for high-intent keywords.", solution: "Technical SEO, content engine and internal linking.", image: "https://images.pexels.com/photos/3194519/pexels-photo-3194519.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940" },
-];
+export const PORTFOLIO = []; // Add real, client-approved case studies here.
 
 export const PORTFOLIO_FILTERS = ["All", "Digital Marketing", "Branding & Social", "Performance Ads", "Web Apps"];
 
@@ -70,4 +64,12 @@ export const COMPANY = {
   phone: "9692791725",
   address: "Pragati Vihar, Ainthapali, Sambalpur, Odisha",
   hours: "Mon–Sat, 9:30am – 6:30pm",
+  reviewUrl: "https://g.page/r/CcXo8lTM8JOuEBM/review",
+  mapsUrl: "https://maps.google.com/?cid=12579662944565127365",
+  social: {
+    linkedin: "https://www.linkedin.com/company/xolnet-technologies-pvt-ltd/",
+    x: "https://x.com/xolnettech",
+    instagram: "https://www.instagram.com/xolnettechnologies/",
+    facebook: "https://www.facebook.com/profile.php?id=61595691696048",
+  },
 };

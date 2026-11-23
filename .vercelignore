@@ -9,3 +9,11 @@
 test_reports
 .screenshots
 .emergent
+
+# Local-only artefacts (not part of the deployed site)
+*.zip
+*.pdf
+*.png.local
+seo-backup-*/
+marketing/
+invoice-check*

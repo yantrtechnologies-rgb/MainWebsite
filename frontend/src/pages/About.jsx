@@ -39,10 +39,6 @@ export default function About() {
                 We start with your goals, not our services. Whether you need more customers, better technology, or a
                 stronger team, we assemble the right mix from our three verticals and stay accountable to measurable results.
               </p>
-              <p className="text-slate-400 mt-4 text-sm">
-                Company history, leadership, certifications and achievements are intentionally left as editable placeholders
-                until verified details are provided.
-              </p>
               <Button data-testid="about-cta" onClick={() => openEnquiry("general")} className="mt-7 bg-[#84CC16] text-[#0B0F19] hover:bg-white rounded-full h-12 px-8 font-semibold">Work With Us <ArrowRight className="w-5 h-5 ml-1" /></Button>
             </div>
           </div>

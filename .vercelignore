@@ -6,9 +6,7 @@
 **/__pycache__
 *.local
 *.local.*
-test_reports
 .screenshots
-.emergent
 
 # Local-only artefacts (not part of the deployed site)
 *.zip

@@ -9,3 +9,4 @@ httpx>=0.27,<1
 requests>=2.31,<3
 python-multipart>=0.0.20
 psycopg[binary]>=3.2,<4
+boto3>=1.34,<2

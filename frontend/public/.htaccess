@@ -1,0 +1,18 @@
+RewriteEngine On
+
+# One official address: send xolnet.in to www.xolnet.in (permanent)
+RewriteCond %{HTTP_HOST} ^xolnet\.in$ [NC]
+RewriteRule ^(.*)$ https://www.xolnet.in/$1 [L,R=301]
+
+# Serve pre-rendered pages: /about -> about.html (keeps URL without .html)
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+# Single-page app: serve real files (robots.txt, sitemap.xml, images), else index.html
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.html [L]
+
+# BEGIN MilesWeb-ErrorPages
+ErrorDocument 503 /error_pages/503.html
+# END MilesWeb-ErrorPages

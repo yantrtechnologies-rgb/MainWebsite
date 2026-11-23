@@ -8,7 +8,10 @@ from typing import List, Optional
 
 import requests
 from fastapi import APIRouter, Depends, File, HTTPException, Response, UploadFile
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field, ValidationError
+
+from file_storage import storage_from_env
 
 logger = logging.getLogger(__name__)
 
@@ -87,8 +90,8 @@ SEED_TESTIMONIALS = [
     ("Manoj Sahu", "Restaurant owner", "SEO & Google Business", "Customers now find us on Google Maps easily. Our weekend footfall has clearly gone up since XOLNET took over our online presence."),
 ]
 
-SEED_CLIENTS = ["Adobe", "Malabar Jewellers", "Tanishq", "Anand Super Market", "Dell", "HP", "Lenovo",
-                "Reliance Digital", "Croma", "Airtel", "HDFC Bank", "Tata Motors", "Asian Paints", "Infosys", "Mahindra"]
+# Only real clients belong here; add them from the admin panel (Clients) instead of code.
+SEED_CLIENTS: List[str] = []
 
 
 # ---------------------------------------------------------------------------
@@ -157,7 +160,6 @@ SEED_PRODUCTS = [
     ("Accessories", "Peripherals", _px("7596072")),
     ("CPU FAN", "Components", _u("1624701928517-44c8ac49d93c")),
     ("Laptop-Battery", "Laptop Parts", _px("7019805")),
-    ("CCTV", "Security", _u("1589935447067-5531094415d1")),
     ("Desktop", "Computers", _u("1587831990711-23ca6441447b")),
     ("Graphics Card", "Components", _u("1562976540-1502c2145186")),
     ("Mobile/iphone", "Mobile", _u("1511707171634-5f897ff02aa9")),
@@ -217,7 +219,7 @@ def _validate(kind: str, payload: dict) -> dict:
         raise HTTPException(status_code=422, detail=e.errors(include_url=False, include_context=False))
 
 
-async def _store_upload(db, file: UploadFile, user: dict) -> str:
+async def _store_upload(db, file: UploadFile, user: dict, storage=None) -> str:
     ext = ALLOWED_TYPES.get(file.content_type or "")
     if not ext:
         raise HTTPException(status_code=400, detail="Only JPG, PNG, WEBP or GIF images are allowed")
@@ -225,22 +227,35 @@ async def _store_upload(db, file: UploadFile, user: dict) -> str:
     if len(data) > MAX_UPLOAD:
         raise HTTPException(status_code=400, detail="Image must be 3 MB or smaller")
     path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
-    stored = {"path": path, "size": len(data)}
-    await db.files.insert_one({
-        "id": str(uuid.uuid4()), "data": base64.b64encode(data).decode("ascii"), "storage_path": stored["path"], "original_filename": file.filename,
-        "content_type": file.content_type, "size": stored.get("size", len(data)), "is_deleted": False,
+    record = {
+        "id": str(uuid.uuid4()), "storage_path": path, "original_filename": file.filename,
+        "content_type": file.content_type, "size": len(data), "is_deleted": False,
         "uploaded_by": user["id"], "created_at": datetime.now(timezone.utc).isoformat(),
-    })
-    return stored["path"]
+    }
+    if storage is not None:
+        # The image goes to the bucket; the database keeps only this small record.
+        await storage.put(path, data, file.content_type)
+        record["location"] = "bucket"
+    else:
+        record["data"] = base64.b64encode(data).decode("ascii")
+    await db.files.insert_one(record)
+    return path
 
 
-async def _load_file(db, path: str) -> Response:
+async def _load_file(db, path: str, storage=None) -> Response:
     record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
     if not record:
         raise HTTPException(status_code=404, detail="File not found")
-    content = base64.b64decode(record["data"])
-    return Response(content=content, media_type=record["content_type"],
-                    headers={"Cache-Control": "public, max-age=86400"})
+    headers = {"Cache-Control": "public, max-age=86400"}
+    if record.get("data"):  # stored inside the database (older uploads, or no bucket configured)
+        return Response(content=base64.b64decode(record["data"]), media_type=record["content_type"], headers=headers)
+    if storage is None:
+        logger.error("File %s is in bucket storage but FILE_STORAGE is not configured", path)
+        raise HTTPException(status_code=404, detail="File not found")
+    public = storage.public_url(path)
+    if public:
+        return RedirectResponse(public, status_code=302, headers=headers)
+    return Response(content=await storage.get(path), media_type=record["content_type"], headers=headers)
 
 
 def create_catalog_router(db, require_admin) -> APIRouter:
@@ -285,10 +300,13 @@ def _register_item_routes(router: APIRouter, db, require_admin) -> None:
 
 
 def _register_file_routes(router: APIRouter, db, require_admin) -> None:
+    storage = storage_from_env()
+    logger.info("Uploaded images are stored in %s", "bucket storage" if storage else "the database")
+
     @router.post("/admin/upload")
     async def upload_image(file: UploadFile = File(...), user: dict = Depends(require_admin)):
-        return {"url": f"/api/files/{await _store_upload(db, file, user)}"}
+        return {"url": f"/api/files/{await _store_upload(db, file, user, storage)}"}
 
     @router.get("/files/{path:path}")
     async def serve_file(path: str):
-        return await _load_file(db, path)
+        return await _load_file(db, path, storage)

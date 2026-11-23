@@ -8,8 +8,8 @@ const BRAND = "XOLNET Technologies Private Limited";
 // learns "Xolnet" is a real name, not a misspelling.
 const PAGES = {
   "/": {
-    title: `${BRAND} | Official Website – Xolnet`,
-    description: "XOLNET Technologies Private Limited (Xolnet) — digital marketing agency, IT products store and IT training academy in Sambalpur, Odisha.",
+    title: "XOLNET Technologies – Digital Marketing, Web Development & IT Training in Sambalpur",
+    description: "XOLNET Technologies Private Limited (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products, and AI & computer training for businesses, students and professionals.",
   },
   "/digital-marketing": {
     title: `Digital Marketing Agency in Sambalpur | ${BRAND}`,

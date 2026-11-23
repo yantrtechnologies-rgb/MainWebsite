@@ -4,7 +4,7 @@
 Premium responsive website for XOLNET Technologies combining Digital Marketing, IT Products (quote-only) and IT Training. First release: homepage + marketing pages + enquiry/lead forms + admin lead dashboard, JWT auth with seeded admin, email notification on new enquiries, no payments.
 
 ## Architecture
-React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-managed email for lead notifications.
+React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Brevo transactional email for lead notifications.
 
 ## Implemented
 - Initial build: pages (Home, Digital Marketing, IT Products, IT Training, Work, About, Contact, Login, Admin), enquiry modal, admin lead dashboard (status, notes, follow-up, search, CSV)
@@ -13,7 +13,7 @@ React (Vite, Tailwind, shadcn) frontend; FastAPI + MongoDB backend; Emergent-man
   - Contact: info@xolnet.in, 9692791725, Pragati Vihar, Ainthapali, Sambalpur, Odisha
   - Budget is now a free-text field
   - Product prices removed → "Price on request" + Request a Quote
-  - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (Emergent Object Storage) or pasted link
+  - Catalog (courses 9, DM packages 9, IT accessories 40) stored in MongoDB, editable at /admin/content by admin + staff; images by upload (S3 bucket storage) or pasted link
 - Success Stories (6 sample reviews tagged "Sample review") + 15 client names in a left→right scrolling strip on Home; both editable at /admin/content (tabs Success Stories, Client Logos)
 - PAUSED: Razorpay payment requests (user skipped key entry; razorpay pip installed, no code yet)
 - Code-review refactor (2026-10): AdminDashboard split into admin/* components + useLeads; EnquiryModal split into enquiry/EnquirySteps + useEnquiryForm; backend email checks and catalog routes split into helpers; tests read admin creds from backend/.env; shell=True removed. Regression iteration_5 passed.

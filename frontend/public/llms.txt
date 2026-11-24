@@ -16,6 +16,7 @@
 
 - [Home](https://www.xolnet.in/): overview of all three services
 - [Digital Marketing](https://www.xolnet.in/digital-marketing): SEO, social media, performance ads, branding, video, websites, influencer marketing
+- [Website Development](https://www.xolnet.in/website-development): business websites, landing pages and redesigns, set up for Google search
 - [IT Products](https://www.xolnet.in/it-products): laptops, desktops, monitors, networking, printers, accessories, bulk procurement
 - [IT Training](https://www.xolnet.in/it-training): Full Stack, Python, Java, CCNA networking, Cyber Security, AI, databases, ITIL and digital marketing courses
 - [About](https://www.xolnet.in/about): company background

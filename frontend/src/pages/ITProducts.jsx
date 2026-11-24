@@ -40,7 +40,7 @@ export default function ITProducts() {
   );
   return (
     <>
-      <PageHero eyebrow="/// IT Products & Accessories" title="Technology That Works for You." desc="Computers, laptops, components, networking, printing and accessories — tell us what you need and we'll send the best quote.">
+      <PageHero eyebrow="/// IT Products & Accessories" title="IT Products & Accessories in Sambalpur" desc="Computers, laptops, components, networking, printing and accessories — tell us what you need and we'll send the best quote.">
         <div className="mt-8 max-w-md relative">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
           <Input data-testid="product-search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search products…" className="pl-12 h-12 bg-white/5 border-white/15 text-white placeholder:text-slate-500 rounded-full" />

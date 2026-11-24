@@ -14,7 +14,7 @@ const SITE = "https://www.xolnet.in";
 const BRAND = "XOLNET Technologies Private Limited";
 const CONTACT = `<p>Contact ${BRAND}: <a href="mailto:info@xolnet.in">info@xolnet.in</a> · <a href="tel:+919692791725">+91 9692791725</a> · Pragati Vihar, Ainthapali, Sambalpur, Odisha 768004, India. Open Monday to Saturday, 9:30 am to 6:30 pm. <a href="https://g.page/r/CcXo8lTM8JOuEBM/review">Review us on Google</a>.</p>`;
 const SOCIAL = `<p>Follow XOLNET Technologies: <a href="https://www.linkedin.com/company/xolnet-technologies-pvt-ltd/" rel="me">LinkedIn</a> · <a href="https://x.com/xolnettech" rel="me">X (Twitter)</a> · <a href="https://www.instagram.com/xolnettechnologies/" rel="me">Instagram</a> · <a href="https://www.facebook.com/profile.php?id=61595691696048" rel="me">Facebook</a></p>`;
-const NAV = `<nav><a href="/">Home</a> · <a href="/digital-marketing">Digital Marketing</a> · <a href="/it-products">IT Products</a> · <a href="/it-training">IT Training</a> · <a href="/about">About XOLNET</a> · <a href="/contact">Contact</a></nav>`;
+const NAV = `<nav><a href="/">Home</a> · <a href="/digital-marketing">Digital Marketing</a> · <a href="/website-development">Web Development</a> · <a href="/it-products">IT Products</a> · <a href="/it-training">IT Training</a> · <a href="/about">About XOLNET</a> · <a href="/contact">Contact</a></nav>`;
 
 const list = (items) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
 
@@ -24,8 +24,8 @@ const PAGES = [
     file: "index.html",
     title: "XOLNET Technologies – Digital Marketing, Web Development & IT Training in Sambalpur",
     description: "XOLNET Technologies Private Limited (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products, and AI & computer training for businesses, students and professionals.",
-    h1: "Digital Marketing, Web Development & IT Training in Sambalpur – XOLNET Technologies Private Limited",
-    body: `<p>XOLNET Technologies Private Limited (Xolnet) helps businesses in Sambalpur and across Odisha with digital marketing, website development and IT hardware, and trains students and professionals in AI, programming and computer skills.</p>
+    h1: "Transforming Brands, Equipping Teams & Educating Tech Leaders – XOLNET Technologies Private Limited",
+    body: `<p>XOLNET Technologies Private Limited (Xolnet) helps businesses in Sambalpur, Bhubaneswar and across Odisha with digital marketing, website development and IT hardware, and trains students and professionals in AI, programming and computer skills.</p>
 <h2>Digital marketing</h2>${list(["Search engine optimisation (SEO)", "Social media marketing", "Performance marketing on Google and Meta", "Brand strategy and identity", "Creative and video production", "Website design and development", "Content, email and marketing automation", "Analytics and conversion optimisation", "Influencer marketing"])}
 <h2>IT products and accessories</h2><p>Computers, laptops, components, networking, printing and accessories, with bulk and corporate procurement quotations.</p>
 <h2>XOLNET Academy – IT training</h2><p>Job-ready IT courses in full stack development, Python, Java, networking (CCNA), cyber security, artificial intelligence, databases, ITIL and digital marketing, with hands-on projects, mentorship and online or classroom batches.</p>`,
@@ -40,6 +40,17 @@ const PAGES = [
 <p>Request a tailored marketing proposal: tell us your goals and budget and we will come back with a concrete plan.</p>`,
   },
   {
+    path: "/website-development",
+    title: `Website Design & Development in Sambalpur | ${BRAND}`,
+    description: "Mobile-friendly business websites, landing pages and redesigns by XOLNET Technologies, Sambalpur — built and set up to be found on Google.",
+    h1: "Website Design & Development in Sambalpur – XOLNET Technologies",
+    body: `<p>Fast, mobile-friendly websites and landing pages for businesses in Sambalpur and across Odisha — designed, built and set up to be found on Google.</p>
+<h2>What we build</h2>${list(["Business websites", "Landing pages for a single service, offer or ad campaign", "Website redesigns"])}
+<h2>What's included</h2>${list(["Mobile-friendly design for phones, tablets and desktops", "Search-ready setup: page titles, descriptions, sitemap and Google Search Console", "Enquiry forms, click-to-call and WhatsApp buttons", "Links to your Google Business Profile and social media pages", "Help with your domain name and hosting setup"])}
+<h2>Recent work</h2><p>Nigam's Turf — website designed and built by XOLNET Technologies.</p>
+<p>Get a website quote: tell us about your business and we will send a clear quote and timeline. See also our <a href="/digital-marketing">digital marketing services</a>.</p>`,
+  },
+  {
     path: "/it-products",
     title: `IT Products – Laptops, Desktops & Accessories | ${BRAND}`,
     description: "Buy laptops, desktops, monitors, networking and IT accessories from XOLNET Technologies Private Limited, Sambalpur.",
@@ -51,7 +62,7 @@ const PAGES = [
     path: "/it-training",
     title: `IT Training Courses in Sambalpur – XOLNET Academy | ${BRAND}`,
     description: "IT courses in Sambalpur: Full Stack, Python, Java, CCNA, Cyber Security, AI, databases, ITIL and digital marketing at XOLNET Academy.",
-    h1: "XOLNET Academy – IT Training Courses in Sambalpur",
+    h1: "IT & AI Training Courses in Sambalpur – XOLNET Academy",
     body: `<p>Learn today, build tomorrow. Job-ready IT courses with hands-on projects, mentorship from industry experts and flexible online and classroom batches.</p>${list(["Full Stack Development", "Python Programming", "Core & Advanced Java", "Networking (CCNA)", "Cyber Security", "Artificial Intelligence", "Database Management", "ITIL Foundation", "Digital Marketing"])}
 <p>Corporate training: custom cohorts, on-site or instructor-led online. Book a free counselling session to pick the right track.</p>`,
   },

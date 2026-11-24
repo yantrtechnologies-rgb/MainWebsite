@@ -6,6 +6,7 @@ import { useTheme, useEnquiry, useAuth } from "@/context/contexts";
 
 const LINKS = [
   { to: "/digital-marketing", label: "Digital Marketing" },
+  { to: "/website-development", label: "Web Development" },
   { to: "/it-products", label: "IT Products" },
   { to: "/it-training", label: "IT Training" },
   { to: "/work", label: "Our Work" },

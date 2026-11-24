@@ -34,13 +34,13 @@ const Hero = () => {
         </Reveal>
         <Reveal delay={0.08}>
           <h1 className="font-display font-black tracking-tight leading-[0.98] text-4xl sm:text-5xl lg:text-6xl max-w-4xl text-balance">
-            Digital Marketing, Web Development &{" "}
-            <span className="text-[#3B82F6]">IT Training</span> in Sambalpur
+            Transforming Brands, Equipping Teams &{" "}
+            <span className="text-[#3B82F6]">Educating</span> Tech Leaders.
           </h1>
         </Reveal>
         <Reveal delay={0.16}>
           <p className="mt-6 text-lg text-slate-300 max-w-2xl leading-relaxed">
-            XOLNET helps businesses in Sambalpur and across Odisha with digital marketing, website
+            XOLNET helps businesses in Sambalpur, Bhubaneswar and across Odisha with digital marketing, website
             development and IT hardware — and trains students and professionals in AI, programming and
             computer skills.
           </p>

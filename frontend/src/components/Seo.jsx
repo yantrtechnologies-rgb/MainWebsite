@@ -15,6 +15,10 @@ const PAGES = {
     title: `Digital Marketing Agency in Sambalpur | ${BRAND}`,
     description: "SEO, social media, performance ads, branding and website development by XOLNET Technologies, Sambalpur, Odisha.",
   },
+  "/website-development": {
+    title: `Website Design & Development in Sambalpur | ${BRAND}`,
+    description: "Mobile-friendly business websites, landing pages and redesigns by XOLNET Technologies, Sambalpur — built and set up to be found on Google.",
+  },
   "/it-products": {
     title: `IT Products – Laptops, Desktops & Accessories | ${BRAND}`,
     description: "Buy laptops, desktops, monitors, networking and IT accessories from XOLNET Technologies Private Limited, Sambalpur.",

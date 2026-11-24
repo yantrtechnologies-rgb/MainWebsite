@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone, Linkedin, Twitter, Instagram, Facebook } from "luc
 import { COMPANY } from "@/data/siteData";
 
 const COLS = [
-  { title: "Digital Marketing", to: "/digital-marketing", links: ["SEO", "Social Media", "Performance Ads", "Branding", "Web Development"] },
+  { title: "Digital Marketing", to: "/digital-marketing", links: ["SEO", "Social Media", "Performance Ads", "Branding", { label: "Web Development", to: "/website-development" }] },
   { title: "IT Products", to: "/it-products", links: ["Laptops", "Desktops", "Monitors", "Networking", "Accessories"] },
   { title: "Training Academy", to: "/it-training", links: ["Full-Stack", "Cloud & DevOps", "Cyber Security", "Data & AI", "Corporate Training"] },
 ];
@@ -38,11 +38,11 @@ export const Footer = () => {
             <div key={c.title}>
               <Link to={c.to} data-testid={`footer-col-${slug(c.title)}`} className="block font-semibold text-white text-sm mb-4 hover:text-[#84CC16] transition-colors">{c.title}</Link>
               <ul className="space-y-2.5">
-                {c.links.map((l) => (
+                {c.links.map((item) => { const l = typeof item === "string" ? item : item.label; const to = typeof item === "string" ? c.to : item.to; return (
                   <li key={l}>
-                    <Link to={c.to} data-testid={`footer-link-${slug(c.title)}-${slug(l)}`} className="text-sm text-slate-400 hover:text-[#84CC16] transition-colors">{l}</Link>
+                    <Link to={to} data-testid={`footer-link-${slug(c.title)}-${slug(l)}`} className="text-sm text-slate-400 hover:text-[#84CC16] transition-colors">{l}</Link>
                   </li>
-                ))}
+                ); })}
               </ul>
             </div>
           ))}

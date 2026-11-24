@@ -8,6 +8,7 @@ import { Seo } from "@/components/Seo";
 import { EnquiryModal } from "@/components/EnquiryModal";
 import Home from "@/pages/Home";
 import DigitalMarketing from "@/pages/DigitalMarketing";
+import WebsiteDevelopment from "@/pages/WebsiteDevelopment";
 import ITProducts from "@/pages/ITProducts";
 import ITTraining from "@/pages/ITTraining";
 import Work from "@/pages/Work";
@@ -30,6 +31,7 @@ function App() {
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
                 <Route path="/digital-marketing" element={<DigitalMarketing />} />
+                <Route path="/website-development" element={<WebsiteDevelopment />} />
                 <Route path="/it-products" element={<ITProducts />} />
                 <Route path="/it-training" element={<ITTraining />} />
                 <Route path="/work" element={<Work />} />

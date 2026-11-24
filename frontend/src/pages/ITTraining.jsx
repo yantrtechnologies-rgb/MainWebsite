@@ -40,7 +40,7 @@ export default function ITTraining() {
   const { items, loading } = useCatalog("courses");
   return (
     <>
-      <PageHero eyebrow="/// XOLNET Training Academy" title="Learn Today. Build Tomorrow." desc="Job-ready IT courses with hands-on projects, mentorship from industry experts and flexible online and classroom batches." />
+      <PageHero eyebrow="/// XOLNET Training Academy" title="IT & AI Training Courses in Sambalpur" desc="Learn today, build tomorrow. Job-ready courses in full stack development, Python, Java, networking, cyber security and AI — with hands-on projects, expert mentors, and online or classroom batches." />
 
       <section className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

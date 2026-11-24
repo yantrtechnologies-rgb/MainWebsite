@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import * as Icons from "lucide-react";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,13 +23,14 @@ export default function DigitalMarketing() {
     <>
       <PageHero
         eyebrow="/// Digital Marketing Agency"
-        title="Make Your Brand Impossible to Ignore."
-        desc="Creative storytelling, performance marketing and data-driven strategy that turns attention into revenue."
+        title="Digital Marketing Agency in Sambalpur"
+        desc="Make your brand impossible to ignore — creative storytelling, performance marketing and data-driven strategy that turns attention into revenue for businesses across Odisha."
       >
         <div className="flex flex-wrap gap-3 mt-8">
           <Button data-testid="dm-proposal-cta" onClick={() => openEnquiry("marketing")} className="bg-[#84CC16] text-[#0B0F19] hover:bg-white font-semibold rounded-full h-12 px-7">Get a Proposal <ArrowRight className="w-5 h-5 ml-1" /></Button>
           <Button data-testid="dm-consult-cta" onClick={() => openEnquiry("general")} variant="outline" className="border-white/25 text-white bg-transparent hover:bg-white/10 rounded-full h-12 px-7">Book a Consultation</Button>
           <a href="#influencer-marketing" className="self-center text-white underline underline-offset-4">Influencer Marketing</a>
+          <Link to="/website-development" className="self-center text-white underline underline-offset-4">Website Development</Link>
         </div>
       </PageHero>
 

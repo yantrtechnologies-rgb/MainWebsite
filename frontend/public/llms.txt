@@ -19,5 +19,6 @@
 - [Website Development](https://www.xolnet.in/website-development): business websites, landing pages and redesigns, set up for Google search
 - [IT Products](https://www.xolnet.in/it-products): laptops, desktops, monitors, networking, printers, accessories, bulk procurement
 - [IT Training](https://www.xolnet.in/it-training): Full Stack, Python, Java, CCNA networking, Cyber Security, AI, databases, ITIL and digital marketing courses
+- [Our Work](https://www.xolnet.in/work): client projects, including the Nigam's Turf website
 - [About](https://www.xolnet.in/about): company background
 - [Contact](https://www.xolnet.in/contact): enquiries

@@ -59,7 +59,8 @@ export const Footer = () => {
           <p className="text-xs text-slate-500">© {new Date().getFullYear()} XOLNET Technologies Private Limited. All rights reserved.</p>
           <div className="flex flex-wrap gap-4 text-xs text-slate-500">
             {["Privacy Policy", "Terms & Conditions", "Refund Policy", "Shipping Policy", "Warranty & Returns"].map((p) => (
-              <a key={p} href="#" className="hover:text-slate-300">{p}</a>
+              // Plain text until each policy has its own page: href="#" links are dead ends for visitors and crawlers.
+              <span key={p}>{p}</span>
             ))}
           </div>
         </div>

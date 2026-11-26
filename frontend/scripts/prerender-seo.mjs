@@ -14,7 +14,7 @@ const SITE = "https://www.xolnet.in";
 const BRAND = "XOLNET Technologies Private Limited";
 const CONTACT = `<p>Contact ${BRAND}: <a href="mailto:info@xolnet.in">info@xolnet.in</a> · <a href="tel:+919692791725">+91 9692791725</a> · Pragati Vihar, Ainthapali, Sambalpur, Odisha 768004, India. Open Monday to Saturday, 9:30 am to 6:30 pm. <a href="https://g.page/r/CcXo8lTM8JOuEBM/review">Review us on Google</a>.</p>`;
 const SOCIAL = `<p>Follow XOLNET Technologies: <a href="https://www.linkedin.com/company/xolnet-technologies-pvt-ltd/" rel="me">LinkedIn</a> · <a href="https://x.com/xolnettech" rel="me">X (Twitter)</a> · <a href="https://www.instagram.com/xolnettechnologies/" rel="me">Instagram</a> · <a href="https://www.facebook.com/profile.php?id=61595691696048" rel="me">Facebook</a></p>`;
-const NAV = `<nav><a href="/">Home</a> · <a href="/digital-marketing">Digital Marketing</a> · <a href="/website-development">Web Development</a> · <a href="/it-products">IT Products</a> · <a href="/it-training">IT Training</a> · <a href="/about">About XOLNET</a> · <a href="/contact">Contact</a></nav>`;
+const NAV = `<nav><a href="/">Home</a> · <a href="/digital-marketing">Digital Marketing</a> · <a href="/website-development">Web Development</a> · <a href="/it-products">IT Products</a> · <a href="/it-training">IT Training</a> · <a href="/work">Our Work</a> · <a href="/about">About XOLNET</a> · <a href="/contact">Contact</a></nav>`;
 
 const list = (items) => `<ul>${items.map((i) => `<li>${i}</li>`).join("")}</ul>`;
 
@@ -23,7 +23,7 @@ const PAGES = [
     path: "/",
     file: "index.html",
     title: "XOLNET Technologies – Digital Marketing, Web Development & IT Training in Sambalpur",
-    description: "XOLNET Technologies Private Limited (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products, and AI & computer training for businesses, students and professionals.",
+    description: "XOLNET Technologies (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products and AI & computer training courses.",
     h1: "Transforming Brands, Equipping Teams & Educating Tech Leaders – XOLNET Technologies Private Limited",
     body: `<p>XOLNET Technologies Private Limited (Xolnet) helps businesses in Sambalpur, Bhubaneswar and across Odisha with digital marketing, website development and IT hardware, and trains students and professionals in AI, programming and computer skills.</p>
 <h2>Digital marketing</h2>${list(["Search engine optimisation (SEO)", "Social media marketing", "Performance marketing on Google and Meta", "Brand strategy and identity", "Creative and video production", "Website design and development", "Content, email and marketing automation", "Analytics and conversion optimisation", "Influencer marketing"])}
@@ -67,6 +67,14 @@ const PAGES = [
 <p>Corporate training: custom cohorts, on-site or instructor-led online. Book a free counselling session to pick the right track.</p>`,
   },
   {
+    path: "/work",
+    title: `Our Work – Websites & Marketing Projects | ${BRAND}`,
+    description: "Client projects by XOLNET Technologies, Sambalpur: websites, branding and digital marketing for businesses across Odisha.",
+    h1: "Our Work – Projects by XOLNET Technologies",
+    body: `<p>We are documenting our client projects in digital marketing, IT supply and training. Until the case studies are published, we are happy to share references and examples relevant to your business.</p>
+<h2>Recent website</h2><p>Nigam's Turf — website designed and built by XOLNET Technologies. See our <a href="/website-development">website development</a> and <a href="/digital-marketing">digital marketing</a> services.</p>`,
+  },
+  {
     path: "/about",
     title: `About Us | ${BRAND}`,
     description: "About XOLNET Technologies Private Limited (Xolnet), a Sambalpur, Odisha company for digital marketing, IT products and IT training.",
@@ -82,6 +90,73 @@ const PAGES = [
     body: `<p>Pick an enquiry type and tell us what you need — the right specialist will get back to you.</p>`,
   },
 ];
+
+// Page-specific JSON-LD, added next to the site-wide Organization / ProfessionalService / WebSite block.
+// The @id values point back to the nodes in index.html.
+const AREA = [{ "@type": "City", name: "Sambalpur" }, { "@type": "City", name: "Bhubaneswar" }, { "@type": "State", name: "Odisha" }];
+const ADDRESS = { "@type": "PostalAddress", streetAddress: "Pragati Vihar, Ainthapali", addressLocality: "Sambalpur", addressRegion: "Odisha", postalCode: "768004", addressCountry: "IN" };
+const breadcrumb = (page, name) => ({
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: `${SITE}/` },
+    { "@type": "ListItem", position: 2, name, item: `${SITE}${page}` },
+  ],
+});
+const service = (page, name, description, items) => ({
+  "@type": "Service",
+  "@id": `${SITE}${page}#service`,
+  name: `${name} in Sambalpur`,
+  serviceType: name,
+  description,
+  url: `${SITE}${page}`,
+  provider: { "@id": `${SITE}/#localbusiness` },
+  areaServed: AREA,
+  hasOfferCatalog: { "@type": "OfferCatalog", name, itemListElement: items.map((i) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name: i } })) },
+});
+const webPage = (page, type, name) => ({ "@type": type, "@id": `${SITE}${page}#webpage`, url: `${SITE}${page}`, name, isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#organization` } });
+const ACADEMY = `${SITE}/it-training#academy`;
+const COURSES = [
+  ["Full Stack Development", "Front-end and back-end web development with hands-on projects."],
+  ["Python Programming", "Python from the basics to real-world projects."],
+  ["Core & Advanced Java", "Java programming from core concepts to advanced topics."],
+  ["Networking (CCNA)", "Cisco CCNA networking fundamentals with labs."],
+  ["Cyber Security", "Security fundamentals, ethical hacking and defence."],
+  ["Artificial Intelligence", "Practical AI and machine learning skills."],
+  ["Database Management", "SQL, database design and administration."],
+  ["ITIL Foundation", "IT service management with the ITIL framework."],
+  ["Digital Marketing", "SEO, social media and performance marketing."],
+];
+const SCHEMA = {
+  "/digital-marketing": [
+    service("/digital-marketing", "Digital Marketing", "SEO, social media marketing, Google and Meta ads, branding, video and influencer marketing for businesses in Sambalpur and Odisha.",
+      ["Search engine optimisation (SEO)", "Social media marketing", "Performance marketing on Google and Meta", "Brand strategy and identity", "Creative and video production", "Content, email and marketing automation", "Analytics and conversion optimisation", "Influencer marketing"]),
+    breadcrumb("/digital-marketing", "Digital Marketing"),
+  ],
+  "/website-development": [
+    service("/website-development", "Website Design & Development", "Mobile-friendly business websites, landing pages and redesigns, built and set up to be found on Google.",
+      ["Business websites", "Landing pages", "Website redesigns"]),
+    breadcrumb("/website-development", "Website Development"),
+  ],
+  "/it-products": [
+    service("/it-products", "IT Products & Accessories", "Laptops, desktops, monitors, networking, storage, printers and accessories, with bulk and corporate procurement.",
+      ["Laptops", "Desktops and workstations", "Monitors", "Networking", "Storage", "Printers", "Computer accessories", "Bulk and corporate procurement"]),
+    breadcrumb("/it-products", "IT Products"),
+  ],
+  "/it-training": [
+    { "@type": "EducationalOrganization", "@id": ACADEMY, name: "XOLNET Academy", url: `${SITE}/it-training`, parentOrganization: { "@id": `${SITE}/#organization` }, address: ADDRESS },
+    {
+      "@type": "ItemList",
+      name: "IT training courses at XOLNET Academy, Sambalpur",
+      itemListElement: COURSES.map(([name, description], i) => ({ "@type": "ListItem", position: i + 1, item: { "@type": "Course", name, description, provider: { "@id": ACADEMY } } })),
+    },
+    breadcrumb("/it-training", "IT Training"),
+  ],
+  "/work": [webPage("/work", "CollectionPage", "Our Work | XOLNET Technologies"), breadcrumb("/work", "Our Work")],
+  "/about": [webPage("/about", "AboutPage", "About XOLNET Technologies"), breadcrumb("/about", "About")],
+  "/contact": [webPage("/contact", "ContactPage", "Contact XOLNET Technologies"), breadcrumb("/contact", "Contact")],
+};
+const schemaTag = (graph) =>
+  `<script type="application/ld+json">${JSON.stringify({ "@context": "https://schema.org", "@graph": graph }).replace(/</g, "\\u003c")}</script>\n    </head>`;
 
 const esc = (s) => s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 
@@ -106,7 +181,26 @@ for (const page of PAGES) {
     `<div id="root">\n<header><h1>${page.h1}</h1></header>\n${NAV}\n<main>${page.body}</main>\n<footer>${CONTACT}${SOCIAL}<p>© ${new Date().getFullYear()} ${BRAND}. All rights reserved.</p></footer>\n</div>$1`,
     "#root fallback"
   );
+  if (SCHEMA[page.path]) html = replaceOnce(html, /<\/head>/, schemaTag(SCHEMA[page.path]), "</head>");
   const file = page.file || `${page.path.slice(1)}.html`;
   fs.writeFileSync(path.join(buildDir, file), html);
   console.log(`prerender-seo: wrote ${file}`);
+}
+
+// 404 page for unknown URLs (vercel.json routes only the real pages to the app). It still
+// loads the app, so visitors get the normal header and links, but search engines get a real
+// 404 status and a noindex tag instead of a copy of the homepage.
+{
+  let html = template;
+  html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>Page not found | ${BRAND}</title>`, "<title>");
+  html = replaceOnce(html, /<meta name="robots" content="[^"]*" \/>/, `<meta name="robots" content="noindex, follow" />`, "meta robots");
+  html = replaceOnce(html, /\s*<link rel="canonical" href="[^"]*" \/>/, "", "canonical");
+  html = replaceOnce(
+    html,
+    /<div id="root">[\s\S]*?<\/div>(\s*(?:<script|<\/body>))/,
+    `<div id="root">\n<header><h1>Page not found</h1></header>\n${NAV}\n<main><p>This page does not exist. Use the links above, or go to the <a href="/">XOLNET Technologies homepage</a>.</p></main>\n<footer>${CONTACT}</footer>\n</div>$1`,
+    "#root fallback"
+  );
+  fs.writeFileSync(path.join(buildDir, "404.html"), html);
+  console.log("prerender-seo: wrote 404.html");
 }

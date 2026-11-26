@@ -9,7 +9,7 @@ const BRAND = "XOLNET Technologies Private Limited";
 const PAGES = {
   "/": {
     title: "XOLNET Technologies – Digital Marketing, Web Development & IT Training in Sambalpur",
-    description: "XOLNET Technologies Private Limited (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products, and AI & computer training for businesses, students and professionals.",
+    description: "XOLNET Technologies (Xolnet), Sambalpur, Odisha: digital marketing, website development, IT products and AI & computer training courses.",
   },
   "/digital-marketing": {
     title: `Digital Marketing Agency in Sambalpur | ${BRAND}`,
@@ -26,6 +26,10 @@ const PAGES = {
   "/it-training": {
     title: `IT Training Courses in Sambalpur – XOLNET Academy | ${BRAND}`,
     description: "IT courses in Sambalpur: Full Stack, Python, Java, CCNA, Cyber Security, AI, databases, ITIL and digital marketing at XOLNET Academy.",
+  },
+  "/work": {
+    title: `Our Work – Websites & Marketing Projects | ${BRAND}`,
+    description: "Client projects by XOLNET Technologies, Sambalpur: websites, branding and digital marketing for businesses across Odisha.",
   },
   "/about": {
     title: `About Us | ${BRAND}`,

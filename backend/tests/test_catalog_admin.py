@@ -11,8 +11,8 @@ load_dotenv(Path(__file__).resolve().parents[1] / ".env")
 BASE_URL = os.environ.get("REACT_APP_BACKEND_URL").rstrip("/")
 ADMIN = {"email": os.environ["ADMIN_EMAIL"], "password": os.environ["ADMIN_PASSWORD"]}
 
-EXPECTED_PRODUCTS = ["Harddisk", "CPU", "Tablet PC", "DVD Writer", "Pen Drive", "LAN Card", "Server", "Cabinet",
-                     "Networking", "Laptop-Keyboard", "RAM", "Motherboard", "K/B-Mouse", "Scanner", "Headphone",
+EXPECTED_PRODUCTS = ["Hard Disks & SSDs", "CPU", "Tablet PC", "DVD Writer", "Pen Drive", "LAN Card", "Server", "Cabinet",
+                     "Networking", "Laptop-Keyboard", "RAM", "Motherboard", "Keyboards & Mice", "Scanner", "Headphone",
                      "Sound Card", "Projector", "Monitor", "Digital Camera", "Software", "Laptop", "LED/ LCD",
                      "Multimedia", "UPS/ Inverter", "Web Cam", "TV Tuner Card", "Toner Cartridge", "Accessories",
                      "CPU FAN", "Laptop-Battery", "CCTV", "Desktop", "Graphics Card", "Mobile/iphone", "Printer",

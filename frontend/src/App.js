@@ -14,6 +14,7 @@ import ITTraining from "@/pages/ITTraining";
 import Work from "@/pages/Work";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import NotFound from "@/pages/NotFound";
 // Admin screens are split into their own bundles so public pages load faster.
 const Login = lazy(() => import("@/pages/Login"));
 const AdminDashboard = lazy(() => import("@/pages/AdminDashboard"));
@@ -37,6 +38,7 @@ function App() {
                 <Route path="/work" element={<Work />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
               <Route path="/login" element={<Login />} />
               <Route path="/admin" element={<AdminDashboard />} />

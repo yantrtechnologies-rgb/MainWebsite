@@ -56,6 +56,7 @@ const Hero = () => {
           </div>
         </Reveal>
 
+        <h2 className="sr-only">Our services in Sambalpur and Odisha</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mt-16">
           {VERTICALS.map((v, i) => {
             const Icon = ICONS[v.icon];
@@ -109,7 +110,7 @@ const Verticals = () => {
             <div className="grid lg:grid-cols-12 gap-6 items-center rounded-3xl border border-slate-200 bg-[#FAFAFA] p-8 lg:p-12">
               <div className="lg:col-span-7">
                 <p className="eyebrow mb-3" style={{ color: b.accent }}>{b.kicker}</p>
-                <h3 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 max-w-xl">{b.title}</h3>
+                <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-slate-900 max-w-xl">{b.title}</h2>
                 <p className="mt-4 text-lg text-slate-600 max-w-xl">{b.desc}</p>
               </div>
               <div className="lg:col-span-5 lg:text-right">

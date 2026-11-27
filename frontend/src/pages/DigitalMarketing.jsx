@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import * as Icons from "lucide-react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+// Import only the icons SERVICES uses: `import * as` pulls the whole icon library (~550 KB) into the main bundle.
+import {
+  ArrowRight, CheckCircle2, Search, Share2, Target, Palette, Clapperboard, Code2, PenTool, Mail, LineChart, Sparkles,
+} from "lucide-react";
+
+const Icons = { Search, Share2, Target, Palette, Clapperboard, Code2, PenTool, Mail, LineChart, Sparkles };
 import { Button } from "@/components/ui/button";
 import { PageHero } from "@/components/PageHero";
 import { Reveal } from "@/components/Reveal";

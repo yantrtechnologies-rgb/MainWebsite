@@ -1,17 +1,46 @@
 RewriteEngine On
 
-# One official address: send xolnet.in to www.xolnet.in (permanent)
+# One official address: send xolnet.in to www.xolnet.in (permanent).
+# (http -> https is handled by MilesWeb's edge proxy before the request reaches this file.)
 RewriteCond %{HTTP_HOST} ^xolnet\.in$ [NC]
 RewriteRule ^(.*)$ https://www.xolnet.in/$1 [L,R=301]
+
+# No duplicate URLs: /about.html -> /about and /index.html -> / (only when the visitor asked
+# for the .html address, so the internal rewrite below does not loop).
+RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+RewriteRule ^ / [L,R=301]
+RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.html[\s?] [NC]
+RewriteRule ^ /%1 [L,R=301]
 
 # Serve pre-rendered pages: /about -> about.html (keeps URL without .html)
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+?)/?$ $1.html [L]
 
-# Single-page app: serve real files (robots.txt, sitemap.xml, images), else index.html
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.html [L]
+# App-only routes with no pre-rendered file (sign-in and admin) load the single-page app.
+RewriteRule ^(login|admin|admin/content)/?$ index.html [L]
+
+# Everything else that is not a real file is a 404 (not a copy of the homepage).
+ErrorDocument 404 /404.html
+
+# Compress text files (the main JavaScript file was being sent uncompressed).
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml application/xml application/javascript text/javascript application/json image/svg+xml
+</IfModule>
+
+# Caching: hashed build files never change, so cache them for a year; always revalidate HTML.
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css|woff2?)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(png|jpe?g|webp|svg|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(html|txt|xml)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  Header always set Strict-Transport-Security "max-age=31536000"
+  Header always set X-Content-Type-Options "nosniff"
+</IfModule>
 
 # BEGIN MilesWeb-ErrorPages
 ErrorDocument 503 /error_pages/503.html

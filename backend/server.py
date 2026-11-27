@@ -237,6 +237,29 @@ def verify_password(plain: str, hashed: str) -> bool:
         return False
 
 
+async def sync_admin_account() -> None:
+    """Make the database admin match ADMIN_EMAIL / ADMIN_PASSWORD.
+
+    Called at startup and on every admin login. On Vercel the startup hook does not
+    reliably run, so without the login-time call a new ADMIN_PASSWORD in the project
+    settings never reaches the database and the admin is locked out.
+    """
+    admin_email = os.environ["ADMIN_EMAIL"].lower()
+    admin_password = os.environ["ADMIN_PASSWORD"]
+    existing = await db.users.find_one({"email": admin_email})
+    if existing is None:
+        await db.users.insert_one({
+            "id": str(uuid.uuid4()), "name": "XOLNET Admin", "email": admin_email,
+            "password_hash": hash_password(admin_password), "role": "admin",
+            "created_at": datetime.now(timezone.utc).isoformat(),
+        })
+        logger.info(f"Seeded admin {admin_email}")
+    elif not verify_password(admin_password, existing["password_hash"]) or existing.get("role") != "admin":
+        await db.users.update_one({"email": admin_email},
+                                  {"$set": {"password_hash": hash_password(admin_password), "role": "admin"}})
+        logger.info("Updated admin password from ADMIN_PASSWORD")
+
+
 def create_access_token(user_id: str, email: str, role: str) -> str:
     payload = {
         "sub": user_id, "email": email, "role": role,
@@ -384,6 +407,8 @@ async def login(payload: LoginInput, request: Request):
     attempts = [t for t in _login_attempts.get(key, []) if now - t < 900]
     if len(attempts) >= 5:
         raise HTTPException(status_code=429, detail="Too many failed attempts. Try again in 15 minutes.")
+    if email == os.environ["ADMIN_EMAIL"].lower():
+        await sync_admin_account()
     user = await db.users.find_one({"email": email})
     if not user or not verify_password(payload.password, user["password_hash"]):
         attempts.append(now)
@@ -584,20 +609,7 @@ async def startup():
     await db.users.create_index("id")
     await db.enquiries.create_index("id")
     await seed_catalog(db)
-    admin_email = os.environ["ADMIN_EMAIL"].lower()
-    admin_password = os.environ["ADMIN_PASSWORD"]
-    existing = await db.users.find_one({"email": admin_email})
-    if existing is None:
-        await db.users.insert_one({
-            "id": str(uuid.uuid4()), "name": "XOLNET Admin", "email": admin_email,
-            "password_hash": hash_password(admin_password), "role": "admin",
-            "created_at": datetime.now(timezone.utc).isoformat(),
-        })
-        logger.info(f"Seeded admin {admin_email}")
-    elif not verify_password(admin_password, existing["password_hash"]):
-        await db.users.update_one({"email": admin_email},
-                                  {"$set": {"password_hash": hash_password(admin_password), "role": "admin"}})
-        logger.info("Updated admin password")
+    await sync_admin_account()
 
 
 @app.on_event("shutdown")

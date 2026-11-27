@@ -130,7 +130,7 @@ SEED_PACKAGES = [
 ]
 
 SEED_PRODUCTS = [
-    ("Harddisk", "Storage", _u("1531492746076-161ca9bcad58")),
+    ("Hard Disks & SSDs", "Storage", _u("1531492746076-161ca9bcad58")),
     ("CPU", "Components", _u("1518770660439-4636190af475")),
     ("Tablet PC", "Computers", _u("1623126908029-58cb08a2b272")),
     ("DVD Writer", "Storage", _u("1618034100983-e1d78be0dc80")),
@@ -142,7 +142,7 @@ SEED_PRODUCTS = [
     ("Laptop-Keyboard", "Laptop Parts", _u("1529236183275-4fdcf2bc987e")),
     ("RAM", "Components", _px("7594824")),
     ("Motherboard", "Components", _u("1562408590-e32931084e23")),
-    ("K/B-Mouse", "Peripherals", _u("1635987391914-cb84b567e68f")),
+    ("Keyboards & Mice", "Peripherals", _u("1635987391914-cb84b567e68f")),
     ("Scanner", "Printing", _u("1666101041092-468eb2818c87")),
     ("Headphone", "Audio & Video", _u("1505740420928-5e560c06d30e")),
     ("Sound Card", "Audio & Video", _u("1618609377864-68609b857e90")),
